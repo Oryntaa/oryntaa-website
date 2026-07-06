@@ -9,7 +9,7 @@ export interface FaqItem {
 }
 
 interface FaqAccordionProps {
-  items: FaqItem[];
+  items: readonly FaqItem[];
 }
 
 /** FAQ accordion (COMPONENT_LIBRARY §6). Radix single-collapsible for correct keyboard + aria; the
