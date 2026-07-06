@@ -1,15 +1,37 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
 
 import { mdxComponents } from '@/lib/content/mdx';
+import { slugify } from '@/lib/utils/slugify';
 
-/** Styled element map for long-form MDX (case studies, articles). Custom components (Callout, …)
- *  come from the shared map; standard elements get the reading typography. */
+/** Flatten heading children to plain text for anchor-id generation. */
+function textOf(node: React.ReactNode): string {
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(textOf).join('');
+  return '';
+}
+
+/** Styled element map for long-form MDX (case studies, articles, legal). Custom components
+ *  (Callout, …) come from the shared map; standard elements get the reading typography; h2/h3 get
+ *  slug ids so a table of contents can deep-link to them. */
 const proseComponents = {
-  h2: (props: React.ComponentProps<'h2'>) => (
-    <h2 className="font-display text-display-sm text-ink mt-14 mb-4 first:mt-0" {...props} />
+  h2: ({ children, ...rest }: React.ComponentProps<'h2'>) => (
+    <h2
+      id={slugify(textOf(children))}
+      className="font-display text-display-sm text-ink mt-14 mb-4 scroll-mt-24 first:mt-0"
+      {...rest}
+    >
+      {children}
+    </h2>
   ),
-  h3: (props: React.ComponentProps<'h3'>) => (
-    <h3 className="font-display text-ink mt-10 mb-3 text-xl" {...props} />
+  h3: ({ children, ...rest }: React.ComponentProps<'h3'>) => (
+    <h3
+      id={slugify(textOf(children))}
+      className="font-display text-ink mt-10 mb-3 scroll-mt-24 text-xl"
+      {...rest}
+    >
+      {children}
+    </h3>
   ),
   p: (props: React.ComponentProps<'p'>) => (
     <p className="text-body-lg text-ink-muted mb-5 leading-relaxed" {...props} />
