@@ -45,8 +45,9 @@ function pad(order: number): string {
 }
 
 /**
- * Interactive services selector (PAGE_SPECIFICATIONS §2). Auto-advances (paused on interaction and
- * under reduced-motion); clicking a service on the right updates the featured panel on the left.
+ * Interactive services selector (PAGE_SPECIFICATIONS §2). Auto-advances through the services on a
+ * timer (a progress bar tracks it); hovering or focusing a row on the right pauses the timer and
+ * makes that service the featured one on the left. Auto-advance is off under reduced-motion.
  */
 export function ServicesShowcase({
   eyebrow,
@@ -58,26 +59,35 @@ export function ServicesShowcase({
   useEffect(() => {
     if (paused || services.length === 0) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    // Sync the featured panel with a timer (external system: the auto-advance clock).
-    const timer = window.setTimeout(() => {
+    // Advance the featured service on a fixed clock (external system: the auto-advance timer).
+    const interval = window.setInterval(() => {
       setActive((index) => (index + 1) % services.length);
     }, ADVANCE_MS);
     return () => {
-      window.clearTimeout(timer);
+      window.clearInterval(interval);
     };
-  }, [active, paused, services.length]);
+  }, [paused, services.length]);
 
   const current = services.at(active) ?? services.at(0);
   if (current === undefined) return null;
   const CurrentIcon = ICONS[current.slug] ?? Rocket;
 
+  function select(index: number): void {
+    setActive(index);
+    setPaused(true);
+  }
+
   return (
     <section className="bg-canvas">
       <Container>
-        <div className="border-line bg-brand-50 rounded-xl border p-8 md:p-12">
+        <div className="bg-brand-50 shadow-card relative overflow-hidden rounded-xl p-8 md:p-12">
+          <div
+            aria-hidden
+            className="bg-brand-300 pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full opacity-25 blur-3xl"
+          />
           <Eyebrow>{eyebrow}</Eyebrow>
 
-          <div className="mt-10 grid gap-10 lg:grid-cols-2">
+          <div className="relative mt-10 grid gap-10 lg:grid-cols-2">
             <div className="flex flex-col gap-6">
               <div className="flex items-start justify-between">
                 <span className="bg-accent/10 text-accent flex h-14 w-14 items-center justify-center rounded-lg">
@@ -85,7 +95,7 @@ export function ServicesShowcase({
                 </span>
                 <span
                   aria-hidden
-                  className="font-display text-brand-200 leading-none"
+                  className="font-display text-brand-200 leading-none font-bold"
                   style={{ fontSize: 'clamp(4.5rem, 9vw, 8rem)' }}
                 >
                   {pad(current.order)}
@@ -110,12 +120,20 @@ export function ServicesShowcase({
                 <div
                   key={active}
                   className="bg-accent h-full"
-                  style={{ animation: `showcase-progress ${String(ADVANCE_MS)}ms linear` }}
+                  style={{
+                    animation: `showcase-progress ${String(ADVANCE_MS)}ms linear`,
+                    animationPlayState: paused ? 'paused' : 'running',
+                  }}
                 />
               </div>
             </div>
 
-            <ul className="flex flex-col">
+            <ul
+              className="flex flex-col"
+              onMouseLeave={() => {
+                setPaused(false);
+              }}
+            >
               {services.map((service, index) => {
                 const Icon = ICONS[service.slug] ?? Rocket;
                 const isActive = index === active;
@@ -123,13 +141,20 @@ export function ServicesShowcase({
                   <li key={service.slug}>
                     <button
                       type="button"
+                      onMouseEnter={() => {
+                        select(index);
+                      }}
+                      onFocus={() => {
+                        select(index);
+                      }}
                       onClick={() => {
-                        setActive(index);
-                        setPaused(true);
+                        select(index);
                       }}
                       className={cn(
-                        'duration-fast focus-visible:outline-accent flex w-full items-center gap-4 rounded-md px-4 py-4 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2',
-                        isActive ? 'bg-surface shadow-card' : 'hover:bg-surface',
+                        'duration-fast focus-visible:outline-accent flex w-full items-center gap-4 rounded-md border-l-2 px-4 py-4 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2',
+                        isActive
+                          ? 'border-accent bg-surface shadow-card'
+                          : 'hover:bg-surface border-transparent',
                       )}
                     >
                       <span className="text-body-sm text-ink-muted font-mono">
