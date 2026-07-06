@@ -63,8 +63,8 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 - [x] `prose.css` base per DESIGN_SYSTEM §4.
 
 **Step 1.2 — Token guards & reference page**
-- [ ] `check:arbitrary` now enforcing (fails on `[...]` in className).
-- [ ] Internal `/dev/tokens` route (dev-only, excluded from build in production): renders ramps, semantic pairs on light/dark, type scale, spacing, radii, shadows — the visual QA surface for this phase.
+- [x] `check:arbitrary` now enforcing (fails on `[...]` in className).
+- [x] Internal `/dev/tokens` route (dev-only, excluded from build in production): renders ramps, semantic pairs on light/dark, type scale, spacing, radii, shadows — the visual QA surface for this phase.
 
 **DoD / ⛳ Gate 1:** founders review `/dev/tokens` on a preview against DESIGN_SYSTEM §2–5 and sign off the palette/type in browser reality. This gate exists because every later pixel inherits it.
 
