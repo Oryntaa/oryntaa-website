@@ -58,9 +58,9 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 **Goal:** the entire DESIGN_SYSTEM exists as code; nothing visual will ever be defined elsewhere. **Depends on:** 0. **Docs:** DESIGN_SYSTEM (all), CODING_STANDARDS §7.
 
 **Step 1.1 — Token implementation**
-- [ ] `styles/globals.css` `@theme`: brand + neutral ramps, semantic tokens, `[data-theme="dark"]` overrides, radius/shadow/easing/duration, `--gradient-horizon`, fluid type scale variables, `--space-section`.
-- [ ] next/font setup (Sora, Inter, JetBrains Mono) in root layout; font CSS vars wired into `@theme`.
-- [ ] `prose.css` base per DESIGN_SYSTEM §4.
+- [x] `styles/globals.css` `@theme`: brand + neutral ramps, semantic tokens, `[data-theme="dark"]` overrides, radius/shadow/easing/duration, `--gradient-horizon`, fluid type scale variables, `--space-section`.
+- [x] next/font setup (Sora, Inter, JetBrains Mono) in root layout; font CSS vars wired into `@theme`.
+- [x] `prose.css` base per DESIGN_SYSTEM §4.
 
 **Step 1.2 — Token guards & reference page**
 - [ ] `check:arbitrary` now enforcing (fails on `[...]` in className).

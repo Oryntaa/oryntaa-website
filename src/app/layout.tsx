@@ -1,20 +1,20 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono, Sora } from 'next/font/google';
 
 import '@/styles/globals.css';
+import '@/styles/prose.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+// Display / body / utility faces (DESIGN_SYSTEM §4). Variable fonts, self-hosted via next/font
+// (zero layout shift); their CSS variables are consumed by the @theme font tokens in globals.css.
+const sora = Sora({ subsets: ['latin'], variable: '--font-sora', display: 'swap' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
+  variable: '--font-jetbrains',
+  display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
-// TODO(content): scaffold placeholder — DESIGN_SYSTEM fonts land in Phase 1 and the
-// SEO metadata factory replaces this in Phase 12 (SEO_ARCHITECTURE).
+// TODO(content): the SEO metadata factory replaces this in Phase 12 (SEO_ARCHITECTURE).
 export const metadata: Metadata = {
   title: 'Oryntaa',
 };
@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+    <html lang="en" className={`${sora.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
