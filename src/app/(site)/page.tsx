@@ -20,7 +20,8 @@ export default function HomePage(): React.JSX.Element {
     slug: service.slug,
     name: service.name,
     oneLiner: service.oneLiner,
-    tags: service.capabilities.slice(0, 3).map((capability) => capability.title),
+    capabilities: service.capabilities.slice(0, 4).map((capability) => capability.title),
+    technologies: service.technologies,
     order: service.order,
   }));
 

@@ -122,6 +122,12 @@
   }
 }
 
+/* The navbar slides away while the "what we do" stage is pinned full-screen (ServicesShowcase
+   toggles the attribute); the header's own transition tokens animate the slide. */
+html[data-stage-pinned] .site-header {
+  transform: translateY(-100%);
+}
+
 /* Stack-logo marquee: continuous scroll, pause on hover, fade at the edges (StackStrip). */
 @keyframes marquee {
   from {

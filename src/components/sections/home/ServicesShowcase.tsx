@@ -1,16 +1,15 @@
 'use client';
 
+import { Check } from 'lucide-react';
 import {
-  Briefcase,
-  Cloud,
-  Globe,
-  LayoutGrid,
-  Rocket,
-  Smartphone,
-  type LucideIcon,
-} from 'lucide-react';
-import { motion, useMotionValueEvent, useScroll } from 'motion/react';
-import { useRef, useState } from 'react';
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+  type Variants,
+} from 'motion/react';
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
 
 import { usePrefersReducedMotion } from '@/lib/hooks/usePrefersReducedMotion';
 import { cn } from '@/lib/utils/cn';
@@ -23,7 +22,8 @@ export interface ShowcaseService {
   slug: string;
   name: string;
   oneLiner: string;
-  tags: string[];
+  capabilities: string[];
+  technologies: string[];
   order: number;
 }
 
@@ -32,76 +32,143 @@ interface ServicesShowcaseProps {
   services: ShowcaseService[];
 }
 
-const ICONS: Record<string, LucideIcon> = {
-  'ai-solutions': Briefcase,
-  'web-development': Globe,
-  'mobile-app-development': Smartphone,
-  'saas-mvp': Rocket,
-  'uiux-design': LayoutGrid,
-  'cloud-devops': Cloud,
-};
-
 const EASE = [0.25, 1, 0.5, 1] as const;
 
-/** How many viewport-heights of scroll each card gets before the stack advances. */
-const SCROLL_PER_CARD = 0.72;
+/** How many viewport-heights of scroll each service gets before the stage advances. */
+const SCROLL_PER_CARD = 0.8;
 
-function iconFor(slug: string): LucideIcon {
-  return ICONS[slug] ?? Rocket;
+/** Brand duotone dye (multiply) — backdrop photography reads as an Oryntaa-orange wash. */
+const STAGE_TINT = 'linear-gradient(120deg, var(--color-brand-900), var(--color-brand-500))';
+
+/** Heavy scrims that keep the blurred backdrop quiet behind the floating card. */
+const STAGE_OVERLAY =
+  'radial-gradient(85% 75% at 50% 45%, color-mix(in oklab, var(--color-neutral-950) 35%, transparent) 0%, color-mix(in oklab, var(--color-neutral-950) 72%, transparent) 100%), linear-gradient(180deg, color-mix(in oklab, var(--color-neutral-950) 72%, transparent) 0%, color-mix(in oklab, var(--color-neutral-950) 38%, transparent) 30%, color-mix(in oklab, var(--color-neutral-950) 38%, transparent) 70%, color-mix(in oklab, var(--color-neutral-950) 72%, transparent) 100%)';
+
+/** Soft warm wash over the card's own photo so it sits in the brand palette. */
+const CARD_WASH =
+  'linear-gradient(160deg, color-mix(in oklab, var(--color-brand-500) 20%, transparent) 0%, color-mix(in oklab, var(--color-neutral-900) 25%, transparent) 100%)';
+
+/** The two wash layers between the backdrop photo and the stage content. */
+function StageWash(): React.JSX.Element {
+  return (
+    <>
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-80 mix-blend-multiply"
+        style={{ backgroundImage: STAGE_TINT }}
+      />
+      <div aria-hidden className="absolute inset-0" style={{ backgroundImage: STAGE_OVERLAY }} />
+    </>
+  );
 }
 
-/** The large service card that sits at the front of the stack. The visual is a placeholder until
- *  real per-service imagery lands (TODO(content): public/images/sections/services/<slug>). */
-function ServiceCard({
-  service,
-  isActive,
-}: {
-  service: ShowcaseService;
-  isActive: boolean;
-}): React.JSX.Element {
-  const Icon = iconFor(service.slug);
+/** Card slide choreography: enter from the reader's scroll direction, settle centered at full
+ *  scale, exit the opposite way — the "comes from the right, zooms into place" beat. */
+const cardVariants: Variants = {
+  enter: (direction: number) => ({
+    x: direction >= 0 ? 480 : -480,
+    opacity: 0,
+    scale: 0.86,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.65, ease: EASE },
+  },
+  exit: (direction: number) => ({
+    x: direction >= 0 ? -480 : 480,
+    opacity: 0,
+    scale: 0.86,
+    transition: { duration: 0.4, ease: 'easeIn' },
+  }),
+};
+
+/** The floating service card — sharp photo on the left, the service's copy on the right.
+ *  Rendered inside the `data-theme="dark"` stage, so surface/ink tokens resolve dark. */
+function ServiceCard({ service }: { service: ShowcaseService }): React.JSX.Element {
   return (
-    <div className="border-line bg-surface shadow-raised grid gap-8 rounded-xl border p-6 md:grid-cols-2 md:p-8">
-      <div
-        className="bg-brand-50 relative flex min-h-56 items-center justify-center overflow-hidden rounded-lg md:min-h-72"
-        style={{ backgroundImage: 'var(--gradient-horizon)' }}
-      >
-        {/* TODO(content): swap for <Image src={`/images/sections/services/${service.slug}.png`} …> */}
-        <span className="bg-accent/10 text-accent relative flex size-20 items-center justify-center rounded-2xl">
-          <Icon size={40} aria-hidden strokeWidth={1.75} />
-        </span>
+    <div className="border-line bg-surface/90 shadow-raised grid overflow-hidden rounded-xl border backdrop-blur-xl md:grid-cols-2">
+      <div className="relative min-h-56 md:min-h-96">
+        <Image
+          src={`/images/sections/services/${service.slug}.jpg`}
+          alt=""
+          fill
+          sizes="(max-width: 768px) 100vw, 40vw"
+          className="object-cover"
+        />
+        <div aria-hidden className="absolute inset-0" style={{ backgroundImage: CARD_WASH }} />
       </div>
-      <div className="flex flex-col justify-center gap-5">
-        <h3 className="font-display text-display-md text-ink">{service.name}</h3>
-        <motion.p
-          className="text-body-lg text-ink-muted"
-          animate={{ opacity: isActive ? 1 : 0.55 }}
-          transition={{ duration: 0.4, ease: EASE }}
-        >
-          {service.oneLiner}
-        </motion.p>
-        <div className="flex flex-wrap gap-2">
-          {service.tags.map((tag) => (
-            <span
-              key={tag}
-              className="border-line bg-canvas text-body-sm text-ink-muted rounded-full border px-3 py-1 font-mono"
-            >
-              {tag}
-            </span>
-          ))}
+
+      <div className="flex flex-col justify-center gap-6 p-8 md:p-10">
+        <div className="flex flex-col gap-3">
+          <h3 className="font-display text-display-md text-ink">{service.name}</h3>
+          <p className="text-body-lg text-ink-muted">{service.oneLiner}</p>
         </div>
+
+        <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+          {service.capabilities.map((capability) => (
+            <li key={capability} className="flex items-start gap-2.5">
+              <Check size={16} aria-hidden className="text-accent mt-1 shrink-0" />
+              <span className="text-body-sm text-ink">{capability}</span>
+            </li>
+          ))}
+        </ul>
+
+        <p className="border-line/60 text-body-sm text-ink-muted border-t pt-5 font-mono">
+          {service.technologies.join(' · ')}
+        </p>
       </div>
     </div>
   );
 }
 
-/** "What we do" — a scroll-pinned stack of service cards. As the reader scrolls into the section it
- *  pins; each card advances to the front (large, with its description) one after another, then the
- *  section releases. Reduced-motion readers get a plain stacked list instead (ANIMATION §4). */
-export function ServicesShowcase({ eyebrow, services }: ServicesShowcaseProps): React.JSX.Element {
+/** One full-bleed panel of the reduced-motion fallback — same imagery and copy, no pinning. */
+function StaticPanel({ service }: { service: ShowcaseService }): React.JSX.Element {
+  return (
+    <div
+      data-theme="dark"
+      className="relative flex min-h-96 flex-col justify-center overflow-hidden rounded-xl p-8 md:p-12"
+    >
+      <Image
+        src={`/images/sections/services/${service.slug}.jpg`}
+        alt=""
+        fill
+        sizes="(max-width: 1280px) 100vw, 1200px"
+        className="object-cover"
+      />
+      <StageWash />
+      <div className="relative flex max-w-xl flex-col gap-5">
+        <h3 className="font-display text-display-md text-ink">{service.name}</h3>
+        <p className="text-body-lg text-ink-muted">{service.oneLiner}</p>
+        <ul className="grid gap-x-8 gap-y-3 sm:grid-cols-2">
+          {service.capabilities.map((capability) => (
+            <li key={capability} className="flex items-start gap-2.5">
+              <Check size={16} aria-hidden className="text-accent mt-1 shrink-0" />
+              <span className="text-body-sm text-ink">{capability}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="border-line/60 text-body-sm text-ink-muted border-t pt-5 font-mono">
+          {service.technologies.join(' · ')}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/** "What we do" — an immersive, scroll-pinned stage (PAGE_SPECIFICATIONS §2, approved design v4).
+ *  Each service is a floating card that slides in from the right, zooms into the center of the
+ *  stage, and hands off to the next as the reader scrolls; the service's own photography fills
+ *  the backdrop behind a heavy brand wash. The navbar hides while the stage is pinned. Reduced-
+ *  motion readers get static full-bleed panels instead (ANIMATION_ARCHITECTURE §4). */
+export function ServicesShowcase({
+  eyebrow,
+  services,
+}: ServicesShowcaseProps): React.JSX.Element | null {
   const prefersReducedMotion = usePrefersReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
+  const [[active, direction], setActiveState] = useState<[number, number]>([0, 1]);
   const count = services.length;
 
   const { scrollYProgress } = useScroll({
@@ -112,13 +179,31 @@ export function ServicesShowcase({ eyebrow, services }: ServicesShowcaseProps): 
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
     if (count === 0) return;
     const next = Math.min(count - 1, Math.max(0, Math.floor(value * count)));
-    setActive((prev) => (prev === next ? prev : next));
+    setActiveState((state) => (state[0] === next ? state : [next, next > state[0] ? 1 : -1]));
+    // While the stage is pinned it owns the full screen — the navbar slides away (globals.css).
+    document.documentElement.toggleAttribute('data-stage-pinned', value > 0.001 && value < 0.999);
   });
 
-  // Reduced motion (or SSR / empty): a static, fully-visible stack — no pinning, no scroll hijack.
+  useEffect(
+    () => () => {
+      document.documentElement.removeAttribute('data-stage-pinned');
+    },
+    [],
+  );
+
+  /** Scroll to the wrapper position whose progress maps to service `index`. */
+  function jumpTo(index: number): void {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    const range = wrapper.offsetHeight - window.innerHeight;
+    const top = wrapper.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: top + ((index + 0.5) / count) * range, behavior: 'smooth' });
+  }
+
+  // Reduced motion (or SSR / empty): static full-bleed panels — no pinning, no scroll hijack.
   if (prefersReducedMotion || count === 0) {
     return (
-      <section className="section-y bg-canvas">
+      <section className="bg-canvas section-y">
         <Container>
           <Reveal>
             <Eyebrow>{eyebrow}</Eyebrow>
@@ -126,7 +211,7 @@ export function ServicesShowcase({ eyebrow, services }: ServicesShowcaseProps): 
           <div className="mt-12 flex flex-col gap-6">
             {services.map((service) => (
               <Reveal key={service.slug}>
-                <ServiceCard service={service} isActive />
+                <StaticPanel service={service} />
               </Reveal>
             ))}
           </div>
@@ -135,52 +220,76 @@ export function ServicesShowcase({ eyebrow, services }: ServicesShowcaseProps): 
     );
   }
 
+  const current = services.at(active) ?? services.at(0);
+  if (current === undefined) return null;
+
   return (
     <section
       ref={wrapperRef}
-      className="bg-canvas relative"
+      className="relative"
       style={{ height: `${String(Math.round(count * SCROLL_PER_CARD * 100))}vh` }}
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <Container className="flex h-full flex-col justify-center py-16">
+      <div data-theme="dark" className="bg-canvas sticky top-0 h-screen overflow-hidden">
+        {/* Blurred backdrop photography, crossfading with the active service. */}
+        {services.map((service, index) => (
+          <motion.div
+            key={service.slug}
+            aria-hidden
+            className="absolute inset-0"
+            initial={false}
+            animate={{ opacity: index === active ? 1 : 0 }}
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+          >
+            <Image
+              src={`/images/sections/services/${service.slug}.jpg`}
+              alt=""
+              fill
+              sizes="100vw"
+              className="scale-110 object-cover blur-lg"
+            />
+          </motion.div>
+        ))}
+        <StageWash />
+
+        <Container className="relative flex h-full flex-col items-center pt-20 pb-10">
           <Eyebrow>{eyebrow}</Eyebrow>
 
-          <div className="relative mt-8 flex-1">
-            {services.map((service, index) => {
-              const offset = index - active;
-              const behind = Math.min(Math.max(offset, 0), 3);
-              return (
+          {/* The stage floor: one floating card at a time, sliding through. */}
+          <div className="relative w-full flex-1">
+            <AnimatePresence initial={false} custom={direction}>
+              <motion.div
+                key={current.slug}
+                custom={direction}
+                variants={cardVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="absolute inset-0 flex items-center justify-center"
+              >
                 <motion.div
-                  key={service.slug}
-                  className="absolute inset-0 flex items-center justify-center"
-                  style={{
-                    zIndex: count - Math.abs(offset),
-                    pointerEvents: offset === 0 ? 'auto' : 'none',
-                  }}
-                  initial={false}
-                  animate={{
-                    y: offset < 0 ? -64 : behind * 22,
-                    scale: offset < 0 ? 0.94 : 1 - behind * 0.05,
-                    opacity: offset < 0 || offset > 2 ? 0 : 1,
-                  }}
-                  transition={{ duration: 0.55, ease: EASE }}
+                  className="w-full max-w-5xl"
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
                 >
-                  <div className="w-full max-w-4xl">
-                    <ServiceCard service={service} isActive={offset === 0} />
-                  </div>
+                  <ServiceCard service={current} />
                 </motion.div>
-              );
-            })}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          <div className="relative mt-10 flex items-center justify-center gap-2">
+          <div className="relative flex items-center justify-center gap-2">
             {services.map((service, index) => (
-              <span
+              <button
                 key={service.slug}
-                aria-hidden
+                type="button"
+                aria-label={service.name}
+                aria-current={index === active}
+                onClick={() => {
+                  jumpTo(index);
+                }}
                 className={cn(
-                  'duration-base h-1.5 rounded-full transition-all',
-                  index === active ? 'bg-accent w-8' : 'bg-line w-1.5',
+                  'duration-base focus-visible:outline-accent h-1.5 rounded-full transition-all focus-visible:outline-2 focus-visible:outline-offset-4',
+                  index === active ? 'bg-accent w-8' : 'bg-line hover:bg-ink-muted w-4',
                 )}
               />
             ))}

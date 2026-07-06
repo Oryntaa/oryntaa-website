@@ -87,7 +87,7 @@ export function NavbarClient({ items, cta }: NavbarClientProps): React.JSX.Eleme
   return (
     <header
       className={cn(
-        'duration-base ease-out-quart sticky top-0 z-30 w-full transition-all',
+        'site-header duration-base ease-out-quart sticky top-0 z-30 w-full transition-all',
         scrolled ? 'border-line bg-surface h-15 border-b' : 'h-18 bg-transparent',
       )}
     >
