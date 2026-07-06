@@ -1,5 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="500" viewBox="0 0 400 500" role="img" aria-label="Founder photo placeholder">
-  <rect width="400" height="500" fill="#e7e5e4" />
-  <circle cx="200" cy="195" r="72" fill="#a8a29e" />
-  <path d="M96 430c0-70 47-118 104-118s104 48 104 118z" fill="#a8a29e" />
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400" role="img" aria-label="Founder photo placeholder">
+  <circle cx="200" cy="165" r="74" fill="#ffffff" fill-opacity="0.9" />
+  <path d="M92 400c0-72 48-120 108-120s108 48 108 120z" fill="#ffffff" fill-opacity="0.9" />
 </svg>
