@@ -97,9 +97,9 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 **Goal:** the content pipeline exists, validates, and gates. **Depends on:** 2 (for SmartLink integration points). **Docs:** CONTENT_ARCHITECTURE, PAGE_SPECIFICATIONS (as fixture source).
 
 **Step 3.1 — Schemas & loaders**
-- [ ] `lib/content/schemas.ts` (all schemas from CONTENT_ARCHITECTURE §2).
-- [ ] Loaders + `React.cache` wrappers; MDX compile util with the component map registered (map components arrive Phase 4 — register placeholders that throw descriptively).
-- [ ] `lib/content/derived.ts` counts → `config/features.ts` real derivation + env overrides.
+- [x] `lib/content/schemas.ts` (all schemas from CONTENT_ARCHITECTURE §2).
+- [x] Loaders + `React.cache` wrappers; MDX compile util with the component map registered (map components arrive Phase 4 — register placeholders that throw descriptively).
+- [x] `lib/content/derived.ts` counts → `config/features.ts` real derivation + env overrides.
 
 **Step 3.2 — Integrity gate**
 - [ ] `check:content` implementing every §4 rule (unique slugs, ref existence, image existence, featured-count, permission×status, dates, SEO presence); wired into `verify` + CI.
