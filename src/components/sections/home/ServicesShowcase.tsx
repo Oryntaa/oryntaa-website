@@ -42,10 +42,6 @@ const ICONS: Record<string, LucideIcon> = {
 
 const ADVANCE_MS = 6000;
 
-function pad(order: number): string {
-  return String(order).padStart(2, '0');
-}
-
 /**
  * Interactive services selector (PAGE_SPECIFICATIONS §2). Auto-advances through the services on a
  * timer (a progress bar tracks it); hovering or focusing a row on the right pauses the timer and
@@ -80,8 +76,16 @@ export function ServicesShowcase({
   }
 
   return (
-    <section className="bg-canvas py-20 md:py-28">
-      <Container>
+    <section className="bg-canvas relative overflow-hidden py-20 md:py-28">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            'radial-gradient(60% 55% at 50% 30%, color-mix(in oklab, var(--color-brand-300) 20%, transparent), transparent 68%)',
+        }}
+      />
+      <Container className="relative">
         <Reveal>
           <div className="bg-brand-50 shadow-card relative overflow-hidden rounded-xl p-8 md:p-12">
             <div
@@ -99,21 +103,13 @@ export function ServicesShowcase({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
                 >
-                  <div className="flex items-start justify-between">
-                    <span className="bg-accent/10 text-accent flex h-14 w-14 items-center justify-center rounded-lg">
-                      <CurrentIcon size={28} aria-hidden />
-                    </span>
-                    <span
-                      aria-hidden
-                      className="font-display text-brand-200 leading-none font-bold"
-                      style={{ fontSize: 'clamp(4.5rem, 9vw, 8rem)' }}
-                    >
-                      {pad(current.order)}
-                    </span>
-                  </div>
+                  <span className="bg-accent/10 text-accent flex h-14 w-14 items-center justify-center rounded-lg">
+                    <CurrentIcon size={28} aria-hidden />
+                  </span>
 
-                  <h3 className="font-display text-display-md text-ink">{current.name}</h3>
-                  <p className="text-body-lg text-ink-muted max-w-md">{current.oneLiner}</p>
+                  <p className="text-display-sm font-display text-ink max-w-md">
+                    {current.oneLiner}
+                  </p>
 
                   <div className="flex flex-wrap gap-2">
                     {current.tags.map((tag) => (
@@ -168,9 +164,6 @@ export function ServicesShowcase({
                             : 'hover:bg-surface border-transparent',
                         )}
                       >
-                        <span className="text-body-sm text-ink-muted font-mono">
-                          {pad(service.order)}
-                        </span>
                         <span
                           className={cn(
                             'font-display text-display-sm flex-1',
