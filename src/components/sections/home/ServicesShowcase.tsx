@@ -9,9 +9,10 @@ import {
   Smartphone,
   type LucideIcon,
 } from 'lucide-react';
-import { motion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { motion, useMotionValueEvent, useScroll } from 'motion/react';
+import { useRef, useState } from 'react';
 
+import { usePrefersReducedMotion } from '@/lib/hooks/usePrefersReducedMotion';
 import { cn } from '@/lib/utils/cn';
 
 import { Container } from '@/components/layout/Container';
@@ -40,152 +41,152 @@ const ICONS: Record<string, LucideIcon> = {
   'cloud-devops': Cloud,
 };
 
-const ADVANCE_MS = 6000;
+const EASE = [0.25, 1, 0.5, 1] as const;
 
-/**
- * Interactive services selector (PAGE_SPECIFICATIONS §2). Auto-advances through the services on a
- * timer (a progress bar tracks it); hovering or focusing a row on the right pauses the timer and
- * makes that service the featured one on the left. Auto-advance is off under reduced-motion.
- */
-export function ServicesShowcase({
-  eyebrow,
-  services,
-}: ServicesShowcaseProps): React.JSX.Element | null {
+/** How many viewport-heights of scroll each card gets before the stack advances. */
+const SCROLL_PER_CARD = 0.72;
+
+function iconFor(slug: string): LucideIcon {
+  return ICONS[slug] ?? Rocket;
+}
+
+/** The large service card that sits at the front of the stack. The visual is a placeholder until
+ *  real per-service imagery lands (TODO(content): public/images/sections/services/<slug>). */
+function ServiceCard({
+  service,
+  isActive,
+}: {
+  service: ShowcaseService;
+  isActive: boolean;
+}): React.JSX.Element {
+  const Icon = iconFor(service.slug);
+  return (
+    <div className="border-line bg-surface shadow-raised grid gap-8 rounded-xl border p-6 md:grid-cols-2 md:p-8">
+      <div
+        className="bg-brand-50 relative flex min-h-56 items-center justify-center overflow-hidden rounded-lg md:min-h-72"
+        style={{ backgroundImage: 'var(--gradient-horizon)' }}
+      >
+        {/* TODO(content): swap for <Image src={`/images/sections/services/${service.slug}.png`} …> */}
+        <span className="bg-accent/10 text-accent relative flex size-20 items-center justify-center rounded-2xl">
+          <Icon size={40} aria-hidden strokeWidth={1.75} />
+        </span>
+      </div>
+      <div className="flex flex-col justify-center gap-5">
+        <h3 className="font-display text-display-md text-ink">{service.name}</h3>
+        <motion.p
+          className="text-body-lg text-ink-muted"
+          animate={{ opacity: isActive ? 1 : 0.55 }}
+          transition={{ duration: 0.4, ease: EASE }}
+        >
+          {service.oneLiner}
+        </motion.p>
+        <div className="flex flex-wrap gap-2">
+          {service.tags.map((tag) => (
+            <span
+              key={tag}
+              className="border-line bg-canvas text-body-sm text-ink-muted rounded-full border px-3 py-1 font-mono"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** "What we do" — a scroll-pinned stack of service cards. As the reader scrolls into the section it
+ *  pins; each card advances to the front (large, with its description) one after another, then the
+ *  section releases. Reduced-motion readers get a plain stacked list instead (ANIMATION §4). */
+export function ServicesShowcase({ eyebrow, services }: ServicesShowcaseProps): React.JSX.Element {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const count = services.length;
 
-  useEffect(() => {
-    if (paused || services.length === 0) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    // Advance the featured service on a fixed clock (external system: the auto-advance timer).
-    const interval = window.setInterval(() => {
-      setActive((index) => (index + 1) % services.length);
-    }, ADVANCE_MS);
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [paused, services.length]);
+  const { scrollYProgress } = useScroll({
+    target: wrapperRef,
+    offset: ['start start', 'end end'],
+  });
 
-  const current = services.at(active) ?? services.at(0);
-  if (current === undefined) return null;
-  const CurrentIcon = ICONS[current.slug] ?? Rocket;
+  useMotionValueEvent(scrollYProgress, 'change', (value) => {
+    if (count === 0) return;
+    const next = Math.min(count - 1, Math.max(0, Math.floor(value * count)));
+    setActive((prev) => (prev === next ? prev : next));
+  });
 
-  function select(index: number): void {
-    setActive(index);
-    setPaused(true);
+  // Reduced motion (or SSR / empty): a static, fully-visible stack — no pinning, no scroll hijack.
+  if (prefersReducedMotion || count === 0) {
+    return (
+      <section className="section-y bg-canvas">
+        <Container>
+          <Reveal>
+            <Eyebrow>{eyebrow}</Eyebrow>
+          </Reveal>
+          <div className="mt-12 flex flex-col gap-6">
+            {services.map((service) => (
+              <Reveal key={service.slug}>
+                <ServiceCard service={service} isActive />
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+    );
   }
 
   return (
-    <section className="bg-canvas relative overflow-hidden py-20 md:py-28">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            'radial-gradient(60% 55% at 50% 30%, color-mix(in oklab, var(--color-brand-300) 20%, transparent), transparent 68%)',
-        }}
-      />
-      <Container className="relative">
-        <Reveal>
-          <div className="bg-brand-50 shadow-card relative overflow-hidden rounded-xl p-8 md:p-12">
-            <div
-              aria-hidden
-              className="bg-brand-300 pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full opacity-25 blur-3xl"
-            />
-            <Eyebrow>{eyebrow}</Eyebrow>
+    <section
+      ref={wrapperRef}
+      className="bg-canvas relative"
+      style={{ height: `${String(Math.round(count * SCROLL_PER_CARD * 100))}vh` }}
+    >
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <Container className="flex h-full flex-col justify-center py-16">
+          <Eyebrow>{eyebrow}</Eyebrow>
 
-            <div className="relative mt-10 grid gap-10 lg:grid-cols-2">
-              <div className="flex flex-col gap-6">
+          <div className="relative mt-8 flex-1">
+            {services.map((service, index) => {
+              const offset = index - active;
+              const behind = Math.min(Math.max(offset, 0), 3);
+              return (
                 <motion.div
-                  key={active}
-                  className="flex flex-col gap-6"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+                  key={service.slug}
+                  className="absolute inset-0 flex items-center justify-center"
+                  style={{
+                    zIndex: count - Math.abs(offset),
+                    pointerEvents: offset === 0 ? 'auto' : 'none',
+                  }}
+                  initial={false}
+                  animate={{
+                    y: offset < 0 ? -64 : behind * 22,
+                    scale: offset < 0 ? 0.94 : 1 - behind * 0.05,
+                    opacity: offset < 0 || offset > 2 ? 0 : 1,
+                  }}
+                  transition={{ duration: 0.55, ease: EASE }}
                 >
-                  <span className="bg-accent/10 text-accent flex h-14 w-14 items-center justify-center rounded-lg">
-                    <CurrentIcon size={28} aria-hidden />
-                  </span>
-
-                  <p className="text-display-sm font-display text-ink max-w-md">
-                    {current.oneLiner}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2">
-                    {current.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="border-line bg-surface text-body-sm text-ink-muted rounded-full border px-3 py-1 font-mono"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                  <div className="w-full max-w-4xl">
+                    <ServiceCard service={service} isActive={offset === 0} />
                   </div>
                 </motion.div>
-
-                <div className="bg-line mt-2 h-1 w-full overflow-hidden rounded-full">
-                  <div
-                    key={active}
-                    className="bg-accent h-full"
-                    style={{
-                      animation: `showcase-progress ${String(ADVANCE_MS)}ms linear`,
-                      animationPlayState: paused ? 'paused' : 'running',
-                    }}
-                  />
-                </div>
-              </div>
-
-              <ul
-                className="flex flex-col"
-                onMouseLeave={() => {
-                  setPaused(false);
-                }}
-              >
-                {services.map((service, index) => {
-                  const Icon = ICONS[service.slug] ?? Rocket;
-                  const isActive = index === active;
-                  return (
-                    <li key={service.slug}>
-                      <button
-                        type="button"
-                        onMouseEnter={() => {
-                          select(index);
-                        }}
-                        onFocus={() => {
-                          select(index);
-                        }}
-                        onClick={() => {
-                          select(index);
-                        }}
-                        className={cn(
-                          'duration-fast focus-visible:outline-accent flex w-full items-center gap-4 rounded-md border-l-2 px-4 py-4 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2',
-                          isActive
-                            ? 'border-accent bg-surface shadow-card'
-                            : 'hover:bg-surface border-transparent',
-                        )}
-                      >
-                        <span
-                          className={cn(
-                            'font-display text-display-sm flex-1',
-                            isActive ? 'text-accent-text' : 'text-ink',
-                          )}
-                        >
-                          {service.name}
-                        </span>
-                        <Icon
-                          size={20}
-                          aria-hidden
-                          className={isActive ? 'text-accent' : 'text-ink-muted'}
-                        />
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
+              );
+            })}
           </div>
-        </Reveal>
-      </Container>
+
+          <div className="relative mt-10 flex items-center justify-center gap-2">
+            {services.map((service, index) => (
+              <span
+                key={service.slug}
+                aria-hidden
+                className={cn(
+                  'duration-base h-1.5 rounded-full transition-all',
+                  index === active ? 'bg-accent w-8' : 'bg-line w-1.5',
+                )}
+              />
+            ))}
+          </div>
+        </Container>
+      </div>
     </section>
   );
 }
