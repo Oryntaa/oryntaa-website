@@ -102,8 +102,8 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 - [x] `lib/content/derived.ts` counts → `config/features.ts` real derivation + env overrides.
 
 **Step 3.2 — Integrity gate**
-- [ ] `check:content` implementing every §4 rule (unique slugs, ref existence, image existence, featured-count, permission×status, dates, SEO presence); wired into `verify` + CI.
-- [ ] Unit suite: fixture-driven valid/invalid cases per rule.
+- [x] `check:content` implementing every §4 rule (unique slugs, ref existence, image existence, featured-count, permission×status, dates, SEO presence); wired into `verify` + CI.
+- [ ] Unit suite: fixture-driven valid/invalid cases per rule. _(Deferred — tests paused per current direction.)_
 
 **Step 3.3 — Seed content**
 - [ ] `content/site.ts` (real identity data; booking URL optional-pending 👤).

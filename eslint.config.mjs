@@ -70,7 +70,7 @@ export default tseslint.config(
 
   // Node scripts and the logger are the only places console output is allowed.
   {
-    files: ['scripts/**/*.{js,mjs,cjs}', 'src/lib/logger.ts'],
+    files: ['scripts/**/*.{js,mjs,cjs,ts,mts}', 'src/lib/logger.ts'],
     rules: { 'no-console': 'off' },
   },
 
