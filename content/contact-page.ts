@@ -15,6 +15,24 @@ export const contactPage = {
     { value: 'careers', label: 'Careers', description: 'Join the founding team.' },
     { value: 'other', label: 'Something else', description: 'Anything not covered above.' },
   ],
+  aside: {
+    eyebrow: 'What to expect',
+    steps: [
+      {
+        title: 'We read it ourselves',
+        body: 'No bots, no gatekeepers — a founder reads every message that comes in.',
+      },
+      {
+        title: 'We reply within a day',
+        body: 'Expect a considered response within one business day, not an autoresponder.',
+      },
+      {
+        title: 'We scope it together',
+        body: 'If it looks like a fit, we set up a call with a founder to scope the work.',
+      },
+    ],
+    directLabel: 'Prefer email? Reach us directly at',
+  },
   booking: {
     title: 'Prefer to talk it through?',
     description: 'Book a 30-minute call with a founder.',

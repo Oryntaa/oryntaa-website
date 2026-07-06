@@ -1,6 +1,7 @@
 'use client';
 
 import { Turnstile } from '@marsidev/react-turnstile';
+import { Check } from 'lucide-react';
 import Link from 'next/link';
 import { useActionState, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -34,7 +35,7 @@ interface ContactFormProps {
 const fieldWrap = 'flex flex-col gap-2';
 const labelClass = 'text-body-sm text-ink font-medium';
 const inputClass =
-  'border-line bg-surface text-body text-ink focus-visible:border-accent focus-visible:outline-accent rounded-md border px-4 py-3 focus-visible:outline-2 focus-visible:-outline-offset-1';
+  'border-line bg-canvas text-body text-ink focus-visible:border-accent focus-visible:outline-accent rounded-md border px-4 py-3 transition-colors focus-visible:outline-2 focus-visible:-outline-offset-1';
 const errorClass = 'text-body-sm text-accent-text';
 
 function Label({
@@ -86,7 +87,10 @@ export function ContactForm({
 
   if (state?.ok === true) {
     return (
-      <div className="border-line bg-surface flex flex-col items-start gap-4 rounded-xl border p-8 md:p-12">
+      <div className="flex flex-col items-start gap-4 py-6">
+        <span className="bg-accent/10 text-accent flex size-12 items-center justify-center rounded-full">
+          <Check size={24} aria-hidden />
+        </span>
         <h2 className="font-display text-display-sm text-ink">{contactPage.success.title}</h2>
         <p className="text-body-lg text-ink-muted max-w-xl">{contactPage.success.body}</p>
         <div className="mt-2 flex flex-wrap gap-3">
@@ -155,6 +159,15 @@ export function ContactForm({
           ))}
         </div>
       </fieldset>
+
+      {/* Step indicator (project route only) */}
+      {isProject ? (
+        <div className="text-body-sm text-ink-muted flex items-center gap-3 font-mono">
+          <span className={cn(step === 1 ? 'text-accent-text' : '')}>01 — Your details</span>
+          <span aria-hidden className="bg-line h-px w-6" />
+          <span className={cn(step === 2 ? 'text-accent-text' : '')}>02 — The project</span>
+        </div>
+      ) : null}
 
       {/* Hidden context + spam traps */}
       <input type="hidden" name="route" value={route} />

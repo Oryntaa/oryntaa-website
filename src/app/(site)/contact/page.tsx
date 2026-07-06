@@ -8,6 +8,7 @@ import { ContactForm } from '@/features/contact/components/ContactForm';
 import { Container } from '@/components/layout/Container';
 import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Reveal } from '@/components/motion/Reveal';
+import { Stagger } from '@/components/motion/Stagger';
 import { FaqAccordion } from '@/components/sections/shared/FaqAccordion';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Heading } from '@/components/ui/Heading';
@@ -75,23 +76,64 @@ export default async function ContactPage({
           <Reveal delay={0.1}>
             <p className="text-body-lg text-ink-muted max-w-2xl">{contactPage.hero.description}</p>
           </Reveal>
-          <Reveal delay={0.15}>
-            <p className="text-body-sm text-accent-text font-mono">{contactPage.hero.promise}</p>
-          </Reveal>
         </Container>
       </section>
 
-      {/* Form */}
+      {/* Form + aside */}
       <section className="section-y bg-canvas pt-4">
         <Container>
-          <div className="max-w-3xl">
-            <ContactForm
-              presetRoute={preset.route}
-              presetStage={preset.stage}
-              intent={preset.intent}
-              sourcePath={sourcePath}
-              email={email}
-            />
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+            <aside className="flex flex-col gap-8 lg:sticky lg:top-24 lg:col-span-5 lg:self-start">
+              <Reveal>
+                <div className="flex flex-col gap-3">
+                  <Eyebrow>{contactPage.aside.eyebrow}</Eyebrow>
+                  <p className="text-body-sm text-accent-text font-mono">
+                    {contactPage.hero.promise}
+                  </p>
+                </div>
+              </Reveal>
+              <Stagger className="flex flex-col gap-6">
+                {contactPage.aside.steps.map((step, index) => (
+                  <div key={step.title} className="flex gap-4">
+                    <span className="border-line text-accent-text text-body-sm flex size-8 shrink-0 items-center justify-center rounded-full border font-mono tabular-nums">
+                      {index + 1}
+                    </span>
+                    <div className="flex flex-col gap-1">
+                      <h2 className="font-display text-ink text-lg">{step.title}</h2>
+                      <p className="text-body-sm text-ink-muted">{step.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </Stagger>
+              <Reveal delay={0.1}>
+                <div className="border-line border-t pt-6">
+                  <p className="text-body-sm text-ink-muted">
+                    {contactPage.aside.directLabel}{' '}
+                    <a
+                      href={`mailto:${email}`}
+                      className="text-accent-text underline underline-offset-4"
+                    >
+                      {email}
+                    </a>
+                    .
+                  </p>
+                </div>
+              </Reveal>
+            </aside>
+
+            <div className="lg:col-span-7">
+              <Reveal delay={0.1}>
+                <div className="border-line bg-surface shadow-card rounded-xl border p-6 md:p-8">
+                  <ContactForm
+                    presetRoute={preset.route}
+                    presetStage={preset.stage}
+                    intent={preset.intent}
+                    sourcePath={sourcePath}
+                    email={email}
+                  />
+                </div>
+              </Reveal>
+            </div>
           </div>
         </Container>
       </section>
