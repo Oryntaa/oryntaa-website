@@ -245,7 +245,7 @@ export function ServicesShowcase({
         <Container className="relative flex h-full flex-col pt-24 pb-12">
           <Eyebrow>{eyebrow}</Eyebrow>
 
-          <div className="grid flex-1 items-center gap-12 lg:grid-cols-[minmax(0,1fr)_auto]">
+          <div className="flex flex-1 flex-col justify-center gap-12 lg:flex-row lg:items-center lg:justify-between">
             <AnimatePresence mode="wait">
               <ServiceContent key={current.slug} service={current} />
             </AnimatePresence>
