@@ -5,6 +5,8 @@ import type { Founder } from '@/lib/content/schemas';
 
 interface FounderCardProps {
   founder: Founder;
+  /** Show the founder's intro paragraph (used on the Leadership page). */
+  showIntro?: boolean;
 }
 
 /** First + second initial for the monogram fallback (e.g. "Muhammad Awais" → "MA"). */
@@ -16,7 +18,7 @@ function initialsOf(name: string): string {
 /** Founder card (COMPONENT_LIBRARY §5). A compact avatar — a real photo once one lands, otherwise a
  *  brand monogram — with name, role, focus areas, and profile links. Placeholder photos render as
  *  the monogram so the section reads cleanly before real photography arrives. */
-export function FounderCard({ founder }: FounderCardProps): React.JSX.Element {
+export function FounderCard({ founder, showIntro = false }: FounderCardProps): React.JSX.Element {
   const hasPhoto = !founder.photo.includes('placeholder');
 
   return (
@@ -44,6 +46,8 @@ export function FounderCard({ founder }: FounderCardProps): React.JSX.Element {
         <h3 className="font-display text-ink text-lg">{founder.name}</h3>
         <p className="text-body-sm text-ink-muted">{founder.role}</p>
       </div>
+
+      {showIntro ? <p className="text-body text-ink-muted">{founder.intro}</p> : null}
 
       <p className="text-body-sm text-ink-muted/80 font-mono">{founder.focusAreas.join(' · ')}</p>
 
