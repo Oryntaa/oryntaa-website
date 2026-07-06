@@ -106,11 +106,11 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 - [ ] Unit suite: fixture-driven valid/invalid cases per rule. _(Deferred — tests paused per current direction.)_
 
 **Step 3.3 — Seed content**
-- [ ] `content/site.ts` (real identity data; booking URL optional-pending 👤).
-- [ ] `content/founders.ts` (names/roles real; photos/bios `TODO(content)` placeholders that pass schema).
-- [ ] Six `content/services/*.ts` drafted **in full** from PAGE_SPECIFICATIONS §4 briefs (real copy work — flagged for Gate 3 review).
-- [ ] Project meta for all six projects with correct `status`/`permission` values from the work map (four `pending` until 👤 clearance; case-study MDX stubs).
-- [ ] Legal MDX stubs with `TODO(content): legal review` frontmatter.
+- [x] `content/site.ts` (real identity data; booking URL optional-pending 👤). _(socials real; industries drafted; stack + booking pending 👤.)_
+- [x] `content/founders.ts` (names/roles real; photos/bios `TODO(content)` placeholders that pass schema).
+- [x] Six `content/services/*.ts` drafted **in full** from PAGE_SPECIFICATIONS §4 briefs (real copy work — flagged for Gate 3 review). _(Founder-supplied; problem/approach/FAQ bodies drafted — Gate 6 sign-off.)_
+- [x] Project meta for all six projects with correct `status`/`permission` values from the work map (four `pending` until 👤 clearance; case-study MDX stubs). _(Four seeded draft/pending; Espo + MASI are post-launch grid additions per 7.4.)_
+- [x] Legal MDX stubs with `TODO(content): legal review` frontmatter.
 
 **DoD / ⛳ Gate 3:** `check:content` red/green demonstrably works (PR shows a failing fixture); founders review the six service modules' copy; gates compute correctly (work off, insights off at this point).
 

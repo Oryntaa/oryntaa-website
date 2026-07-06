@@ -1,6 +1,19 @@
+import { aiSolutions } from './ai-solutions';
+import { cloudDevops } from './cloud-devops';
+import { mobileAppDevelopment } from './mobile-app-development';
+import { saasMvp } from './saas-mvp';
+import { uiuxDesign } from './uiux-design';
+import { webDevelopment } from './web-development';
+
 /**
- * Service registry (CONTENT_ARCHITECTURE §1). The six per-service modules are imported here and
- * validated by getServices() against serviceSchema. Empty until Phase 3.3 drafts them from the
- * PAGE_SPECIFICATIONS §4 briefs.
+ * Service registry (CONTENT_ARCHITECTURE §1) — the six per-service modules, validated and ordered
+ * by getServices() against serviceSchema. Problem/approach/FAQ bodies are drafted; ⛳ Gate 6 review.
  */
-export const services: unknown[] = [];
+export const services = [
+  aiSolutions,
+  webDevelopment,
+  mobileAppDevelopment,
+  saasMvp,
+  uiuxDesign,
+  cloudDevops,
+];

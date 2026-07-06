@@ -151,8 +151,14 @@ for (const project of parsedProjects) {
     );
   }
   assertSeo(project.seo, `project "${project.slug}"`);
-  assertImageExists(project.cover, `project "${project.slug}" cover`);
-  for (const shot of project.gallery) assertImageExists(shot, `project "${project.slug}" gallery`);
+  // Images are only required once a project is publicly renderable (§5); drafts may reference
+  // covers/gallery shots that get added before the project is cleared for publish.
+  if (project.status === 'published' && project.permission !== 'pending') {
+    assertImageExists(project.cover, `project "${project.slug}" cover`);
+    for (const shot of project.gallery) {
+      assertImageExists(shot, `project "${project.slug}" gallery`);
+    }
+  }
 }
 
 for (const article of parsedArticles) {

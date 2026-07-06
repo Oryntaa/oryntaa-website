@@ -1,7 +1,7 @@
 /**
  * Site identity (CONTENT_ARCHITECTURE §1). Plain data — validated by getSite() against siteSchema.
- * TODO(content): socials + bookingUrl (👤), the stack-logo row, and the industries strip land in
- * Phase 3.3 (industries from PAGE_SPECIFICATIONS §2.5; stack logos as public/brand assets).
+ * TODO(content): bookingUrl (👤, later) and the stack-logo row (drop SVGs in public/images/stack/,
+ * then wire them here). Industries are drafted from our project sectors — flag for review.
  */
 export const site = {
   name: 'Oryntaa',
@@ -9,7 +9,18 @@ export const site = {
   description:
     'An AI-first software engineering company building intelligent digital products for organizations worldwide.',
   email: 'hello@oryntaa.com',
-  socials: {},
+  socials: {
+    linkedin: 'https://www.linkedin.com/company/oryntaa',
+    instagram: 'https://www.instagram.com/oryntaa/',
+    facebook: 'https://www.facebook.com/people/Oryntaa/61591166057905/',
+  },
   stack: [],
-  industries: [],
+  industries: [
+    'Healthcare & Education',
+    'Recruitment & HR Tech',
+    'Automotive & Logistics',
+    'Legal & Family',
+    'SaaS & Startups',
+    'E-commerce & Marketplaces',
+  ],
 };
