@@ -28,5 +28,3 @@ pnpm dev                     # http://localhost:3000
 
 See [`docs/DEVELOPMENT_WORKFLOW.md`](./docs/DEVELOPMENT_WORKFLOW.md) for the full workflow, Git conventions, and PR checklist.
 
-
-Redeployed from github
