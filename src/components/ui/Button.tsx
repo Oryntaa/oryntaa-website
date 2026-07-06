@@ -19,6 +19,8 @@ export const buttonVariants = cva(
       variant: {
         primary: 'bg-accent text-accent-contrast hover:bg-brand-500 active:translate-y-px',
         secondary: 'border border-ink text-ink hover:bg-ink hover:text-canvas',
+        // Solid-dark secondary from the homepage design ("Book a Call") — not in DESIGN_SYSTEM §6.
+        ink: 'bg-ink text-canvas hover:bg-neutral-800 active:translate-y-px',
         ghost: 'text-accent-text underline-offset-4 hover:underline',
       },
       size: {

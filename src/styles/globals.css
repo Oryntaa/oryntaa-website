@@ -108,6 +108,16 @@
   padding-block: var(--space-section);
 }
 
+/* Auto-advance progress bar for the homepage services showcase (respects reduced-motion below). */
+@keyframes showcase-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 /* Duration tokens as utilities — Tailwind v4 has no named-duration namespace. DESIGN_SYSTEM §3. */
 @utility duration-fast {
   transition-duration: var(--duration-fast);
