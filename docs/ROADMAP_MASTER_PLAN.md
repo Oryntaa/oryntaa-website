@@ -80,10 +80,10 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 - [x] `config/features.ts` with counts stubbed to 0 (real derivation lands Phase 3) — gating logic testable now.
 
 **Step 2.2 — Navbar & footer**
-- [ ] `Navbar` (server shell + client island): top/scrolled states (`useScrolled`), desktop dropdowns (Radix), active-route logic, CTA button.
-- [ ] `MobileMenu` (Dialog drawer per spec) with focus trap, scroll lock, route-change close.
-- [ ] `Footer` per NAVIGATION_ARCHITECTURE §4 (dark theme — first real dark-section consumer).
-- [ ] Root layout assembly: fonts, skip link, header/main/footer landmarks; `error.tsx` + `not-found.tsx` shells (final copy Phase 11).
+- [x] `Navbar` (server shell + client island): top/scrolled states (`useScrolled`), desktop dropdowns (Radix), active-route logic, CTA button.
+- [x] `MobileMenu` (Dialog drawer per spec) with focus trap, scroll lock, route-change close.
+- [x] `Footer` per NAVIGATION_ARCHITECTURE §4 (dark theme — first real dark-section consumer). _(Social column + brand tagline become content/site.ts in Phase 3.)_
+- [x] Root layout assembly: fonts, skip link, header/main/footer landmarks; `error.tsx` + `not-found.tsx` shells (final copy Phase 11).
 
 **Step 2.3 — First real e2e**
 - [ ] Playwright: nav walk desktop + mobile drawer; axe on the shell; Lighthouse CI job activated on `/`.

@@ -27,7 +27,13 @@ export interface FooterColumn {
 }
 
 export const primaryNav: NavGroup[] = [
-  { label: 'Services', href: routes.services, children: [] },
+  // The six per-service links are prepended from the content layer (Phase 3); the overview
+  // link is the always-present "All Services" footer of the dropdown (NAVIGATION_ARCHITECTURE §2).
+  {
+    label: 'Services',
+    href: routes.services,
+    children: [{ label: 'All Services', href: routes.services }],
+  },
   { label: 'Work', href: routes.work, gate: 'work' },
   {
     label: 'About',

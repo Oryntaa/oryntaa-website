@@ -108,6 +108,17 @@
   padding-block: var(--space-section);
 }
 
+/* Duration tokens as utilities — Tailwind v4 has no named-duration namespace. DESIGN_SYSTEM §3. */
+@utility duration-fast {
+  transition-duration: var(--duration-fast);
+}
+@utility duration-base {
+  transition-duration: var(--duration-base);
+}
+@utility duration-slow {
+  transition-duration: var(--duration-slow);
+}
+
 /* Dark-section semantic overrides. DESIGN_SYSTEM §2. */
 [data-theme='dark'] {
   --color-canvas: var(--color-neutral-950);
@@ -133,5 +144,18 @@
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Honor reduced-motion globally (ACCESSIBILITY_GUIDELINES §5): reveals render static,
+     transitions become instant. Phase 13 refines per-surface motion (ANIMATION_ARCHITECTURE §4). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
