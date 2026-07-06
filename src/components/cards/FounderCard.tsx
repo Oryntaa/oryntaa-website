@@ -7,27 +7,47 @@ interface FounderCardProps {
   founder: Founder;
 }
 
-/** Founder portrait card — circular accent-framed photo, name, role, focus, profile links (§5). */
+/** First + second initial for the monogram fallback (e.g. "Muhammad Awais" → "MA"). */
+function initialsOf(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase();
+}
+
+/** Founder card (COMPONENT_LIBRARY §5). A compact avatar — a real photo once one lands, otherwise a
+ *  brand monogram — with name, role, focus areas, and profile links. Placeholder photos render as
+ *  the monogram so the section reads cleanly before real photography arrives. */
 export function FounderCard({ founder }: FounderCardProps): React.JSX.Element {
+  const hasPhoto = !founder.photo.includes('placeholder');
+
   return (
-    <div className="flex flex-col gap-4">
-      <div className="bg-accent relative aspect-square overflow-hidden rounded-full">
-        <Image
-          src={founder.photo}
-          alt={founder.name}
-          fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-          className="object-cover object-top"
-        />
-      </div>
+    <div className="group border-line flex flex-col gap-5 border-t pt-6">
+      {hasPhoto ? (
+        <div className="border-line relative size-16 overflow-hidden rounded-full border">
+          <Image
+            src={founder.photo}
+            alt={founder.name}
+            fill
+            sizes="64px"
+            className="object-cover object-top"
+          />
+        </div>
+      ) : (
+        <div
+          aria-hidden
+          className="border-line bg-brand-100 text-accent-text font-display flex size-16 items-center justify-center rounded-full border text-xl"
+        >
+          {initialsOf(founder.name)}
+        </div>
+      )}
+
       <div className="flex flex-col gap-1">
-        <h3 className="font-display text-display-sm text-ink">{founder.name}</h3>
+        <h3 className="font-display text-ink text-lg">{founder.name}</h3>
         <p className="text-body-sm text-ink-muted">{founder.role}</p>
-        <p className="text-body-sm text-ink-muted mt-1 font-mono">
-          {founder.focusAreas.join(' · ')}
-        </p>
       </div>
-      <div className="text-body-sm text-accent-text flex gap-4 font-mono uppercase">
+
+      <p className="text-body-sm text-ink-muted/80 font-mono">{founder.focusAreas.join(' · ')}</p>
+
+      <div className="text-body-sm text-accent-text mt-auto flex gap-4 font-mono uppercase">
         {founder.linkedin !== undefined ? (
           <a
             href={founder.linkedin}
