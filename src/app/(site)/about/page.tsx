@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 
+import { routes } from '@/config/routes';
+
 import { getFounders } from '@/lib/content/founders';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 import { FounderCard } from '@/components/cards/FounderCard';
 import { Container } from '@/components/layout/Container';
@@ -16,11 +19,12 @@ import { Heading } from '@/components/ui/Heading';
 import { aboutPage } from '@/content/about-page';
 import { home } from '@/content/home';
 
-export const metadata: Metadata = {
-  title: 'About | Oryntaa',
+export const metadata: Metadata = buildMetadata({
+  title: 'About',
   description:
     'Oryntaa is an AI-first software engineering company — founder-led, quality without compromise, built for long-term growth.',
-};
+  path: routes.about,
+});
 
 export default function AboutPage(): React.JSX.Element {
   const { hero, story, missionVision, principles, howWeBuild, leadership, careers } = aboutPage;

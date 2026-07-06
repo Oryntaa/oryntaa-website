@@ -1,6 +1,13 @@
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono, Sora } from 'next/font/google';
 
+import { getFounders } from '@/lib/content/founders';
+import { getSite } from '@/lib/content/site';
+import { organizationJsonLd, websiteJsonLd } from '@/lib/seo/jsonld';
+import { buildMetadata } from '@/lib/seo/metadata';
+
+import { JsonLd } from '@/components/seo/JsonLd';
+
 import '@/styles/globals.css';
 import '@/styles/prose.css';
 
@@ -14,19 +21,36 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
-// TODO(content): the SEO metadata factory replaces this in Phase 12 (SEO_ARCHITECTURE).
-export const metadata: Metadata = {
-  title: 'Oryntaa',
-};
+/** Site-wide default metadata (SEO_ARCHITECTURE §2). Pages override with their own factory call. */
+export const metadata: Metadata = buildMetadata({
+  description: getSite().description,
+  path: '/',
+  ogType: 'default',
+});
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>): React.JSX.Element {
+  const site = getSite();
+  const socials = [site.socials.linkedin, site.socials.instagram, site.socials.facebook].filter(
+    (value): value is string => value !== undefined,
+  );
+  const organization = organizationJsonLd({
+    name: site.name,
+    description: site.description,
+    email: site.email,
+    socials,
+    founders: getFounders().map((founder) => ({ name: founder.name })),
+  });
+
   return (
     <html lang="en" className={`${sora.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <JsonLd data={[organization, websiteJsonLd(site.name)]} />
+        {children}
+      </body>
     </html>
   );
 }

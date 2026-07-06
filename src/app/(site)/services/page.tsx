@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 
 import { features } from '@/config/features';
+import { routes } from '@/config/routes';
 
 import { getFeaturedProjects } from '@/lib/content/projects';
 import { getServices } from '@/lib/content/services';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { Container } from '@/components/layout/Container';
@@ -20,11 +22,12 @@ import { Heading } from '@/components/ui/Heading';
 import { home } from '@/content/home';
 import { servicesPage } from '@/content/services-page';
 
-export const metadata: Metadata = {
-  title: 'Services | Oryntaa',
+export const metadata: Metadata = buildMetadata({
+  title: 'Services',
   description:
     'Custom software development, from strategy to scale — AI, web, mobile, SaaS/MVP, UI/UX, and cloud, delivered by a founding team that stays accountable end to end.',
-};
+  path: routes.services,
+});
 
 /** Services overview (PAGE_SPECIFICATIONS §3): hero, service grid, how-services-connect, engagement
  *  models, process, gated Selected Work, CTA. */

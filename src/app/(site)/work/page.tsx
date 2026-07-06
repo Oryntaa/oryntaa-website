@@ -4,6 +4,7 @@ import { routes } from '@/config/routes';
 
 import { getProjects } from '@/lib/content/projects';
 import type { ProjectMeta } from '@/lib/content/schemas';
+import { buildMetadata } from '@/lib/seo/metadata';
 import { cn } from '@/lib/utils/cn';
 
 import { ProjectCard } from '@/components/cards/ProjectCard';
@@ -17,11 +18,12 @@ import { Heading } from '@/components/ui/Heading';
 import { home } from '@/content/home';
 import { workPage } from '@/content/work-page';
 
-export const metadata: Metadata = {
-  title: 'Work | Oryntaa',
+export const metadata: Metadata = buildMetadata({
+  title: 'Work',
   description:
     "Selected products delivered by Oryntaa's founding team — web, mobile, AI, and SaaS.",
-};
+  path: routes.work,
+});
 
 interface WorkPageProps {
   searchParams: Promise<{ type?: string }>;

@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 
+import { routes } from '@/config/routes';
+
 import { getSite } from '@/lib/content/site';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 import { BookingEmbed } from '@/features/contact/components/BookingEmbed';
 import { ContactForm } from '@/features/contact/components/ContactForm';
@@ -15,11 +18,12 @@ import { Heading } from '@/components/ui/Heading';
 
 import { contactPage } from '@/content/contact-page';
 
-export const metadata: Metadata = {
-  title: 'Contact | Oryntaa',
+export const metadata: Metadata = buildMetadata({
+  title: 'Contact',
   description:
     'Tell us about your product idea, business challenge, or question — we reply within one business day.',
-};
+  path: routes.contact(),
+});
 
 interface ContactPageProps {
   searchParams: Promise<{ intent?: string }>;

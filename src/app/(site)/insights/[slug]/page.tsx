@@ -5,6 +5,8 @@ import { routes } from '@/config/routes';
 
 import { getFounders } from '@/lib/content/founders';
 import { getArticle, getArticles, getRelatedArticles } from '@/lib/content/insights';
+import { articleJsonLd, breadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 import { ArticleCard, type ArticleCardItem } from '@/components/cards/ArticleCard';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
@@ -14,6 +16,7 @@ import { Mdx } from '@/components/mdx/Mdx';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
 import { CtaSection } from '@/components/sections/shared/CtaSection';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { Heading } from '@/components/ui/Heading';
 
 import { home } from '@/content/home';
@@ -52,10 +55,12 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   const { slug } = await params;
   const article = getArticle(slug);
   if (article === undefined) return {};
-  return {
-    title: article.meta.seo.title ?? `${article.meta.title} | Oryntaa`,
+  return buildMetadata({
+    title: article.meta.seo.title ?? article.meta.title,
     description: article.meta.seo.description ?? article.meta.excerpt,
-  };
+    path: routes.article(slug),
+    ogType: 'article',
+  });
 }
 
 /** Article template (PAGE_SPECIFICATIONS §9): category → H1 → excerpt → author + date · read time →
@@ -85,6 +90,22 @@ export default async function ArticlePage({
 
   return (
     <>
+      <JsonLd
+        data={[
+          articleJsonLd({
+            headline: meta.title,
+            description: meta.excerpt,
+            path: routes.article(slug),
+            authorName,
+            publishedAt: meta.publishedAt,
+          }),
+          breadcrumbJsonLd([
+            { name: 'Home', path: routes.home },
+            { name: 'Insights', path: routes.insights },
+            { name: meta.title, path: routes.article(slug) },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section className="bg-canvas relative overflow-hidden">
         <div

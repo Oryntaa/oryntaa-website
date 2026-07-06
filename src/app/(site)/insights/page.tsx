@@ -6,6 +6,7 @@ import { routes } from '@/config/routes';
 import { getFounders } from '@/lib/content/founders';
 import { getArticles } from '@/lib/content/insights';
 import type { ArticleFrontmatter } from '@/lib/content/schemas';
+import { buildMetadata } from '@/lib/seo/metadata';
 import { cn } from '@/lib/utils/cn';
 
 import { ArticleCard, type ArticleCardItem } from '@/components/cards/ArticleCard';
@@ -19,11 +20,12 @@ import { Heading } from '@/components/ui/Heading';
 import { home } from '@/content/home';
 import { insightsPage } from '@/content/insights-page';
 
-export const metadata: Metadata = {
-  title: 'Insights | Oryntaa',
+export const metadata: Metadata = buildMetadata({
+  title: 'Insights',
   description:
     "Ideas, perspectives, and what we're learning — on AI, engineering, product, and how Oryntaa builds.",
-};
+  path: routes.insights,
+});
 
 interface InsightsPageProps {
   searchParams: Promise<{ category?: string }>;

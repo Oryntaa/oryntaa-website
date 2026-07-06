@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { routes } from '@/config/routes';
 
 import { getFounders } from '@/lib/content/founders';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 import { FounderCard } from '@/components/cards/FounderCard';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
@@ -16,10 +17,11 @@ import { Heading } from '@/components/ui/Heading';
 import { home } from '@/content/home';
 import { leadershipPage } from '@/content/leadership-page';
 
-export const metadata: Metadata = {
-  title: 'Leadership | Oryntaa',
+export const metadata: Metadata = buildMetadata({
+  title: 'Leadership',
   description: 'The four founders building Oryntaa — equal partners, senior engineers, hands on.',
-};
+  path: routes.leadership,
+});
 
 export default function LeadershipPage(): React.JSX.Element {
   const { hero, cta } = leadershipPage;

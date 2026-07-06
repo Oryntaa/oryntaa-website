@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 
+import { routes } from '@/config/routes';
+
 import { getOpenings } from '@/lib/content/careers';
 import { getSite } from '@/lib/content/site';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 import { Container } from '@/components/layout/Container';
 import { SectionHeader } from '@/components/layout/SectionHeader';
@@ -15,11 +18,12 @@ import { Heading } from '@/components/ui/Heading';
 import { careersPage } from '@/content/careers-page';
 import { home } from '@/content/home';
 
-export const metadata: Metadata = {
-  title: 'Careers | Oryntaa',
+export const metadata: Metadata = buildMetadata({
+  title: 'Careers',
   description:
     'Build meaningful technology with a small, senior team. See open roles at Oryntaa, or follow us on LinkedIn for future positions.',
-};
+  path: routes.careers,
+});
 
 export default function CareersPage(): React.JSX.Element {
   const { hero, why, openings: openingsCopy, emptyState } = careersPage;

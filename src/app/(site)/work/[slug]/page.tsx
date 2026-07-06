@@ -6,12 +6,15 @@ import { routes } from '@/config/routes';
 
 import { getProject, getProjectCaseStudy, getProjects } from '@/lib/content/projects';
 import { getService } from '@/lib/content/services';
+import { breadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { Container } from '@/components/layout/Container';
 import { Mdx } from '@/components/mdx/Mdx';
 import { Reveal } from '@/components/motion/Reveal';
 import { CtaSection } from '@/components/sections/shared/CtaSection';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { ArrowLink } from '@/components/ui/ArrowLink';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Heading } from '@/components/ui/Heading';
@@ -32,7 +35,12 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   const { slug } = await params;
   const project = getProject(slug);
   if (project === undefined) return {};
-  return { title: project.seo.title, description: project.seo.description };
+  return buildMetadata({
+    title: project.name,
+    description: project.seo.description,
+    path: routes.project(slug),
+    ogType: 'work',
+  });
 }
 
 /** Case-study detail (PAGE_SPECIFICATIONS §5): hero → Snapshot → narrative (MDX) → Technology →
@@ -83,6 +91,13 @@ export default async function ProjectDetailPage({
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: routes.home },
+          { name: 'Work', path: routes.work },
+          { name: project.name, path: routes.project(slug) },
+        ])}
+      />
       {/* Hero */}
       <section className="bg-canvas relative overflow-hidden">
         <div

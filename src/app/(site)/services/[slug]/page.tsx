@@ -7,6 +7,8 @@ import { routes } from '@/config/routes';
 
 import { getProjects } from '@/lib/content/projects';
 import { getService, getServices } from '@/lib/content/services';
+import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from '@/lib/seo/jsonld';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 import { Container } from '@/components/layout/Container';
 import { SectionHeader } from '@/components/layout/SectionHeader';
@@ -14,6 +16,7 @@ import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
 import { CtaSection } from '@/components/sections/shared/CtaSection';
 import { FaqAccordion } from '@/components/sections/shared/FaqAccordion';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { ArrowLink } from '@/components/ui/ArrowLink';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { Eyebrow } from '@/components/ui/Eyebrow';
@@ -34,7 +37,12 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
   const { slug } = await params;
   const service = getService(slug);
   if (service === undefined) return {};
-  return { title: service.seo.title, description: service.seo.description };
+  return buildMetadata({
+    title: service.name,
+    description: service.seo.description,
+    path: routes.service(slug),
+    ogType: 'service',
+  });
 }
 
 /** Service detail template (PAGE_SPECIFICATIONS §4) — every section fed from the service content
@@ -54,18 +62,23 @@ export default async function ServiceDetailPage({
     .filter((related): related is NonNullable<typeof related> => related !== undefined)
     .slice(0, 3);
 
-  const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: service.faq.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: { '@type': 'Answer', text: item.a },
-    })),
-  };
+  const structuredData = [
+    serviceJsonLd({
+      name: service.name,
+      description: service.seo.description,
+      path: routes.service(slug),
+    }),
+    faqJsonLd(service.faq),
+    breadcrumbJsonLd([
+      { name: 'Home', path: routes.home },
+      { name: 'Services', path: routes.services },
+      { name: service.name, path: routes.service(slug) },
+    ]),
+  ];
 
   return (
     <>
+      <JsonLd data={structuredData} />
       {/* Hero */}
       <section className="bg-canvas relative overflow-hidden">
         <div
@@ -287,11 +300,6 @@ export default async function ServiceDetailPage({
             <FaqAccordion items={service.faq} />
           </div>
         </Container>
-        <script
-          type="application/ld+json"
-
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
       </section>
 
       <CtaSection
