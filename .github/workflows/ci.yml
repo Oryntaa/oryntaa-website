@@ -1,0 +1,94 @@
+name: CI
+
+# Pipeline per TESTING_STRATEGY §6:
+# install -> lint -> typecheck -> unit+component -> build -> e2e+axe -> greps -> lighthouse-ci
+# Phase 0: e2e runs the skipped seed spec (axe lands Phase 2); lighthouse is stubbed.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Unit + component tests
+        run: pnpm run test
+
+      - name: Content / asset / token guards
+        run: |
+          pnpm run check:content
+          pnpm run check:assets
+          pnpm run check:arbitrary
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Secret scan (no service-role secret in client bundle)
+        run: |
+          if grep -rE 'service_role' .next/static >/dev/null 2>&1; then
+            echo "::error::Potential secret leaked into .next/static (SECURITY_GUIDELINES §4)"
+            exit 1
+          fi
+          echo "secret scan ✓ (no secrets in .next/static)"
+
+  e2e:
+    name: e2e
+    needs: verify
+    runs-on: ubuntu-latest
+    # Turnstile test keys + dev Supabase are supplied here once real specs land (Phase 2).
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium webkit
+
+      - name: E2E (+ axe from Phase 2)
+        run: pnpm run test:e2e
+
+  lighthouse:
+    name: lighthouse
+    needs: e2e
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lighthouse CI (stubbed)
+        run: echo "Lighthouse CI is stubbed until Phase 2 provides real pages (ROADMAP 2.3)."

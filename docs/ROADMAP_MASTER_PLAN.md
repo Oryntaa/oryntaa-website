@@ -38,9 +38,9 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 - [x] Scripts: `verify`, `check:content` (stub), `check:assets`, `check:arbitrary` (the grep guards, wired but trivially green).
 
 **Step 0.3 — Environment & CI**
-- [ ] `src/lib/env.ts` per ENVIRONMENT_VARIABLES §1 (all keys, optional-safe until services exist); `.env.example`.
-- [ ] GitHub Actions pipeline per TESTING_STRATEGY §6 (lighthouse job stubbed until Phase 2 gives it pages).
-- [ ] `src/lib/logger.ts` per LOGGING_MONITORING §1.
+- [x] `src/lib/env.ts` per ENVIRONMENT_VARIABLES §1 (all keys, optional-safe until services exist); `.env.example`.
+- [x] GitHub Actions pipeline per TESTING_STRATEGY §6 (lighthouse job stubbed until Phase 2 gives it pages).
+- [x] `src/lib/logger.ts` per LOGGING_MONITORING §1.
 
 **Step 0.4 — Deployment & external provisioning** 👤 (engineering pairs where marked)
 - [ ] 👤 Vercel team + project import; env vars (placeholders where services pending); Deployment Protection on; Analytics + Speed Insights toggled.
