@@ -1,8 +1,13 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { cache } from 'react';
 
 import { projectMetaSchema, type ProjectMeta } from '@/lib/content/schemas';
 
 import { projects } from '@/content/projects';
+
+const PROJECTS_DIR = join(process.cwd(), 'content', 'projects');
 
 interface GetProjectsOptions {
   type?: ProjectMeta['type'];
@@ -32,4 +37,18 @@ export function getFeaturedProjects(): ProjectMeta[] {
       (project): project is ProjectMeta & { featured: number } => project.featured !== undefined,
     )
     .sort((a, b) => a.featured - b.featured);
+}
+
+/** A single publicly-renderable project by slug, or undefined. */
+export function getProject(slug: string): ProjectMeta | undefined {
+  return getProjects({ publishedOnly: true }).find((project) => project.slug === slug);
+}
+
+/** The raw case-study MDX body for a project, or undefined if absent (CONTENT_ARCHITECTURE §3). */
+export function getProjectCaseStudy(slug: string): string | undefined {
+  try {
+    return readFileSync(join(PROJECTS_DIR, slug, 'case-study.mdx'), 'utf8');
+  } catch {
+    return undefined;
+  }
 }

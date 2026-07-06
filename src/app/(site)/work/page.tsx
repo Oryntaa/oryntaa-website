@@ -1,0 +1,128 @@
+import type { Metadata } from 'next';
+
+import { routes } from '@/config/routes';
+
+import { getProjects } from '@/lib/content/projects';
+import type { ProjectMeta } from '@/lib/content/schemas';
+import { cn } from '@/lib/utils/cn';
+
+import { ProjectCard } from '@/components/cards/ProjectCard';
+import { Container } from '@/components/layout/Container';
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger } from '@/components/motion/Stagger';
+import { CtaSection } from '@/components/sections/shared/CtaSection';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Heading } from '@/components/ui/Heading';
+
+import { home } from '@/content/home';
+import { workPage } from '@/content/work-page';
+
+export const metadata: Metadata = {
+  title: 'Work | Oryntaa',
+  description:
+    "Selected products delivered by Oryntaa's founding team — web, mobile, AI, and SaaS.",
+};
+
+interface WorkPageProps {
+  searchParams: Promise<{ type?: string }>;
+}
+
+const TYPES: ProjectMeta['type'][] = ['web', 'mobile', 'ai', 'saas'];
+
+function isProjectType(value: string | undefined): value is ProjectMeta['type'] {
+  return value !== undefined && (TYPES as string[]).includes(value);
+}
+
+/** Work grid (PAGE_SPECIFICATIONS §5) — hero, type filter (URL param `?type=`), published projects,
+ *  CTA. Filtering is server-side; the filter bar is a set of links, so it works without JS. */
+export default async function WorkPage({
+  searchParams,
+}: WorkPageProps): Promise<React.JSX.Element> {
+  const { type } = await searchParams;
+  const activeType = isProjectType(type) ? type : null;
+
+  const projects = getProjects({ publishedOnly: true })
+    .filter((project) => activeType === null || project.type === activeType)
+    .map((project) => ({
+      slug: project.slug,
+      name: project.name,
+      type: project.type,
+      oneLiner: project.oneLiner,
+      industry: project.industry,
+      cover: project.cover,
+    }));
+
+  return (
+    <>
+      <section className="bg-canvas relative overflow-hidden">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              'radial-gradient(55% 55% at 20% 0%, color-mix(in oklab, var(--color-brand-200) 40%, transparent), transparent 60%)',
+          }}
+        />
+        <Container className="relative flex flex-col items-start gap-6 pt-16 pb-14 lg:pt-24 lg:pb-16">
+          <Reveal>
+            <Eyebrow>{workPage.hero.eyebrow}</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <Heading level={1} size="display-lg" className="max-w-3xl">
+              {workPage.hero.title}
+            </Heading>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="text-body-lg text-ink-muted max-w-2xl">{workPage.hero.description}</p>
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="section-y bg-canvas pt-0">
+        <Container>
+          <Reveal>
+            <div className="border-line flex flex-wrap gap-2 border-b pb-6">
+              {workPage.filters.map((filter) => {
+                const active = filter.value === activeType;
+                const href =
+                  filter.value === null ? routes.work : `${routes.work}?type=${filter.value}`;
+                return (
+                  <a
+                    key={filter.label}
+                    href={href}
+                    aria-current={active ? 'true' : undefined}
+                    className={cn(
+                      'duration-base focus-visible:outline-accent text-body-sm rounded-full border px-4 py-2 font-mono transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
+                      active
+                        ? 'border-accent bg-accent text-accent-contrast'
+                        : 'border-line text-ink-muted hover:border-ink-muted hover:text-ink',
+                    )}
+                  >
+                    {filter.label}
+                  </a>
+                );
+              })}
+            </div>
+          </Reveal>
+
+          {projects.length > 0 ? (
+            <Stagger className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {projects.map((project) => (
+                <ProjectCard key={project.slug} project={project} />
+              ))}
+            </Stagger>
+          ) : (
+            <p className="text-body-lg text-ink-muted mt-10">No projects in this category yet.</p>
+          )}
+        </Container>
+      </section>
+
+      <CtaSection
+        title={home.cta.title}
+        description={home.cta.description}
+        primary={home.cta.primary}
+        secondary={home.cta.secondary}
+      />
+    </>
+  );
+}
