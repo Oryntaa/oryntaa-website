@@ -1,0 +1,172 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+
+import { routes } from '@/config/routes';
+
+import { getFounders } from '@/lib/content/founders';
+import { getArticles } from '@/lib/content/insights';
+import type { ArticleFrontmatter } from '@/lib/content/schemas';
+import { cn } from '@/lib/utils/cn';
+
+import { ArticleCard, type ArticleCardItem } from '@/components/cards/ArticleCard';
+import { Container } from '@/components/layout/Container';
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger } from '@/components/motion/Stagger';
+import { CtaSection } from '@/components/sections/shared/CtaSection';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Heading } from '@/components/ui/Heading';
+
+import { home } from '@/content/home';
+import { insightsPage } from '@/content/insights-page';
+
+export const metadata: Metadata = {
+  title: 'Insights | Oryntaa',
+  description:
+    "Ideas, perspectives, and what we're learning — on AI, engineering, product, and how Oryntaa builds.",
+};
+
+interface InsightsPageProps {
+  searchParams: Promise<{ category?: string }>;
+}
+
+const CATEGORY_LABEL: Record<ArticleFrontmatter['category'], string> = {
+  ai: 'AI',
+  engineering: 'Engineering',
+  product: 'Product',
+  design: 'Design',
+  oryntaa: 'Oryntaa',
+};
+
+const DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+});
+
+export default async function InsightsListPage({
+  searchParams,
+}: InsightsPageProps): Promise<React.JSX.Element> {
+  const { category } = await searchParams;
+  const founderNames = new Map(getFounders().map((founder) => [founder.slug, founder.name]));
+
+  const toItem = (article: ReturnType<typeof getArticles>[number]): ArticleCardItem => ({
+    slug: article.slug,
+    title: article.title,
+    category: article.category,
+    excerpt: article.excerpt,
+    author: founderNames.get(article.author) ?? article.author,
+    publishedAt: article.publishedAt,
+    readingTimeMinutes: article.readingTimeMinutes,
+  });
+
+  const published = getArticles().filter((article) => article.status === 'published');
+  const activeCategory =
+    insightsPage.categories.find((entry) => entry.value === category)?.value ?? null;
+  const filtered = published.filter(
+    (article) => activeCategory === null || article.category === activeCategory,
+  );
+
+  const [featured, ...rest] = filtered;
+
+  return (
+    <>
+      <section className="bg-canvas relative overflow-hidden">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              'radial-gradient(55% 55% at 20% 0%, color-mix(in oklab, var(--color-brand-200) 40%, transparent), transparent 60%)',
+          }}
+        />
+        <Container className="relative flex flex-col items-start gap-6 pt-16 pb-12 lg:pt-24 lg:pb-14">
+          <Reveal>
+            <Eyebrow>{insightsPage.hero.eyebrow}</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <Heading level={1} size="display-lg" className="max-w-3xl">
+              {insightsPage.hero.title}
+            </Heading>
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="section-y bg-canvas pt-0">
+        <Container>
+          {/* Category filter */}
+          <Reveal>
+            <div className="border-line flex flex-wrap gap-2 border-b pb-6">
+              {insightsPage.categories.map((entry) => {
+                const active = entry.value === activeCategory;
+                const href =
+                  entry.value === null
+                    ? routes.insights
+                    : `${routes.insights}?category=${entry.value}`;
+                return (
+                  <a
+                    key={entry.label}
+                    href={href}
+                    aria-current={active ? 'true' : undefined}
+                    className={cn(
+                      'duration-base focus-visible:outline-accent text-body-sm rounded-full border px-4 py-2 font-mono transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
+                      active
+                        ? 'border-accent bg-accent text-accent-contrast'
+                        : 'border-line text-ink-muted hover:border-ink-muted hover:text-ink',
+                    )}
+                  >
+                    {entry.label}
+                  </a>
+                );
+              })}
+            </div>
+          </Reveal>
+
+          {featured !== undefined ? (
+            <Reveal delay={0.05}>
+              <Link
+                href={routes.article(featured.slug)}
+                className="group border-line mt-10 flex flex-col gap-4 border-b pb-10"
+              >
+                <div className="text-body-sm text-ink-muted flex items-center gap-3 font-mono">
+                  <span className="text-accent-text uppercase">
+                    {CATEGORY_LABEL[featured.category]}
+                  </span>
+                  <span>{featured.readingTimeMinutes} min read</span>
+                </div>
+                <Heading
+                  level={2}
+                  size="display-md"
+                  className="group-hover:text-accent-text max-w-3xl transition-colors"
+                >
+                  {featured.title}
+                </Heading>
+                <p className="text-body-lg text-ink-muted max-w-2xl">{featured.excerpt}</p>
+                <p className="text-body-sm text-ink-muted font-mono">
+                  {founderNames.get(featured.author) ?? featured.author} ·{' '}
+                  {DATE_FORMAT.format(featured.publishedAt)}
+                </p>
+              </Link>
+            </Reveal>
+          ) : (
+            <p className="text-body-lg text-ink-muted mt-10">No articles in this category yet.</p>
+          )}
+
+          {rest.length > 0 ? (
+            <Stagger className="mt-12 grid gap-8 md:grid-cols-3">
+              {rest.map((article) => (
+                <ArticleCard key={article.slug} article={toItem(article)} />
+              ))}
+            </Stagger>
+          ) : null}
+        </Container>
+      </section>
+
+      <CtaSection
+        title={home.cta.title}
+        description={home.cta.description}
+        primary={home.cta.primary}
+        secondary={home.cta.secondary}
+      />
+    </>
+  );
+}
