@@ -9,12 +9,12 @@ import { BookingEmbed } from '@/features/contact/components/BookingEmbed';
 import { ContactForm } from '@/features/contact/components/ContactForm';
 
 import { Container } from '@/components/layout/Container';
+import { PageHero } from '@/components/layout/PageHero';
 import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
 import { FaqAccordion } from '@/components/sections/shared/FaqAccordion';
 import { Eyebrow } from '@/components/ui/Eyebrow';
-import { Heading } from '@/components/ui/Heading';
 
 import { contactPage } from '@/content/contact-page';
 
@@ -58,30 +58,11 @@ export default async function ContactPage({
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-canvas relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(55% 55% at 20% 0%, color-mix(in oklab, var(--color-brand-200) 40%, transparent), transparent 60%)',
-          }}
-        />
-        <Container className="relative flex flex-col items-start gap-5 pt-16 pb-12 lg:pt-24 lg:pb-14">
-          <Reveal>
-            <Eyebrow>{contactPage.hero.eyebrow}</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <Heading level={1} size="display-lg" className="max-w-3xl">
-              {contactPage.hero.title}
-            </Heading>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="text-body-lg text-ink-muted max-w-2xl">{contactPage.hero.description}</p>
-          </Reveal>
-        </Container>
-      </section>
+      <PageHero
+        eyebrow={contactPage.hero.eyebrow}
+        title={contactPage.hero.title}
+        description={contactPage.hero.description}
+      />
 
       {/* Form + aside */}
       <section className="section-y bg-canvas pt-4">

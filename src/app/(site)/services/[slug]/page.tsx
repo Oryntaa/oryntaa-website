@@ -11,6 +11,7 @@ import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 
 import { Container } from '@/components/layout/Container';
+import { HorizonBackdrop } from '@/components/layout/HorizonBackdrop';
 import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
@@ -21,6 +22,7 @@ import { ArrowLink } from '@/components/ui/ArrowLink';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Heading } from '@/components/ui/Heading';
+import { TagList } from '@/components/ui/TagList';
 
 import { home } from '@/content/home';
 
@@ -81,14 +83,7 @@ export default async function ServiceDetailPage({
       <JsonLd data={structuredData} />
       {/* Hero */}
       <section className="bg-canvas relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(60% 60% at 15% 0%, color-mix(in oklab, var(--color-brand-200) 40%, transparent), transparent 60%)',
-          }}
-        />
+        <HorizonBackdrop />
         <Container className="relative grid items-center gap-12 pt-16 pb-20 lg:grid-cols-2 lg:gap-16 lg:pt-24 lg:pb-28">
           <div className="flex flex-col gap-6">
             <Reveal>
@@ -222,16 +217,7 @@ export default async function ServiceDetailPage({
             <SectionHeader eyebrow="Technologies" title="The stack behind it." />
           </Reveal>
           <Reveal delay={0.1}>
-            <ul className="mt-10 flex flex-wrap gap-3">
-              {service.technologies.map((tech) => (
-                <li
-                  key={tech}
-                  className="border-line bg-canvas text-body-sm text-ink-muted rounded-full border px-4 py-2 font-mono"
-                >
-                  {tech}
-                </li>
-              ))}
-            </ul>
+            <TagList items={service.technologies} className="mt-10" />
           </Reveal>
         </Container>
       </section>

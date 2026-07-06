@@ -7,6 +7,7 @@ import { buildMetadata } from '@/lib/seo/metadata';
 
 import { FounderCard } from '@/components/cards/FounderCard';
 import { Container } from '@/components/layout/Container';
+import { PageHero } from '@/components/layout/PageHero';
 import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
@@ -14,7 +15,6 @@ import { CtaSection } from '@/components/sections/shared/CtaSection';
 import { ArrowLink } from '@/components/ui/ArrowLink';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { Eyebrow } from '@/components/ui/Eyebrow';
-import { Heading } from '@/components/ui/Heading';
 
 import { aboutPage } from '@/content/about-page';
 import { home } from '@/content/home';
@@ -32,27 +32,7 @@ export default function AboutPage(): React.JSX.Element {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-canvas relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(55% 55% at 20% 0%, color-mix(in oklab, var(--color-brand-200) 40%, transparent), transparent 60%)',
-          }}
-        />
-        <Container className="relative flex flex-col items-start gap-6 pt-16 pb-16 lg:pt-24 lg:pb-20">
-          <Reveal>
-            <Eyebrow>{hero.eyebrow}</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <Heading level={1} size="display-lg" className="max-w-4xl">
-              {hero.title}
-            </Heading>
-          </Reveal>
-        </Container>
-      </section>
+      <PageHero eyebrow={hero.eyebrow} title={hero.title} />
 
       {/* Our story */}
       <section className="section-y bg-surface">

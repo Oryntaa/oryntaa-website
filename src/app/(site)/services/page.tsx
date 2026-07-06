@@ -9,6 +9,7 @@ import { buildMetadata } from '@/lib/seo/metadata';
 
 import { ServiceCard } from '@/components/cards/ServiceCard';
 import { Container } from '@/components/layout/Container';
+import { PageHero } from '@/components/layout/PageHero';
 import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
@@ -16,8 +17,6 @@ import { SelectedWork } from '@/components/sections/home/SelectedWork';
 import { CtaSection } from '@/components/sections/shared/CtaSection';
 import { ProcessSteps } from '@/components/sections/shared/ProcessSteps';
 import { ButtonLink } from '@/components/ui/ButtonLink';
-import { Eyebrow } from '@/components/ui/Eyebrow';
-import { Heading } from '@/components/ui/Heading';
 
 import { home } from '@/content/home';
 import { servicesPage } from '@/content/services-page';
@@ -52,35 +51,16 @@ export default function ServicesOverviewPage(): React.JSX.Element {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-canvas relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(55% 55% at 20% 0%, color-mix(in oklab, var(--color-brand-200) 40%, transparent), transparent 60%)',
-          }}
-        />
-        <Container className="relative flex flex-col items-start gap-6 pt-16 pb-20 lg:pt-24 lg:pb-24">
-          <Reveal>
-            <Eyebrow>{hero.eyebrow}</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <Heading level={1} size="display-lg" className="max-w-3xl">
-              {hero.title}
-            </Heading>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="text-body-lg text-ink-muted max-w-2xl">{hero.description}</p>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <ButtonLink href={hero.cta.href} size="lg">
-              {hero.cta.label}
-            </ButtonLink>
-          </Reveal>
-        </Container>
-      </section>
+      <PageHero
+        eyebrow={hero.eyebrow}
+        title={hero.title}
+        description={hero.description}
+        actions={
+          <ButtonLink href={hero.cta.href} size="lg">
+            {hero.cta.label}
+          </ButtonLink>
+        }
+      />
 
       {/* Services grid */}
       <section className="section-y bg-surface">

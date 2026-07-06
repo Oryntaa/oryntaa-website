@@ -9,11 +9,10 @@ import { cn } from '@/lib/utils/cn';
 
 import { ProjectCard } from '@/components/cards/ProjectCard';
 import { Container } from '@/components/layout/Container';
+import { PageHero } from '@/components/layout/PageHero';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
 import { CtaSection } from '@/components/sections/shared/CtaSection';
-import { Eyebrow } from '@/components/ui/Eyebrow';
-import { Heading } from '@/components/ui/Heading';
 
 import { home } from '@/content/home';
 import { workPage } from '@/content/work-page';
@@ -56,29 +55,11 @@ export default async function WorkPage({
 
   return (
     <>
-      <section className="bg-canvas relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(55% 55% at 20% 0%, color-mix(in oklab, var(--color-brand-200) 40%, transparent), transparent 60%)',
-          }}
-        />
-        <Container className="relative flex flex-col items-start gap-6 pt-16 pb-14 lg:pt-24 lg:pb-16">
-          <Reveal>
-            <Eyebrow>{workPage.hero.eyebrow}</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <Heading level={1} size="display-lg" className="max-w-3xl">
-              {workPage.hero.title}
-            </Heading>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="text-body-lg text-ink-muted max-w-2xl">{workPage.hero.description}</p>
-          </Reveal>
-        </Container>
-      </section>
+      <PageHero
+        eyebrow={workPage.hero.eyebrow}
+        title={workPage.hero.title}
+        description={workPage.hero.description}
+      />
 
       <section className="section-y bg-canvas pt-0">
         <Container>

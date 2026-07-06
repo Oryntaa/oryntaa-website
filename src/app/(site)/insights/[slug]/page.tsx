@@ -11,6 +11,7 @@ import { buildMetadata } from '@/lib/seo/metadata';
 import { ArticleCard, type ArticleCardItem } from '@/components/cards/ArticleCard';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { Container } from '@/components/layout/Container';
+import { HorizonBackdrop } from '@/components/layout/HorizonBackdrop';
 import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Mdx } from '@/components/mdx/Mdx';
 import { Reveal } from '@/components/motion/Reveal';
@@ -108,14 +109,7 @@ export default async function ArticlePage({
       />
       {/* Hero */}
       <section className="bg-canvas relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(55% 55% at 20% 0%, color-mix(in oklab, var(--color-brand-200) 35%, transparent), transparent 60%)',
-          }}
-        />
+        <HorizonBackdrop />
         <Container className="relative flex flex-col gap-8 pt-10 pb-12 lg:pt-14 lg:pb-14">
           <Breadcrumbs
             items={[

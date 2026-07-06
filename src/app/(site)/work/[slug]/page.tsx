@@ -11,6 +11,7 @@ import { buildMetadata } from '@/lib/seo/metadata';
 
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { Container } from '@/components/layout/Container';
+import { HorizonBackdrop } from '@/components/layout/HorizonBackdrop';
 import { Mdx } from '@/components/mdx/Mdx';
 import { Reveal } from '@/components/motion/Reveal';
 import { CtaSection } from '@/components/sections/shared/CtaSection';
@@ -18,6 +19,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { ArrowLink } from '@/components/ui/ArrowLink';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Heading } from '@/components/ui/Heading';
+import { TagList } from '@/components/ui/TagList';
 
 import { home } from '@/content/home';
 
@@ -100,14 +102,7 @@ export default async function ProjectDetailPage({
       />
       {/* Hero */}
       <section className="bg-canvas relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(55% 55% at 20% 0%, color-mix(in oklab, var(--color-brand-200) 35%, transparent), transparent 60%)',
-          }}
-        />
+        <HorizonBackdrop />
         <Container className="relative flex flex-col gap-8 pt-10 pb-16 lg:pt-14 lg:pb-20">
           <Breadcrumbs
             items={[
@@ -191,16 +186,7 @@ export default async function ProjectDetailPage({
             <Eyebrow>Technology</Eyebrow>
           </Reveal>
           <Reveal delay={0.1}>
-            <ul className="mt-8 flex flex-wrap gap-3">
-              {project.technologies.map((tech) => (
-                <li
-                  key={tech}
-                  className="border-line bg-canvas text-body-sm text-ink-muted rounded-full border px-4 py-2 font-mono"
-                >
-                  {tech}
-                </li>
-              ))}
-            </ul>
+            <TagList items={project.technologies} className="mt-8" />
           </Reveal>
         </Container>
       </section>

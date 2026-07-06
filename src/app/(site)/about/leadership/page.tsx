@@ -6,13 +6,10 @@ import { getFounders } from '@/lib/content/founders';
 import { buildMetadata } from '@/lib/seo/metadata';
 
 import { FounderCard } from '@/components/cards/FounderCard';
-import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { Container } from '@/components/layout/Container';
-import { Reveal } from '@/components/motion/Reveal';
+import { PageHero } from '@/components/layout/PageHero';
 import { Stagger } from '@/components/motion/Stagger';
 import { CtaSection } from '@/components/sections/shared/CtaSection';
-import { Eyebrow } from '@/components/ui/Eyebrow';
-import { Heading } from '@/components/ui/Heading';
 
 import { home } from '@/content/home';
 import { leadershipPage } from '@/content/leadership-page';
@@ -29,38 +26,18 @@ export default function LeadershipPage(): React.JSX.Element {
 
   return (
     <>
-      <section className="bg-canvas relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(55% 55% at 20% 0%, color-mix(in oklab, var(--color-brand-200) 40%, transparent), transparent 60%)',
-          }}
-        />
-        <Container className="relative flex flex-col gap-8 pt-10 pb-14 lg:pt-14 lg:pb-16">
-          <Breadcrumbs
-            items={[
-              { label: 'Home', href: routes.home },
-              { label: 'About', href: routes.about },
-            ]}
-            current="Leadership"
-          />
-          <div className="flex flex-col items-start gap-6">
-            <Reveal>
-              <Eyebrow>{hero.eyebrow}</Eyebrow>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <Heading level={1} size="display-lg" className="max-w-3xl">
-                {hero.title}
-              </Heading>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="text-body-lg text-ink-muted max-w-2xl">{hero.description}</p>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
+      <PageHero
+        breadcrumbs={{
+          items: [
+            { label: 'Home', href: routes.home },
+            { label: 'About', href: routes.about },
+          ],
+          current: 'Leadership',
+        }}
+        eyebrow={hero.eyebrow}
+        title={hero.title}
+        description={hero.description}
+      />
 
       <section className="section-y bg-canvas pt-0">
         <Container>
