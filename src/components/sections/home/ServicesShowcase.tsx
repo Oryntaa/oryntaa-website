@@ -84,12 +84,17 @@ const cardVariants: Variants = {
   }),
 };
 
-/** The floating service card — sharp photo on the left, the service's copy on the right.
- *  Rendered inside the `data-theme="dark"` stage, so surface/ink tokens resolve dark. */
-function ServiceCard({ service }: { service: ShowcaseService }): React.JSX.Element {
+/** One service on the open stage — a floating photo on the left, the service's copy sitting
+ *  directly on the dark backdrop to its right (no card chrome). Rendered inside the
+ *  `data-theme="dark"` stage, so ink/line tokens resolve to their dark-surface values. */
+function ServiceStage({ service }: { service: ShowcaseService }): React.JSX.Element {
   return (
-    <div className="border-line bg-surface/90 shadow-raised grid overflow-hidden rounded-xl border backdrop-blur-xl md:grid-cols-2">
-      <div className="relative min-h-56 md:min-h-96">
+    <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
+      <motion.div
+        className="shadow-raised relative min-h-56 overflow-hidden rounded-xl md:min-h-96"
+        animate={{ y: [0, -10, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+      >
         <Image
           src={`/images/sections/services/${service.slug}.jpg`}
           alt=""
@@ -98,9 +103,9 @@ function ServiceCard({ service }: { service: ShowcaseService }): React.JSX.Eleme
           className="object-cover"
         />
         <div aria-hidden className="absolute inset-0" style={{ backgroundImage: CARD_WASH }} />
-      </div>
+      </motion.div>
 
-      <div className="flex flex-col justify-center gap-6 p-8 md:p-10">
+      <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-3">
           <h3 className="font-display text-display-md text-ink">{service.name}</h3>
           <p className="text-body-lg text-ink-muted">{service.oneLiner}</p>
@@ -266,13 +271,9 @@ export function ServicesShowcase({
                 exit="exit"
                 className="absolute inset-0 flex items-center justify-center"
               >
-                <motion.div
-                  className="w-full max-w-5xl"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                  <ServiceCard service={current} />
-                </motion.div>
+                <div className="w-full max-w-5xl">
+                  <ServiceStage service={current} />
+                </div>
               </motion.div>
             </AnimatePresence>
           </div>
