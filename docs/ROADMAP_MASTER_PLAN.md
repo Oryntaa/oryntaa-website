@@ -31,11 +31,11 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 - [x] Lay the FOLDER_STRUCTURE skeleton (empty dirs + `.gitkeep`, `config/`, `content/`, `docs/` = this suite, `CLAUDE.md` symlink).
 
 **Step 0.2 — Quality tooling**
-- [ ] ESLint 9 flat config: typescript-eslint strict, import order, `no-console`, react rules; Prettier + tailwind plugin; printWidth 100.
-- [ ] Husky + lint-staged (staged files: eslint --fix, prettier).
-- [ ] commitlint (Conventional Commits) + PR template (DEVELOPMENT_WORKFLOW §4).
-- [ ] Vitest + RTL setup with one seed test; Playwright installed with one seed spec (skipped until Phase 2).
-- [ ] Scripts: `verify`, `check:content` (stub), `check:assets`, `check:arbitrary` (the grep guards, wired but trivially green).
+- [x] ESLint 9 flat config: typescript-eslint strict, import order, `no-console`, react rules; Prettier + tailwind plugin; printWidth 100.
+- [x] Husky + lint-staged (staged files: eslint --fix, prettier).
+- [x] commitlint (Conventional Commits) + PR template (DEVELOPMENT_WORKFLOW §4).
+- [x] Vitest + RTL setup with one seed test; Playwright installed with one seed spec (skipped until Phase 2).
+- [x] Scripts: `verify`, `check:content` (stub), `check:assets`, `check:arbitrary` (the grep guards, wired but trivially green).
 
 **Step 0.3 — Environment & CI**
 - [ ] `src/lib/env.ts` per ENVIRONMENT_VARIABLES §1 (all keys, optional-safe until services exist); `.env.example`.
