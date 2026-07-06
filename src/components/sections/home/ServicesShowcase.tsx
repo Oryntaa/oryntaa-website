@@ -9,11 +9,13 @@ import {
   Smartphone,
   type LucideIcon,
 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils/cn';
 
 import { Container } from '@/components/layout/Container';
+import { Reveal } from '@/components/motion/Reveal';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 
 export interface ShowcaseService {
@@ -80,106 +82,116 @@ export function ServicesShowcase({
   return (
     <section className="bg-canvas">
       <Container>
-        <div className="bg-brand-50 shadow-card relative overflow-hidden rounded-xl p-8 md:p-12">
-          <div
-            aria-hidden
-            className="bg-brand-300 pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full opacity-25 blur-3xl"
-          />
-          <Eyebrow>{eyebrow}</Eyebrow>
+        <Reveal>
+          <div className="bg-brand-50 shadow-card relative overflow-hidden rounded-xl p-8 md:p-12">
+            <div
+              aria-hidden
+              className="bg-brand-300 pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full opacity-25 blur-3xl"
+            />
+            <Eyebrow>{eyebrow}</Eyebrow>
 
-          <div className="relative mt-10 grid gap-10 lg:grid-cols-2">
-            <div className="flex flex-col gap-6">
-              <div className="flex items-start justify-between">
-                <span className="bg-accent/10 text-accent flex h-14 w-14 items-center justify-center rounded-lg">
-                  <CurrentIcon size={28} aria-hidden />
-                </span>
-                <span
-                  aria-hidden
-                  className="font-display text-brand-200 leading-none font-bold"
-                  style={{ fontSize: 'clamp(4.5rem, 9vw, 8rem)' }}
-                >
-                  {pad(current.order)}
-                </span>
-              </div>
-
-              <h3 className="font-display text-display-md text-ink">{current.name}</h3>
-              <p className="text-body-lg text-ink-muted max-w-md">{current.oneLiner}</p>
-
-              <div className="flex flex-wrap gap-2">
-                {current.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="border-line bg-surface text-body-sm text-ink-muted rounded-full border px-3 py-1 font-mono"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="bg-line mt-2 h-1 w-full overflow-hidden rounded-full">
-                <div
+            <div className="relative mt-10 grid gap-10 lg:grid-cols-2">
+              <div className="flex flex-col gap-6">
+                <motion.div
                   key={active}
-                  className="bg-accent h-full"
-                  style={{
-                    animation: `showcase-progress ${String(ADVANCE_MS)}ms linear`,
-                    animationPlayState: paused ? 'paused' : 'running',
-                  }}
-                />
-              </div>
-            </div>
-
-            <ul
-              className="flex flex-col"
-              onMouseLeave={() => {
-                setPaused(false);
-              }}
-            >
-              {services.map((service, index) => {
-                const Icon = ICONS[service.slug] ?? Rocket;
-                const isActive = index === active;
-                return (
-                  <li key={service.slug}>
-                    <button
-                      type="button"
-                      onMouseEnter={() => {
-                        select(index);
-                      }}
-                      onFocus={() => {
-                        select(index);
-                      }}
-                      onClick={() => {
-                        select(index);
-                      }}
-                      className={cn(
-                        'duration-fast focus-visible:outline-accent flex w-full items-center gap-4 rounded-md border-l-2 px-4 py-4 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2',
-                        isActive
-                          ? 'border-accent bg-surface shadow-card'
-                          : 'hover:bg-surface border-transparent',
-                      )}
+                  className="flex flex-col gap-6"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
+                >
+                  <div className="flex items-start justify-between">
+                    <span className="bg-accent/10 text-accent flex h-14 w-14 items-center justify-center rounded-lg">
+                      <CurrentIcon size={28} aria-hidden />
+                    </span>
+                    <span
+                      aria-hidden
+                      className="font-display text-brand-200 leading-none font-bold"
+                      style={{ fontSize: 'clamp(4.5rem, 9vw, 8rem)' }}
                     >
-                      <span className="text-body-sm text-ink-muted font-mono">
-                        {pad(service.order)}
-                      </span>
+                      {pad(current.order)}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display text-display-md text-ink">{current.name}</h3>
+                  <p className="text-body-lg text-ink-muted max-w-md">{current.oneLiner}</p>
+
+                  <div className="flex flex-wrap gap-2">
+                    {current.tags.map((tag) => (
                       <span
+                        key={tag}
+                        className="border-line bg-surface text-body-sm text-ink-muted rounded-full border px-3 py-1 font-mono"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+
+                <div className="bg-line mt-2 h-1 w-full overflow-hidden rounded-full">
+                  <div
+                    key={active}
+                    className="bg-accent h-full"
+                    style={{
+                      animation: `showcase-progress ${String(ADVANCE_MS)}ms linear`,
+                      animationPlayState: paused ? 'paused' : 'running',
+                    }}
+                  />
+                </div>
+              </div>
+
+              <ul
+                className="flex flex-col"
+                onMouseLeave={() => {
+                  setPaused(false);
+                }}
+              >
+                {services.map((service, index) => {
+                  const Icon = ICONS[service.slug] ?? Rocket;
+                  const isActive = index === active;
+                  return (
+                    <li key={service.slug}>
+                      <button
+                        type="button"
+                        onMouseEnter={() => {
+                          select(index);
+                        }}
+                        onFocus={() => {
+                          select(index);
+                        }}
+                        onClick={() => {
+                          select(index);
+                        }}
                         className={cn(
-                          'font-display text-display-sm flex-1',
-                          isActive ? 'text-accent-text' : 'text-ink',
+                          'duration-fast focus-visible:outline-accent flex w-full items-center gap-4 rounded-md border-l-2 px-4 py-4 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2',
+                          isActive
+                            ? 'border-accent bg-surface shadow-card'
+                            : 'hover:bg-surface border-transparent',
                         )}
                       >
-                        {service.name}
-                      </span>
-                      <Icon
-                        size={20}
-                        aria-hidden
-                        className={isActive ? 'text-accent' : 'text-ink-muted'}
-                      />
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+                        <span className="text-body-sm text-ink-muted font-mono">
+                          {pad(service.order)}
+                        </span>
+                        <span
+                          className={cn(
+                            'font-display text-display-sm flex-1',
+                            isActive ? 'text-accent-text' : 'text-ink',
+                          )}
+                        >
+                          {service.name}
+                        </span>
+                        <Icon
+                          size={20}
+                          aria-hidden
+                          className={isActive ? 'text-accent' : 'text-ink-muted'}
+                        />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </Container>
     </section>
   );

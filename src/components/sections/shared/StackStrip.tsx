@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 
 import { Container } from '@/components/layout/Container';
+import { Reveal } from '@/components/motion/Reveal';
 
 import { home } from '@/content/home';
 
@@ -43,7 +44,9 @@ export function StackStrip(): React.JSX.Element {
   return (
     <section className="border-line bg-canvas border-y py-12">
       <Container>
-        <p className="text-body-sm text-ink-muted mb-10 text-center">{home.stack.heading}</p>
+        <Reveal>
+          <p className="text-body-sm text-ink-muted mb-10 text-center">{home.stack.heading}</p>
+        </Reveal>
       </Container>
       <div className="marquee">
         <div className="marquee__track items-center gap-x-16 px-8">

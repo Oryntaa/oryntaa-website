@@ -2,6 +2,8 @@ import { ArrowRight, Code2, Sparkles, Workflow, type LucideIcon } from 'lucide-r
 import Link from 'next/link';
 
 import { Container } from '@/components/layout/Container';
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger } from '@/components/motion/Stagger';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Heading } from '@/components/ui/Heading';
 
@@ -25,15 +27,17 @@ export function AiFirstSection(): React.JSX.Element {
         }}
       />
       <Container>
-        <div className="relative flex flex-col gap-5">
-          <Eyebrow>{aiFirst.eyebrow}</Eyebrow>
-          <Heading level={2} className="max-w-3xl">
-            {aiFirst.title}
-          </Heading>
-          <p className="text-body-lg text-ink-muted max-w-2xl">{aiFirst.description}</p>
-        </div>
+        <Reveal>
+          <div className="relative flex flex-col gap-5">
+            <Eyebrow>{aiFirst.eyebrow}</Eyebrow>
+            <Heading level={2} className="max-w-3xl">
+              {aiFirst.title}
+            </Heading>
+            <p className="text-body-lg text-ink-muted max-w-2xl">{aiFirst.description}</p>
+          </div>
+        </Reveal>
 
-        <div className="relative mt-16 grid gap-10 md:grid-cols-3">
+        <Stagger className="relative mt-16 grid gap-10 md:grid-cols-3">
           {aiFirst.pillars.map((pillar, index) => {
             const Icon = PILLAR_ICONS[index] ?? Sparkles;
             return (
@@ -46,15 +50,17 @@ export function AiFirstSection(): React.JSX.Element {
               </div>
             );
           })}
-        </div>
+        </Stagger>
 
-        <Link
-          href={aiFirst.cta.href}
-          className="font-body text-body-sm text-accent-text focus-visible:outline-accent relative mt-14 inline-flex items-center gap-2 font-medium underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          {aiFirst.cta.label}
-          <ArrowRight size={16} aria-hidden />
-        </Link>
+        <Reveal delay={0.1}>
+          <Link
+            href={aiFirst.cta.href}
+            className="font-body text-body-sm text-accent-text focus-visible:outline-accent relative mt-14 inline-flex items-center gap-2 font-medium underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            {aiFirst.cta.label}
+            <ArrowRight size={16} aria-hidden />
+          </Link>
+        </Reveal>
       </Container>
     </section>
   );

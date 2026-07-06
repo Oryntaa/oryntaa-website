@@ -1,15 +1,18 @@
+'use client';
+
 import { cva, type VariantProps } from 'class-variance-authority';
+import { motion, type HTMLMotionProps } from 'motion/react';
 
 import { cn } from '@/lib/utils/cn';
 
 /**
  * The canonical variant contract (COMPONENT_LIBRARY §2). Every button-shaped element — the
  * <Button> here and the <ButtonLink> next-link wrapper — composes these classes. Primary is
- * orange-with-ink-text (never white-on-orange at body sizes) per DESIGN_SYSTEM §2/§6.
+ * orange-with-ink-text (never white-on-orange at body sizes) per DESIGN_SYSTEM §2/§6. The
+ * hover-lift / tap-scale micro-interaction is motion-driven and drops movement under reduced-motion
+ * (ANIMATION_ARCHITECTURE §2), while the CSS bg change persists.
  */
 export const buttonVariants = cva(
-  // `transition` (non-bracketed) already animates background-color + transform; the bracketed
-  // form in COMPONENT_LIBRARY §2 would trip the arbitrary-value guard (CODING_STANDARDS §7).
   'inline-flex items-center justify-center gap-2 rounded-md font-body font-medium ' +
     'transition duration-fast ease-out-quart ' +
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ' +
@@ -17,10 +20,10 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-accent text-accent-contrast hover:bg-brand-500 active:translate-y-px',
+        primary: 'bg-accent text-accent-contrast hover:bg-brand-500',
         secondary: 'border border-ink text-ink hover:bg-ink hover:text-canvas',
         // Solid-dark secondary from the homepage design ("Book a Call") — not in DESIGN_SYSTEM §6.
-        ink: 'bg-ink text-canvas hover:bg-neutral-800 active:translate-y-px',
+        ink: 'bg-ink text-canvas hover:bg-neutral-800',
         ghost: 'text-accent-text underline-offset-4 hover:underline',
       },
       size: {
@@ -35,7 +38,14 @@ export const buttonVariants = cva(
 
 export type ButtonVariantProps = VariantProps<typeof buttonVariants>;
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariantProps {
+/** Shared hover/press micro-interaction for both Button and ButtonLink. */
+export const buttonMotion = {
+  whileHover: { y: -2 },
+  whileTap: { scale: 0.97 },
+  transition: { duration: 0.15, ease: [0.25, 1, 0.5, 1] as [number, number, number, number] },
+};
+
+interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'>, ButtonVariantProps {
   children: React.ReactNode;
 }
 
@@ -48,8 +58,13 @@ export function Button({
   ...props
 }: ButtonProps): React.JSX.Element {
   return (
-    <button className={cn(buttonVariants({ variant, size }), className)} type={type} {...props}>
+    <motion.button
+      className={cn(buttonVariants({ variant, size }), className)}
+      type={type}
+      {...buttonMotion}
+      {...props}
+    >
       {children}
-    </button>
+    </motion.button>
   );
 }
