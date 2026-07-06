@@ -1,6 +1,7 @@
 import { ArrowUpRight, Star } from 'lucide-react';
 
 import { Container } from '@/components/layout/Container';
+import { AmbientDrift } from '@/components/motion/AmbientDrift';
 import { Reveal } from '@/components/motion/Reveal';
 import { WaveText } from '@/components/motion/WaveText';
 import { ButtonLink } from '@/components/ui/ButtonLink';
@@ -10,7 +11,10 @@ import { home } from '@/content/home';
 const STARS = ['s1', 's2', 's3', 's4', 's5'];
 
 /** Homepage hero (PAGE_SPECIFICATIONS §2). H1 is the LCP (never inside a Reveal) — it waves on
- *  load and hover; the surrounding block reveals in sequence. The Horizon glow sits behind it. */
+ *  load and hover; the surrounding block reveals in sequence. The Horizon glow (with a gentle
+ *  ambient drift) sits behind it.
+ *  Visual decision (ROADMAP 13): still + ambient glow only — the 3D object layer is deferred until
+ *  the final render assets land (HeroVisual protocol / 👤 asset track), never becoming the LCP. */
 export function HeroSection(): React.JSX.Element {
   const { hero } = home;
 
@@ -21,6 +25,7 @@ export function HeroSection(): React.JSX.Element {
         className="pointer-events-none absolute inset-0"
         style={{ backgroundImage: 'var(--gradient-horizon)' }}
       />
+      <AmbientDrift />
       <Container>
         <div className="relative flex flex-col items-center gap-8 py-24 text-center md:py-32">
           <Reveal>
