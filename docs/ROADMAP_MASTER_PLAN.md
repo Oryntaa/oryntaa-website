@@ -75,9 +75,9 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 **Goal:** every future page drops into a finished shell. **Depends on:** 1. **Docs:** NAVIGATION_ARCHITECTURE, COMPONENT_LIBRARY §4, ACCESSIBILITY_GUIDELINES §2–3.
 
 **Step 2.1 — Structural primitives**
-- [ ] `Container`, `Section` (theme prop → data-theme, spacing), `SectionHeader`, `SkipLink`, `VisuallyHidden`.
-- [ ] `config/routes.ts` + `config/navigation.ts` (typed maps, gate-aware filtering helper).
-- [ ] `config/features.ts` with counts stubbed to 0 (real derivation lands Phase 3) — gating logic testable now.
+- [x] `Container`, `Section` (theme prop → data-theme, spacing), `SectionHeader`, `SkipLink`, `VisuallyHidden`.
+- [x] `config/routes.ts` + `config/navigation.ts` (typed maps, gate-aware filtering helper).
+- [x] `config/features.ts` with counts stubbed to 0 (real derivation lands Phase 3) — gating logic testable now.
 
 **Step 2.2 — Navbar & footer**
 - [ ] `Navbar` (server shell + client island): top/scrolled states (`useScrolled`), desktop dropdowns (Radix), active-route logic, CTA button.
