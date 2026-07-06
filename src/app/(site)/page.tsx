@@ -1,11 +1,14 @@
 import { features } from '@/config/features';
 
+import { getFounders } from '@/lib/content/founders';
+import { getArticles } from '@/lib/content/insights';
 import { getFeaturedProjects } from '@/lib/content/projects';
 import { getServices } from '@/lib/content/services';
 
 import { AiFirstSection } from '@/components/sections/home/AiFirstSection';
 import { FoundersSection } from '@/components/sections/home/FoundersSection';
 import { HeroSection } from '@/components/sections/home/HeroSection';
+import { InsightsPreview } from '@/components/sections/home/InsightsPreview';
 import { SelectedWork } from '@/components/sections/home/SelectedWork';
 import { ServicesShowcase } from '@/components/sections/home/ServicesShowcase';
 import { StartWhereYouAre } from '@/components/sections/home/StartWhereYouAre';
@@ -38,6 +41,20 @@ export default function HomePage(): React.JSX.Element {
     cover: project.cover,
   }));
 
+  const founderNames = new Map(getFounders().map((founder) => [founder.slug, founder.name]));
+  const latestArticles = getArticles()
+    .filter((article) => article.status === 'published')
+    .slice(0, 3)
+    .map((article) => ({
+      slug: article.slug,
+      title: article.title,
+      category: article.category,
+      excerpt: article.excerpt,
+      author: founderNames.get(article.author) ?? article.author,
+      publishedAt: article.publishedAt,
+      readingTimeMinutes: article.readingTimeMinutes,
+    }));
+
   return (
     <>
       <HeroSection />
@@ -60,6 +77,14 @@ export default function HomePage(): React.JSX.Element {
       ) : null}
       <WhyOryntaa />
       <FoundersSection />
+      {features.insights.enabled ? (
+        <InsightsPreview
+          eyebrow={home.insights.eyebrow}
+          title={home.insights.title}
+          viewAll={home.insights.viewAll}
+          articles={latestArticles}
+        />
+      ) : null}
       <CtaSection
         title={home.cta.title}
         description={home.cta.description}
