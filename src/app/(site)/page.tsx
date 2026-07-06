@@ -1,8 +1,12 @@
+import { features } from '@/config/features';
+
+import { getFeaturedProjects } from '@/lib/content/projects';
 import { getServices } from '@/lib/content/services';
 
 import { AiFirstSection } from '@/components/sections/home/AiFirstSection';
 import { FoundersSection } from '@/components/sections/home/FoundersSection';
 import { HeroSection } from '@/components/sections/home/HeroSection';
+import { SelectedWork } from '@/components/sections/home/SelectedWork';
 import { ServicesShowcase } from '@/components/sections/home/ServicesShowcase';
 import { StartWhereYouAre } from '@/components/sections/home/StartWhereYouAre';
 import { WhyOryntaa } from '@/components/sections/home/WhyOryntaa';
@@ -25,6 +29,15 @@ export default function HomePage(): React.JSX.Element {
     order: service.order,
   }));
 
+  const featuredProjects = getFeaturedProjects().map((project) => ({
+    slug: project.slug,
+    name: project.name,
+    type: project.type,
+    summary: project.summary,
+    liveUrl: project.liveUrl,
+    cover: project.cover,
+  }));
+
   return (
     <>
       <HeroSection />
@@ -37,6 +50,14 @@ export default function HomePage(): React.JSX.Element {
         title={home.process.title}
         steps={home.process.steps}
       />
+      {features.work.enabled ? (
+        <SelectedWork
+          eyebrow={home.selectedWork.eyebrow}
+          title={home.selectedWork.title}
+          viewAll={home.selectedWork.viewAll}
+          projects={featuredProjects}
+        />
+      ) : null}
       <WhyOryntaa />
       <FoundersSection />
       <CtaSection
