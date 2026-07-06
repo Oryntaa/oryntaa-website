@@ -80,7 +80,7 @@ export function ServicesShowcase({
   }
 
   return (
-    <section className="bg-canvas">
+    <section className="bg-canvas py-20 md:py-28">
       <Container>
         <Reveal>
           <div className="bg-brand-50 shadow-card relative overflow-hidden rounded-xl p-8 md:p-12">
@@ -95,9 +95,9 @@ export function ServicesShowcase({
                 <motion.div
                   key={active}
                   className="flex flex-col gap-6"
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
+                  transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
                 >
                   <div className="flex items-start justify-between">
                     <span className="bg-accent/10 text-accent flex h-14 w-14 items-center justify-center rounded-lg">

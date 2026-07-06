@@ -47,23 +47,23 @@ export function StackStrip(): React.JSX.Element {
         <Reveal>
           <p className="text-body-sm text-ink-muted mb-10 text-center">{home.stack.heading}</p>
         </Reveal>
-      </Container>
-      <div className="marquee">
-        <div className="marquee__track items-center gap-x-16 px-8">
-          {MARQUEE.map(({ name, Icon }, index) => (
-            <span
-              key={`${name}-${String(index)}`}
-              className="text-ink-muted duration-fast hover:text-accent shrink-0 transition"
-            >
-              <Icon
-                size={34}
-                aria-label={index < STACK.length ? name : undefined}
-                aria-hidden={index >= STACK.length}
-              />
-            </span>
-          ))}
+        <div className="marquee">
+          <div className="marquee__track items-center gap-x-16">
+            {MARQUEE.map(({ name, Icon }, index) => (
+              <span
+                key={`${name}-${String(index)}`}
+                className="text-ink-muted duration-fast hover:text-accent shrink-0 transition"
+              >
+                <Icon
+                  size={34}
+                  aria-label={index < STACK.length ? name : undefined}
+                  aria-hidden={index >= STACK.length}
+                />
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

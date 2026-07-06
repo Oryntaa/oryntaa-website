@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import { usePrefersReducedMotion } from '@/lib/hooks/usePrefersReducedMotion';
 
@@ -10,10 +10,12 @@ interface WaveTextProps {
   className?: string;
 }
 
+const STAGGER = 0.035;
+
 /**
- * Per-word wave — each word rises and settles in sequence on mount, and replays when the phrase is
- * hovered. Transform + opacity only; renders as plain, immediately-visible text under reduced-motion
- * (and stays LCP-safe: the words are always in the DOM at full opacity).
+ * Per-letter wave — each character lifts and settles in sequence to form a travelling wave on mount,
+ * replayed on hover. Words stay unbroken (only whole words wrap). Transform-only; renders as plain,
+ * immediately-visible text under reduced-motion, so it never blocks LCP.
  */
 export function WaveText({ text, className }: WaveTextProps): React.JSX.Element {
   const prefersReduced = usePrefersReducedMotion();
@@ -24,6 +26,12 @@ export function WaveText({ text, className }: WaveTextProps): React.JSX.Element 
   }
 
   const words = text.split(' ');
+  let charCount = 0;
+  const wordChars = words.map((word) => {
+    const chars = Array.from(word, (char) => ({ char, index: charCount++ }));
+    charCount += 1; // account for the space between words
+    return chars;
+  });
 
   return (
     <motion.span
@@ -32,17 +40,23 @@ export function WaveText({ text, className }: WaveTextProps): React.JSX.Element 
         setWaveKey((key) => key + 1);
       }}
     >
-      {words.map((word, index) => (
-        <motion.span
-          key={`${String(waveKey)}-${String(index)}-${word}`}
-          className="inline-block"
-          initial={{ y: 0 }}
-          animate={{ y: [0, -14, 0] }}
-          transition={{ duration: 0.6, delay: index * 0.05, ease: [0.25, 1, 0.5, 1] }}
-        >
-          {word}
-          {index < words.length - 1 ? ' ' : null}
-        </motion.span>
+      {wordChars.map((chars, wordIndex) => (
+        <Fragment key={wordIndex}>
+          <span className="inline-block whitespace-nowrap">
+            {chars.map(({ char, index }) => (
+              <motion.span
+                key={`${String(waveKey)}-${String(index)}`}
+                className="inline-block"
+                initial={{ y: 0 }}
+                animate={{ y: [0, -12, 0] }}
+                transition={{ duration: 0.5, delay: index * STAGGER, ease: [0.25, 1, 0.5, 1] }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </span>
+          {wordIndex < wordChars.length - 1 ? ' ' : null}
+        </Fragment>
       ))}
     </motion.span>
   );
