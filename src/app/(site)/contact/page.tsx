@@ -65,7 +65,7 @@ export default async function ContactPage({
       />
 
       {/* Form + aside */}
-      <section className="section-y bg-canvas pt-4">
+      <section className="section-y bg-canvas pt-0">
         <Container>
           <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
             <aside className="flex flex-col gap-8 lg:sticky lg:top-24 lg:col-span-5 lg:self-start">

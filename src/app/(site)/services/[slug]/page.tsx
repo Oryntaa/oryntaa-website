@@ -84,7 +84,7 @@ export default async function ServiceDetailPage({
       {/* Hero */}
       <section className="bg-canvas relative overflow-hidden">
         <HorizonBackdrop />
-        <Container className="relative grid items-center gap-12 pt-16 pb-20 lg:grid-cols-2 lg:gap-16 lg:pt-24 lg:pb-28">
+        <Container className="relative grid items-center gap-12 pt-16 pb-16 lg:grid-cols-2 lg:gap-16 lg:pt-24 lg:pb-20">
           <div className="flex flex-col gap-6">
             <Reveal>
               <Eyebrow>{service.name}</Eyebrow>

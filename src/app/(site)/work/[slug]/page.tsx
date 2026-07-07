@@ -103,7 +103,7 @@ export default async function ProjectDetailPage({
       {/* Hero */}
       <section className="bg-canvas relative overflow-hidden">
         <HorizonBackdrop />
-        <Container className="relative flex flex-col gap-8 pt-10 pb-16 lg:pt-14 lg:pb-20">
+        <Container className="relative flex flex-col gap-8 pt-16 pb-16 lg:pt-24 lg:pb-20">
           <Breadcrumbs
             items={[
               { label: 'Home', href: routes.home },
