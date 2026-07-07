@@ -4,6 +4,8 @@ import Link from 'next/link';
 
 import { routes } from '@/config/routes';
 
+import { PROJECT_TYPE_LABEL } from '@/lib/content/labels';
+
 export interface ProjectCardItem {
   slug: string;
   name: string;
@@ -16,13 +18,6 @@ export interface ProjectCardItem {
 interface ProjectCardProps {
   project: ProjectCardItem;
 }
-
-const TYPE_LABEL: Record<ProjectCardItem['type'], string> = {
-  web: 'Web',
-  mobile: 'Mobile',
-  ai: 'AI',
-  saas: 'SaaS',
-};
 
 /** Work grid card (PAGE_SPECIFICATIONS §5) — cover, type badge, industry, name, one-liner. The whole
  *  card links to the case study. */
@@ -45,7 +40,7 @@ export function ProjectCard({ project }: ProjectCardProps): React.JSX.Element {
       <div className="flex flex-1 flex-col gap-3 p-6">
         <div className="text-body-sm text-ink-muted flex items-center gap-3 font-mono">
           <span className="text-accent-text border-line rounded-full border px-2.5 py-0.5">
-            {TYPE_LABEL[project.type]}
+            {PROJECT_TYPE_LABEL[project.type]}
           </span>
           <span>{project.industry}</span>
         </div>

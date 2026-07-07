@@ -3,6 +3,7 @@ import { routes } from '@/config/routes';
 import type { LegalDoc } from '@/lib/content/legal';
 import { getSite } from '@/lib/content/site';
 import { cn } from '@/lib/utils/cn';
+import { formatDateLong } from '@/lib/utils/format';
 
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { Container } from '@/components/layout/Container';
@@ -12,12 +13,6 @@ import { Heading } from '@/components/ui/Heading';
 interface LegalDocumentProps {
   doc: LegalDoc;
 }
-
-const DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-});
 
 /** Legal document template (PAGE_SPECIFICATIONS §11): H1, last-updated, auto TOC, prose body, and a
  *  contact block. Shared by all four legal routes. */
@@ -37,7 +32,7 @@ export function LegalDocument({ doc }: LegalDocumentProps): React.JSX.Element {
             {doc.frontmatter.title}
           </Heading>
           <p className="text-body-sm text-ink-muted font-mono">
-            Last updated {DATE_FORMAT.format(doc.frontmatter.updatedAt)}
+            Last updated {formatDateLong(doc.frontmatter.updatedAt)}
           </p>
         </div>
 

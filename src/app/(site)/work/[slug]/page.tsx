@@ -14,14 +14,12 @@ import { Container } from '@/components/layout/Container';
 import { HorizonBackdrop } from '@/components/layout/HorizonBackdrop';
 import { Mdx } from '@/components/mdx/Mdx';
 import { Reveal } from '@/components/motion/Reveal';
-import { CtaSection } from '@/components/sections/shared/CtaSection';
+import { SiteCta } from '@/components/sections/shared/SiteCta';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { ArrowLink } from '@/components/ui/ArrowLink';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Heading } from '@/components/ui/Heading';
 import { TagList } from '@/components/ui/TagList';
-
-import { home } from '@/content/home';
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -212,12 +210,7 @@ export default async function ProjectDetailPage({
         </section>
       ) : null}
 
-      <CtaSection
-        title={home.cta.title}
-        description={home.cta.description}
-        primary={home.cta.primary}
-        secondary={home.cta.secondary}
-      />
+      <SiteCta />
     </>
   );
 }

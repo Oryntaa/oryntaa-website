@@ -11,13 +11,12 @@ import { PageHero } from '@/components/layout/PageHero';
 import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
-import { CtaSection } from '@/components/sections/shared/CtaSection';
+import { SiteCta } from '@/components/sections/shared/SiteCta';
 import { ArrowLink } from '@/components/ui/ArrowLink';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 
 import { aboutPage } from '@/content/about-page';
-import { home } from '@/content/home';
 
 export const metadata: Metadata = buildMetadata({
   title: 'About',
@@ -157,12 +156,7 @@ export default function AboutPage(): React.JSX.Element {
         </Container>
       </section>
 
-      <CtaSection
-        title={home.cta.title}
-        description={home.cta.description}
-        primary={home.cta.primary}
-        secondary={home.cta.secondary}
-      />
+      <SiteCta />
     </>
   );
 }

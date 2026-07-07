@@ -1,5 +1,8 @@
 import { routes } from '@/config/routes';
 
+import { ARTICLE_CATEGORY_LABEL } from '@/lib/content/labels';
+import { formatDate } from '@/lib/utils/format';
+
 import { ArrowLink } from '@/components/ui/ArrowLink';
 
 export interface ArticleCardItem {
@@ -16,20 +19,6 @@ interface ArticleCardProps {
   article: ArticleCardItem;
 }
 
-const CATEGORY_LABEL: Record<ArticleCardItem['category'], string> = {
-  ai: 'AI',
-  engineering: 'Engineering',
-  product: 'Product',
-  design: 'Design',
-  oryntaa: 'Oryntaa',
-};
-
-const DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-});
-
 /** An article preview (PAGE_SPECIFICATIONS §2): editorial column with a top rule, category + read
  *  time, title, excerpt, byline, and a "Read article" link. Copy comes from the article frontmatter. */
 export function ArticleCard({ article }: ArticleCardProps): React.JSX.Element {
@@ -37,7 +26,7 @@ export function ArticleCard({ article }: ArticleCardProps): React.JSX.Element {
     <article className="border-line flex h-full flex-col gap-4 border-t pt-6">
       <div className="flex items-center justify-between">
         <span className="text-body-sm text-accent-text font-mono uppercase">
-          {CATEGORY_LABEL[article.category]}
+          {ARTICLE_CATEGORY_LABEL[article.category]}
         </span>
         <span className="text-body-sm text-ink-muted font-mono">
           {article.readingTimeMinutes} min read
@@ -50,7 +39,7 @@ export function ArticleCard({ article }: ArticleCardProps): React.JSX.Element {
       <p className="text-body-sm text-ink-muted flex items-center gap-2 font-mono">
         <span>{article.author}</span>
         <span aria-hidden>·</span>
-        <span>{DATE_FORMAT.format(article.publishedAt)}</span>
+        <span>{formatDate(article.publishedAt)}</span>
       </p>
 
       <ArrowLink href={routes.article(article.slug)}>Read article</ArrowLink>

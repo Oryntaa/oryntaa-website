@@ -2,6 +2,8 @@ import Image from 'next/image';
 
 import { routes } from '@/config/routes';
 
+import { PROJECT_TYPE_LABEL } from '@/lib/content/labels';
+
 import { ArrowLink } from '@/components/ui/ArrowLink';
 
 export interface FeaturedProjectItem {
@@ -17,13 +19,6 @@ interface FeaturedProjectCardProps {
   project: FeaturedProjectItem;
   index: number;
 }
-
-const TYPE_LABEL: Record<FeaturedProjectItem['type'], string> = {
-  web: 'Web',
-  mobile: 'Mobile',
-  ai: 'AI',
-  saas: 'SaaS',
-};
 
 /** The URL host without protocol or leading www. — shown in the browser-frame address bar. */
 function hostOf(url: string | undefined): string {
@@ -52,7 +47,7 @@ export function FeaturedProjectCard({
           </span>
           <span aria-hidden className="bg-line h-px w-8" />
           <span className="border-line text-body-sm text-accent-text rounded-full border px-3 py-1 font-mono">
-            {TYPE_LABEL[project.type]}
+            {PROJECT_TYPE_LABEL[project.type]}
           </span>
         </div>
 

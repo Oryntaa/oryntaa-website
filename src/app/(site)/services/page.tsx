@@ -14,8 +14,8 @@ import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
 import { SelectedWork } from '@/components/sections/home/SelectedWork';
-import { CtaSection } from '@/components/sections/shared/CtaSection';
 import { ProcessSteps } from '@/components/sections/shared/ProcessSteps';
+import { SiteCta } from '@/components/sections/shared/SiteCta';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 
 import { home } from '@/content/home';
@@ -130,12 +130,7 @@ export default function ServicesOverviewPage(): React.JSX.Element {
         />
       ) : null}
 
-      <CtaSection
-        title={home.cta.title}
-        description={home.cta.description}
-        primary={home.cta.primary}
-        secondary={home.cta.secondary}
-      />
+      <SiteCta />
     </>
   );
 }

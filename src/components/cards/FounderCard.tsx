@@ -2,17 +2,12 @@ import { ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 
 import type { Founder } from '@/lib/content/schemas';
+import { initials } from '@/lib/utils/format';
 
 interface FounderCardProps {
   founder: Founder;
   /** Show the founder's intro paragraph (used on the Leadership page). */
   showIntro?: boolean;
-}
-
-/** First + second initial for the monogram fallback (e.g. "Muhammad Awais" → "MA"). */
-function initialsOf(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase();
 }
 
 /** Founder card (COMPONENT_LIBRARY §5). A compact avatar — a real photo once one lands, otherwise a
@@ -38,7 +33,7 @@ export function FounderCard({ founder, showIntro = false }: FounderCardProps): R
           aria-hidden
           className="border-line bg-brand-100 text-accent-text font-display flex size-16 items-center justify-center rounded-full border text-xl"
         >
-          {initialsOf(founder.name)}
+          {initials(founder.name)}
         </div>
       )}
 

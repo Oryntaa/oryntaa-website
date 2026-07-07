@@ -11,11 +11,10 @@ import { PageHero } from '@/components/layout/PageHero';
 import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
-import { CtaSection } from '@/components/sections/shared/CtaSection';
+import { SiteCta } from '@/components/sections/shared/SiteCta';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 
 import { careersPage } from '@/content/careers-page';
-import { home } from '@/content/home';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Careers',
@@ -90,12 +89,7 @@ export default function CareersPage(): React.JSX.Element {
         </Container>
       </section>
 
-      <CtaSection
-        title={home.cta.title}
-        description={home.cta.description}
-        primary={home.cta.primary}
-        secondary={home.cta.secondary}
-      />
+      <SiteCta />
     </>
   );
 }

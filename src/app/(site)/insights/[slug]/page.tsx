@@ -5,8 +5,10 @@ import { routes } from '@/config/routes';
 
 import { getFounders } from '@/lib/content/founders';
 import { getArticle, getArticles, getRelatedArticles } from '@/lib/content/insights';
+import { ARTICLE_CATEGORY_LABEL } from '@/lib/content/labels';
 import { articleJsonLd, breadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { formatDate, initials } from '@/lib/utils/format';
 
 import { ArticleCard, type ArticleCardItem } from '@/components/cards/ArticleCard';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
@@ -16,34 +18,12 @@ import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Mdx } from '@/components/mdx/Mdx';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
-import { CtaSection } from '@/components/sections/shared/CtaSection';
+import { SiteCta } from '@/components/sections/shared/SiteCta';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { Heading } from '@/components/ui/Heading';
 
-import { home } from '@/content/home';
-
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
-}
-
-const CATEGORY_LABEL: Record<string, string> = {
-  ai: 'AI',
-  engineering: 'Engineering',
-  product: 'Product',
-  design: 'Design',
-  oryntaa: 'Oryntaa',
-};
-
-const DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-});
-
-/** First + second initial for the author monogram. */
-function initialsOf(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase();
 }
 
 export function generateStaticParams(): { slug: string }[] {
@@ -121,7 +101,7 @@ export default async function ArticlePage({
           <div className="flex max-w-3xl flex-col gap-5">
             <div className="text-body-sm text-ink-muted flex items-center gap-3 font-mono">
               <span className="text-accent-text uppercase">
-                {CATEGORY_LABEL[meta.category] ?? meta.category}
+                {ARTICLE_CATEGORY_LABEL[meta.category]}
               </span>
               <span>{meta.readingTimeMinutes} min read</span>
             </div>
@@ -138,12 +118,12 @@ export default async function ArticlePage({
                 aria-hidden
                 className="border-line bg-brand-100 text-accent-text font-display flex size-10 items-center justify-center rounded-full border text-sm"
               >
-                {initialsOf(authorName)}
+                {initials(authorName)}
               </span>
               <div className="flex flex-col">
                 <span className="text-body-sm text-ink font-medium">{authorName}</span>
                 <span className="text-body-sm text-ink-muted">
-                  {author?.role ?? 'Oryntaa'} · {DATE_FORMAT.format(meta.publishedAt)}
+                  {author?.role ?? 'Oryntaa'} · {formatDate(meta.publishedAt)}
                 </span>
               </div>
             </div>
@@ -176,12 +156,7 @@ export default async function ArticlePage({
         </section>
       ) : null}
 
-      <CtaSection
-        title={home.cta.title}
-        description={home.cta.description}
-        primary={home.cta.primary}
-        secondary={home.cta.secondary}
-      />
+      <SiteCta />
     </>
   );
 }

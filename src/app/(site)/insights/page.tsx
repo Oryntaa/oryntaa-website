@@ -5,19 +5,19 @@ import { routes } from '@/config/routes';
 
 import { getFounders } from '@/lib/content/founders';
 import { getArticles } from '@/lib/content/insights';
-import type { ArticleFrontmatter } from '@/lib/content/schemas';
+import { ARTICLE_CATEGORY_LABEL } from '@/lib/content/labels';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { cn } from '@/lib/utils/cn';
+import { formatDate } from '@/lib/utils/format';
 
 import { ArticleCard, type ArticleCardItem } from '@/components/cards/ArticleCard';
 import { Container } from '@/components/layout/Container';
 import { PageHero } from '@/components/layout/PageHero';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
-import { CtaSection } from '@/components/sections/shared/CtaSection';
+import { SiteCta } from '@/components/sections/shared/SiteCta';
 import { Heading } from '@/components/ui/Heading';
 
-import { home } from '@/content/home';
 import { insightsPage } from '@/content/insights-page';
 
 export const metadata: Metadata = buildMetadata({
@@ -30,20 +30,6 @@ export const metadata: Metadata = buildMetadata({
 interface InsightsPageProps {
   searchParams: Promise<{ category?: string }>;
 }
-
-const CATEGORY_LABEL: Record<ArticleFrontmatter['category'], string> = {
-  ai: 'AI',
-  engineering: 'Engineering',
-  product: 'Product',
-  design: 'Design',
-  oryntaa: 'Oryntaa',
-};
-
-const DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-});
 
 export default async function InsightsListPage({
   searchParams,
@@ -112,7 +98,7 @@ export default async function InsightsListPage({
               >
                 <div className="text-body-sm text-ink-muted flex items-center gap-3 font-mono">
                   <span className="text-accent-text uppercase">
-                    {CATEGORY_LABEL[featured.category]}
+                    {ARTICLE_CATEGORY_LABEL[featured.category]}
                   </span>
                   <span>{featured.readingTimeMinutes} min read</span>
                 </div>
@@ -126,7 +112,7 @@ export default async function InsightsListPage({
                 <p className="text-body-lg text-ink-muted max-w-2xl">{featured.excerpt}</p>
                 <p className="text-body-sm text-ink-muted font-mono">
                   {founderNames.get(featured.author) ?? featured.author} ·{' '}
-                  {DATE_FORMAT.format(featured.publishedAt)}
+                  {formatDate(featured.publishedAt)}
                 </p>
               </Link>
             </Reveal>
@@ -144,12 +130,7 @@ export default async function InsightsListPage({
         </Container>
       </section>
 
-      <CtaSection
-        title={home.cta.title}
-        description={home.cta.description}
-        primary={home.cta.primary}
-        secondary={home.cta.secondary}
-      />
+      <SiteCta />
     </>
   );
 }

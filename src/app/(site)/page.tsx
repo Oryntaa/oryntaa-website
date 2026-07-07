@@ -13,8 +13,8 @@ import { SelectedWork } from '@/components/sections/home/SelectedWork';
 import { ServicesShowcase } from '@/components/sections/home/ServicesShowcase';
 import { StartWhereYouAre } from '@/components/sections/home/StartWhereYouAre';
 import { WhyOryntaa } from '@/components/sections/home/WhyOryntaa';
-import { CtaSection } from '@/components/sections/shared/CtaSection';
 import { ProcessSteps } from '@/components/sections/shared/ProcessSteps';
+import { SiteCta } from '@/components/sections/shared/SiteCta';
 import { StackStrip } from '@/components/sections/shared/StackStrip';
 
 import { home } from '@/content/home';
@@ -85,12 +85,7 @@ export default function HomePage(): React.JSX.Element {
           articles={latestArticles}
         />
       ) : null}
-      <CtaSection
-        title={home.cta.title}
-        description={home.cta.description}
-        primary={home.cta.primary}
-        secondary={home.cta.secondary}
-      />
+      <SiteCta />
     </>
   );
 }

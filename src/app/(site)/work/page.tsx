@@ -12,9 +12,8 @@ import { Container } from '@/components/layout/Container';
 import { PageHero } from '@/components/layout/PageHero';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
-import { CtaSection } from '@/components/sections/shared/CtaSection';
+import { SiteCta } from '@/components/sections/shared/SiteCta';
 
-import { home } from '@/content/home';
 import { workPage } from '@/content/work-page';
 
 export const metadata: Metadata = buildMetadata({
@@ -100,12 +99,7 @@ export default async function WorkPage({
         </Container>
       </section>
 
-      <CtaSection
-        title={home.cta.title}
-        description={home.cta.description}
-        primary={home.cta.primary}
-        secondary={home.cta.secondary}
-      />
+      <SiteCta />
     </>
   );
 }

@@ -15,16 +15,14 @@ import { HorizonBackdrop } from '@/components/layout/HorizonBackdrop';
 import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
-import { CtaSection } from '@/components/sections/shared/CtaSection';
 import { FaqAccordion } from '@/components/sections/shared/FaqAccordion';
+import { SiteCta } from '@/components/sections/shared/SiteCta';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { ArrowLink } from '@/components/ui/ArrowLink';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Heading } from '@/components/ui/Heading';
 import { TagList } from '@/components/ui/TagList';
-
-import { home } from '@/content/home';
 
 interface ServicePageProps {
   params: Promise<{ slug: string }>;
@@ -288,12 +286,7 @@ export default async function ServiceDetailPage({
         </Container>
       </section>
 
-      <CtaSection
-        title={home.cta.title}
-        description={home.cta.description}
-        primary={home.cta.primary}
-        secondary={home.cta.secondary}
-      />
+      <SiteCta />
     </>
   );
 }
