@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 import { getSite } from '@/lib/content/site';
 
 /** Web app manifest (API_DOCUMENTATION §3). Brand colors from DESIGN_SYSTEM.
- *  TODO(content): icons land with the brand mark in /public/brand (Phase 13 / asset track). */
+ *  Install/PWA icon is the square Oryntaa mark in /public/brand. */
 export default function manifest(): MetadataRoute.Manifest {
   const site = getSite();
   return {
@@ -14,5 +14,6 @@ export default function manifest(): MetadataRoute.Manifest {
     display: 'standalone',
     theme_color: '#ea580c',
     background_color: '#fafaf9',
+    icons: [{ src: '/brand/oryntaa-mark.png', sizes: 'any', type: 'image/png', purpose: 'any' }],
   };
 }

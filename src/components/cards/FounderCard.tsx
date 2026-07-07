@@ -15,23 +15,26 @@ interface FounderCardProps {
  *  the monogram so the section reads cleanly before real photography arrives. */
 export function FounderCard({ founder, showIntro = false }: FounderCardProps): React.JSX.Element {
   const hasPhoto = !founder.photo.includes('placeholder');
+  // Larger, showcase-sized avatar on the Leadership page (where each founder has a bio); compact on
+  // the About preview grid.
+  const avatarSize = showIntro ? 'size-28' : 'size-20';
 
   return (
     <div className="group border-line flex flex-col gap-5 border-t pt-6">
       {hasPhoto ? (
-        <div className="border-line relative size-16 overflow-hidden rounded-full border">
+        <div className={`border-line relative ${avatarSize} overflow-hidden rounded-full border`}>
           <Image
             src={founder.photo}
             alt={founder.name}
             fill
-            sizes="64px"
-            className="object-cover object-top"
+            sizes="112px"
+            className="object-cover object-center"
           />
         </div>
       ) : (
         <div
           aria-hidden
-          className="border-line bg-brand-100 text-accent-text font-display flex size-16 items-center justify-center rounded-full border text-xl"
+          className={`border-line bg-brand-100 text-accent-text font-display flex ${avatarSize} items-center justify-center rounded-full border text-2xl`}
         >
           {initials(founder.name)}
         </div>

@@ -8,6 +8,7 @@ import { getSite } from '@/lib/content/site';
 
 import { ButtonLink } from '@/components/ui/ButtonLink';
 
+import { BrandLogo } from './BrandLogo';
 import { Container } from './Container';
 
 // Brand glyphs as inline single-path SVGs (this lucide build ships no brand icons); 24×24 viewBox.
@@ -52,13 +53,7 @@ export function Footer(): React.JSX.Element {
       <Container>
         <div className="grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col items-start gap-4">
-            <Link
-              href="/"
-              className="font-display text-display-sm text-ink focus-visible:outline-accent focus-visible:outline-2 focus-visible:outline-offset-2"
-              aria-label="Oryntaa home"
-            >
-              Oryntaa
-            </Link>
+            <BrandLogo tone="light" />
             <p className="text-body-sm text-ink-muted max-w-xs">{site.description}</p>
             <ButtonLink href={primaryCta.href} size="sm">
               {primaryCta.label}

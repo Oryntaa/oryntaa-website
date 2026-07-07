@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono, Sora } from 'next/font/google';
 
 import { getFounders } from '@/lib/content/founders';
@@ -28,6 +28,11 @@ export const metadata: Metadata = buildMetadata({
   path: '/',
   ogType: 'default',
 });
+
+/** Mobile browser-chrome tint — matches the canvas the nav sits on (DESIGN_SYSTEM §2). */
+export const viewport: Viewport = {
+  themeColor: '#fafaf9',
+};
 
 export default function RootLayout({
   children,

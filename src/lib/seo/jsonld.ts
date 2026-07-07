@@ -25,7 +25,7 @@ export function organizationJsonLd(input: OrganizationInput): Record<string, unk
     url: SITE_URL,
     description: input.description,
     email: input.email,
-    logo: absolute('/brand/logo.png'),
+    logo: absolute('/brand/oryntaa-mark.png'),
     sameAs: input.socials,
     founder: input.founders.map((founder) => ({ '@type': 'Person', name: founder.name })),
   };
@@ -79,14 +79,21 @@ export function articleJsonLd(input: {
   path: string;
   authorName: string;
   publishedAt: Date;
+  modifiedAt?: Date;
+  /** Representative image path (the social card); absolute-ized here. */
+  image?: string;
 }): Record<string, unknown> {
+  const url = absolute(input.path);
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: input.headline,
     description: input.description,
-    url: absolute(input.path),
+    url,
+    mainEntityOfPage: url,
     datePublished: input.publishedAt.toISOString(),
+    dateModified: (input.modifiedAt ?? input.publishedAt).toISOString(),
+    ...(input.image !== undefined ? { image: absolute(input.image) } : {}),
     author: { '@type': 'Person', name: input.authorName },
     publisher: { '@id': ORG_ID },
   };

@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils/cn';
 
 import { ButtonLink } from '@/components/ui/ButtonLink';
 
+import { BrandLogo } from './BrandLogo';
 import { MobileMenu } from './MobileMenu';
 
 interface NavbarClientProps {
@@ -92,13 +93,7 @@ export function NavbarClient({ items, cta }: NavbarClientProps): React.JSX.Eleme
       )}
     >
       <div className="max-w-content mx-auto flex h-full items-center justify-between px-5 sm:px-8 lg:px-10">
-        <Link
-          href="/"
-          className="font-display text-display-sm text-ink focus-visible:outline-accent focus-visible:outline-2 focus-visible:outline-offset-2"
-          aria-label="Oryntaa home"
-        >
-          Oryntaa
-        </Link>
+        <BrandLogo priority />
 
         <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
           {items.map((item) => {

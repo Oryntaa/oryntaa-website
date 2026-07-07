@@ -36,11 +36,16 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   const { slug } = await params;
   const article = getArticle(slug);
   if (article === undefined) return {};
+  const author = getFounders().find((founder) => founder.slug === article.meta.author);
   return buildMetadata({
     title: article.meta.seo.title ?? article.meta.title,
     description: article.meta.seo.description ?? article.meta.excerpt,
     path: routes.article(slug),
     ogType: 'article',
+    article: {
+      publishedTime: article.meta.publishedAt.toISOString(),
+      authors: [author?.name ?? article.meta.author],
+    },
   });
 }
 
@@ -79,6 +84,7 @@ export default async function ArticlePage({
             path: routes.article(slug),
             authorName,
             publishedAt: meta.publishedAt,
+            image: `/api/og?title=${encodeURIComponent(meta.seo.title ?? meta.title)}&type=article`,
           }),
           breadcrumbJsonLd([
             { name: 'Home', path: routes.home },

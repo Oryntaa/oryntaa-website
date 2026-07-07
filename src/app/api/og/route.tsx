@@ -13,7 +13,7 @@ const TYPE_LABEL: Record<string, string> = {
 
 /** GET /api/og?title=…&type=… — branded social card (SEO_ARCHITECTURE §2, API_DOCUMENTATION §2). */
 export function GET(request: Request): ImageResponse {
-  const { searchParams } = new URL(request.url);
+  const { searchParams, origin } = new URL(request.url);
   const title = (searchParams.get('title') ?? 'Oryntaa').slice(0, 100);
   const rawType = searchParams.get('type') ?? 'default';
   const label = TYPE_LABEL[rawType] ?? TYPE_LABEL.default;
@@ -31,9 +31,16 @@ export function GET(request: Request): ImageResponse {
         padding: '80px',
       }}
     >
-      <div style={{ display: 'flex', fontSize: 40, fontWeight: 700, color: '#fafaf9' }}>
-        Oryntaa
-      </div>
+      {/* Light lockup reads on the dark card; absolute URL so satori can fetch it at render.
+            ImageResponse/satori requires a raw <img>; next/image is unsupported here. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={`${origin}/brand/oryntaa-logo-light.png`}
+        height={72}
+        width={242}
+        alt=""
+        style={{ objectFit: 'contain' }}
+      />
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div
           style={{

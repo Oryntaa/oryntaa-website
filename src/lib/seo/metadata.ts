@@ -18,6 +18,8 @@ interface BuildMetadataOptions {
   /** Absolute path, params stripped (canonical). e.g. '/services', '/work/trackrec'. */
   path: string;
   ogType?: OgType;
+  /** Article routes only: promotes og:type to 'article' with publish time + author bylines. */
+  article?: { publishedTime: string; authors: string[] };
 }
 
 /** The single metadata factory every route's `generateMetadata`/`metadata` uses (SEO_ARCHITECTURE
@@ -27,11 +29,14 @@ export function buildMetadata({
   description,
   path,
   ogType = 'page',
+  article,
 }: BuildMetadataOptions): Metadata {
   const canonical = new URL(path, SITE_URL).toString();
   const fullTitle = title === undefined ? HOME_TITLE : `${title} — ${SITE_NAME}`;
   const ogTitle = title ?? SITE_NAME;
   const ogImage = `/api/og?title=${encodeURIComponent(ogTitle)}&type=${ogType}`;
+  const images = [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }];
+  const baseOg = { title: fullTitle, description, url: canonical, siteName: SITE_NAME, images };
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -39,14 +44,14 @@ export function buildMetadata({
     description,
     alternates: { canonical },
     robots: IS_PRODUCTION ? undefined : { index: false, follow: false },
-    openGraph: {
-      title: fullTitle,
-      description,
-      url: canonical,
-      siteName: SITE_NAME,
-      type: 'website',
-      images: [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }],
-    },
+    openGraph: article
+      ? {
+          ...baseOg,
+          type: 'article',
+          publishedTime: article.publishedTime,
+          authors: article.authors,
+        }
+      : { ...baseOg, type: 'website' },
     twitter: {
       card: 'summary_large_image',
       title: fullTitle,

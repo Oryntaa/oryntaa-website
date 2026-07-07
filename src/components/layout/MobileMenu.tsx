@@ -14,6 +14,8 @@ import { cn } from '@/lib/utils/cn';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 
+import { BrandLogo } from './BrandLogo';
+
 interface MobileMenuProps {
   items: NavGroup[];
   cta: NavLink;
@@ -77,13 +79,7 @@ export function MobileMenu({ items, cta }: MobileMenuProps): React.JSX.Element {
           </Dialog.Title>
 
           <div className="flex h-18 shrink-0 items-center justify-between px-5">
-            <Link
-              href="/"
-              className="font-display text-display-sm text-ink"
-              aria-label="Oryntaa home"
-            >
-              Oryntaa
-            </Link>
+            <BrandLogo />
             <Dialog.Close
               aria-label="Close menu"
               className="text-ink focus-visible:outline-accent inline-flex h-11 w-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
