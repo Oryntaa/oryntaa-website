@@ -6,6 +6,7 @@ import { getSite } from '@/lib/content/site';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 
+import { Analytics } from '@/components/analytics/Analytics';
 import { JsonLd } from '@/components/seo/JsonLd';
 
 import '@/styles/globals.css';
@@ -50,6 +51,7 @@ export default function RootLayout({
       <body className="antialiased">
         <JsonLd data={[organization, websiteJsonLd(site.name)]} />
         {children}
+        <Analytics />
       </body>
     </html>
   );

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { track } from '@/lib/analytics';
 import { clientEnv } from '@/lib/env';
 
 import { Container } from '@/components/layout/Container';
@@ -48,6 +49,7 @@ export function BookingEmbed({ title, description }: BookingEmbedProps): React.J
               type="button"
               onClick={() => {
                 setLoaded(true);
+                track('booking_open', { location: 'contact' });
               }}
               className="bg-accent text-accent-contrast focus-visible:outline-accent duration-fast w-fit rounded-md px-6 py-3 font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2"
             >

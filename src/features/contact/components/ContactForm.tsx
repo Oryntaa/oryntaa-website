@@ -13,8 +13,10 @@ import {
 } from '@/config/constants';
 import { routes } from '@/config/routes';
 
+import { track } from '@/lib/analytics';
 import { clientEnv } from '@/lib/env';
 import { cn } from '@/lib/utils/cn';
+import { getUtmSuffix } from '@/lib/utils/utm';
 
 import { contactPage } from '@/content/contact-page';
 
@@ -67,7 +69,12 @@ export function ContactForm({
   const [step, setStep] = useState(1);
   const [token, setToken] = useState('');
   const [stepError, setStepError] = useState<string | null>(null);
+  const [source, setSource] = useState(sourcePath);
   const mountedAt = useRef(Date.now());
+  const submitted = useRef<{ route: RouteValue; services: string[] }>({
+    route: presetRoute,
+    services: [],
+  });
 
   const isProject = route === 'project';
   const serverErrors = state !== null && !state.ok ? state.fieldErrors : undefined;
@@ -77,6 +84,24 @@ export function ContactForm({
   useEffect(() => {
     setStep(1);
   }, [route]);
+
+  // Append first-view UTM to the source path for cookieless attribution (ANALYTICS §4).
+  useEffect(() => {
+    setSource(sourcePath + getUtmSuffix());
+  }, [sourcePath]);
+
+  // Report the outcome to analytics — PII-free (route + service names only, never field values).
+  useEffect(() => {
+    if (state === null) return;
+    if (state.ok) {
+      track('form_submit', {
+        route: submitted.current.route,
+        services: submitted.current.services,
+      });
+    } else {
+      track('form_error', { code: state.code });
+    }
+  }, [state]);
 
   const errorMessage = useMemo(() => {
     if (state === null || state.ok) return null;
@@ -129,12 +154,24 @@ export function ContactForm({
     }
     setStepError(null);
     setStep(2);
+    track('form_step', { step: 2, route });
   }
 
   const showFinal = !isProject || step === 2;
 
   return (
-    <form id="contact-form" action={formAction} className="flex flex-col gap-8">
+    <form
+      id="contact-form"
+      action={formAction}
+      onSubmit={(event) => {
+        const data = new FormData(event.currentTarget);
+        submitted.current = {
+          route,
+          services: data.getAll('services').filter((v): v is string => typeof v === 'string'),
+        };
+      }}
+      className="flex flex-col gap-8"
+    >
       {/* Route selector */}
       <fieldset className="flex flex-col gap-3">
         <legend className={cn(labelClass, 'mb-2')}>What brings you here?</legend>
@@ -171,7 +208,7 @@ export function ContactForm({
 
       {/* Hidden context + spam traps */}
       <input type="hidden" name="route" value={route} />
-      <input type="hidden" name="sourcePath" value={sourcePath} />
+      <input type="hidden" name="sourcePath" value={source} />
       <input type="hidden" name="ts" value={mountedAt.current} />
       {intent !== undefined ? <input type="hidden" name="intent" value={intent} /> : null}
       <input type="hidden" name="turnstileToken" value={token} />

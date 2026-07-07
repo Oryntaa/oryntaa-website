@@ -9,6 +9,7 @@ import { getService } from '@/lib/content/services';
 import { breadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 
+import { TrackProjectView } from '@/components/analytics/TrackProjectView';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { Container } from '@/components/layout/Container';
 import { HorizonBackdrop } from '@/components/layout/HorizonBackdrop';
@@ -98,6 +99,7 @@ export default async function ProjectDetailPage({
           { name: project.name, path: routes.project(slug) },
         ])}
       />
+      <TrackProjectView slug={slug} />
       {/* Hero */}
       <section className="bg-canvas relative overflow-hidden">
         <HorizonBackdrop />
