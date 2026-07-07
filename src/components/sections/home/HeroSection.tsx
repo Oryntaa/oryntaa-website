@@ -13,8 +13,8 @@ const STARS = ['s1', 's2', 's3', 's4', 's5'];
 /** Homepage hero (PAGE_SPECIFICATIONS §2). H1 is the LCP (never inside a Reveal) — it waves on
  *  load and hover; the surrounding block reveals in sequence. The Horizon glow (with a gentle
  *  ambient drift) sits behind it.
- *  Visual decision (ROADMAP 13): still + ambient glow only — the 3D object layer is deferred until
- *  the final render assets land (HeroVisual protocol / 👤 asset track), never becoming the LCP. */
+ *  Visual decision (ROADMAP 13, final): still + ambient glow only — the 3D object layer is dropped
+ *  for v1; the text hero is the LCP and stays that way. */
 export function HeroSection(): React.JSX.Element {
   const { hero } = home;
 

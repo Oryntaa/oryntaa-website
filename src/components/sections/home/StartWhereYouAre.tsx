@@ -89,7 +89,7 @@ export function StartWhereYouAre(): React.JSX.Element {
                       <span
                         className={cn(
                           'duration-base text-body-sm font-mono tabular-nums transition-colors',
-                          isActive ? 'text-accent-text' : 'text-ink-muted/70',
+                          isActive ? 'text-accent-text' : 'text-ink-muted',
                         )}
                       >
                         {String(index + 1).padStart(2, '0')}

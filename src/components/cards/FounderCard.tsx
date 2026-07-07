@@ -44,7 +44,7 @@ export function FounderCard({ founder, showIntro = false }: FounderCardProps): R
 
       {showIntro ? <p className="text-body text-ink-muted">{founder.intro}</p> : null}
 
-      <p className="text-body-sm text-ink-muted/80 font-mono">{founder.focusAreas.join(' · ')}</p>
+      <p className="text-body-sm text-ink-muted font-mono">{founder.focusAreas.join(' · ')}</p>
 
       <div className="text-body-sm text-accent-text mt-auto flex gap-4 font-mono uppercase">
         {founder.linkedin !== undefined ? (

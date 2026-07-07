@@ -28,7 +28,10 @@ export function WhyOryntaa(): React.JSX.Element {
                   key={principle.title}
                   className="border-line flex flex-col gap-3 border-t py-8 first:border-t-0 first:pt-0 sm:flex-row sm:gap-8"
                 >
-                  <span className="font-display text-display-md text-accent/25 leading-none tabular-nums">
+                  <span
+                    aria-hidden
+                    className="font-display text-display-md text-accent/25 leading-none tabular-nums"
+                  >
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <div className="flex flex-col gap-3">

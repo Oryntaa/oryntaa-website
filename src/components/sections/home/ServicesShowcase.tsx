@@ -262,7 +262,7 @@ export function ServicesShowcase({
                     }}
                     className={cn(
                       'duration-base focus-visible:outline-accent flex items-center gap-3 text-right transition-colors focus-visible:outline-2 focus-visible:outline-offset-4',
-                      index === active ? 'text-ink' : 'text-ink-muted/60 hover:text-ink-muted',
+                      index === active ? 'text-ink' : 'text-ink-muted hover:text-ink',
                     )}
                   >
                     <span className="text-body-sm font-body font-medium">{service.name}</span>
