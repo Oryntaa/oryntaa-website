@@ -38,9 +38,13 @@ export default function CareersPage(): React.JSX.Element {
           <Reveal>
             <SectionHeader eyebrow={why.eyebrow} title={why.title} />
           </Reveal>
-          <Stagger className="mt-12 grid gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+          <Stagger className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {why.items.map((item) => (
-              <div key={item.title} className="border-line flex flex-col gap-3 border-t pt-5">
+              <div
+                key={item.title}
+                className="border-line bg-canvas flex flex-col gap-3 rounded-xl border p-8"
+              >
+                <span aria-hidden className="bg-accent h-1 w-8 rounded-full" />
                 <h3 className="font-display text-ink text-lg">{item.title}</h3>
                 <p className="text-body-sm text-ink-muted">{item.body}</p>
               </div>

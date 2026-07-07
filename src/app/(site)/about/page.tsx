@@ -76,11 +76,15 @@ export default function AboutPage(): React.JSX.Element {
           <Reveal>
             <SectionHeader eyebrow={principles.eyebrow} title={principles.title} />
           </Reveal>
-          <Stagger className="mt-12 grid gap-x-12 gap-y-10 md:grid-cols-2">
+          <Stagger className="mt-12 grid gap-6 md:grid-cols-2">
             {principles.items.map((principle) => (
-              <div key={principle.title} className="flex flex-col gap-3">
+              <div
+                key={principle.title}
+                className="border-line bg-canvas flex flex-col gap-3 rounded-xl border p-8"
+              >
+                <span aria-hidden className="bg-accent h-1 w-8 rounded-full" />
                 <h3 className="font-display text-display-sm text-ink">{principle.title}</h3>
-                <p className="text-body text-ink-muted max-w-md">{principle.body}</p>
+                <p className="text-body text-ink-muted">{principle.body}</p>
               </div>
             ))}
           </Stagger>
@@ -102,10 +106,16 @@ export default function AboutPage(): React.JSX.Element {
               }
             />
           </Reveal>
-          <Stagger className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <Stagger className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {howWeBuild.items.map((item, index) => (
-              <div key={item.title} className="border-line flex flex-col gap-3 border-t pt-5">
-                <span className="text-body-sm text-accent-text font-mono tabular-nums">
+              <div
+                key={item.title}
+                className="border-line bg-surface flex flex-col gap-3 rounded-xl border p-6"
+              >
+                <span
+                  aria-hidden
+                  className="font-display text-display-md text-accent/30 leading-none tabular-nums"
+                >
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <h3 className="font-display text-ink text-lg">{item.title}</h3>

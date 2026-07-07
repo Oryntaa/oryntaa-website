@@ -10,6 +10,8 @@ import { getService, getServices } from '@/lib/content/services';
 import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 
+import { ProjectCard } from '@/components/cards/ProjectCard';
+import { ServiceCard } from '@/components/cards/ServiceCard';
 import { Container } from '@/components/layout/Container';
 import { HorizonBackdrop } from '@/components/layout/HorizonBackdrop';
 import { SectionHeader } from '@/components/layout/SectionHeader';
@@ -155,11 +157,15 @@ export default async function ServiceDetailPage({
           <Reveal>
             <SectionHeader eyebrow="What we fix" title="Problems we solve." />
           </Reveal>
-          <Stagger className="mt-12 grid gap-x-12 gap-y-10 md:grid-cols-2">
+          <Stagger className="mt-12 grid gap-6 md:grid-cols-2">
             {service.problems.map((problem) => (
-              <div key={problem.title} className="border-line flex flex-col gap-3 border-t pt-6">
+              <div
+                key={problem.title}
+                className="border-line bg-surface flex flex-col gap-3 rounded-xl border p-8"
+              >
+                <span aria-hidden className="bg-accent h-1 w-8 rounded-full" />
                 <h3 className="font-display text-display-sm text-ink">{problem.title}</h3>
-                <p className="text-body text-ink-muted max-w-md">{problem.body}</p>
+                <p className="text-body text-ink-muted">{problem.body}</p>
               </div>
             ))}
           </Stagger>
@@ -172,12 +178,17 @@ export default async function ServiceDetailPage({
           <Reveal>
             <SectionHeader eyebrow="Capabilities" title="What this service covers." />
           </Reveal>
-          <Stagger className="mt-12 grid gap-x-10 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
+          <Stagger className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {service.capabilities.map((capability) => (
-              <div key={capability.title} className="flex items-start gap-3">
-                <Check size={18} aria-hidden className="text-accent mt-1 shrink-0" />
+              <div
+                key={capability.title}
+                className="border-line bg-canvas flex items-start gap-4 rounded-xl border p-6"
+              >
+                <span className="bg-accent/10 text-accent flex size-9 shrink-0 items-center justify-center rounded-lg">
+                  <Check size={18} aria-hidden />
+                </span>
                 <div className="flex flex-col gap-1">
-                  <h3 className="font-display text-ink text-lg">{capability.title}</h3>
+                  <h3 className="font-display text-ink text-base">{capability.title}</h3>
                   {capability.body !== undefined ? (
                     <p className="text-body-sm text-ink-muted">{capability.body}</p>
                   ) : null}
@@ -194,13 +205,19 @@ export default async function ServiceDetailPage({
           <Reveal>
             <SectionHeader eyebrow="How we work" title="Our approach." />
           </Reveal>
-          <Stagger className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <Stagger className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {service.approach.map((step, index) => (
-              <div key={step.step} className="border-line flex flex-col gap-3 border-t pt-5">
-                <span className="text-body-sm text-accent-text font-mono tabular-nums">
+              <div
+                key={step.step}
+                className="border-line bg-surface flex flex-col gap-3 rounded-xl border p-6"
+              >
+                <span
+                  aria-hidden
+                  className="font-display text-display-md text-accent/30 leading-none tabular-nums"
+                >
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3 className="font-display text-display-sm text-ink">{step.step}</h3>
+                <h3 className="font-display text-ink text-lg">{step.step}</h3>
                 <p className="text-body-sm text-ink-muted">{step.body}</p>
               </div>
             ))}
@@ -231,19 +248,19 @@ export default async function ServiceDetailPage({
                 action={<ArrowLink href={routes.work}>View all work</ArrowLink>}
               />
             </Reveal>
-            <Stagger className="mt-12 grid gap-8 md:grid-cols-3">
+            <Stagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {relatedWork.map((project) => (
-                <div key={project.slug} className="border-line flex flex-col gap-3 border-t pt-6">
-                  <h3 className="font-display text-display-sm text-ink">{project.name}</h3>
-                  <p className="text-body text-ink-muted flex-1">{project.oneLiner}</p>
-                  {project.liveUrl !== undefined ? (
-                    <ArrowLink href={project.liveUrl} external>
-                      View project
-                    </ArrowLink>
-                  ) : (
-                    <ArrowLink href={routes.project(project.slug)}>View project</ArrowLink>
-                  )}
-                </div>
+                <ProjectCard
+                  key={project.slug}
+                  project={{
+                    slug: project.slug,
+                    name: project.name,
+                    type: project.type,
+                    oneLiner: project.oneLiner,
+                    industry: project.industry,
+                    cover: project.cover,
+                  }}
+                />
               ))}
             </Stagger>
           </Container>
@@ -261,13 +278,17 @@ export default async function ServiceDetailPage({
                 action={<ArrowLink href={routes.services}>All services</ArrowLink>}
               />
             </Reveal>
-            <Stagger className="mt-12 grid gap-8 md:grid-cols-3">
+            <Stagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {relatedServices.map((related) => (
-                <div key={related.slug} className="border-line flex flex-col gap-3 border-t pt-6">
-                  <h3 className="font-display text-display-sm text-ink">{related.name}</h3>
-                  <p className="text-body text-ink-muted flex-1">{related.oneLiner}</p>
-                  <ArrowLink href={routes.service(related.slug)}>Explore service</ArrowLink>
-                </div>
+                <ServiceCard
+                  key={related.slug}
+                  service={{
+                    slug: related.slug,
+                    name: related.name,
+                    oneLiner: related.oneLiner,
+                    tags: related.capabilities.slice(0, 3).map((capability) => capability.title),
+                  }}
+                />
               ))}
             </Stagger>
           </Container>
