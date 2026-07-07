@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 
 import { mdxComponents } from '@/lib/content/mdx';
@@ -49,9 +50,28 @@ const proseComponents = {
     />
   ),
   li: (props: React.ComponentProps<'li'>) => <li className="pl-1" {...props} />,
-  a: (props: React.ComponentProps<'a'>) => (
-    <a className="text-accent-text underline underline-offset-4" {...props} />
-  ),
+  a: ({ href, children, ...rest }: React.ComponentProps<'a'>) => {
+    const className = 'text-accent-text underline underline-offset-4';
+    // Internal links get client-side navigation (no full reload); external open in a new tab.
+    if (typeof href === 'string' && href.startsWith('/')) {
+      return (
+        <Link href={href} className={className}>
+          {children}
+        </Link>
+      );
+    }
+    const external = typeof href === 'string' && href.startsWith('http');
+    return (
+      <a
+        href={href}
+        className={className}
+        {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        {...rest}
+      >
+        {children}
+      </a>
+    );
+  },
   strong: (props: React.ComponentProps<'strong'>) => (
     <strong className="text-ink font-semibold" {...props} />
   ),

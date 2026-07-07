@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import { routes } from '@/config/routes';
 
@@ -69,9 +70,10 @@ export default async function WorkPage({
                 const href =
                   filter.value === null ? routes.work : `${routes.work}?type=${filter.value}`;
                 return (
-                  <a
+                  <Link
                     key={filter.label}
                     href={href}
+                    scroll={false}
                     aria-current={active ? 'true' : undefined}
                     className={cn(
                       'duration-base focus-visible:outline-accent text-body-sm rounded-full border px-4 py-2 font-mono transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
@@ -81,7 +83,7 @@ export default async function WorkPage({
                     )}
                   >
                     {filter.label}
-                  </a>
+                  </Link>
                 );
               })}
             </div>

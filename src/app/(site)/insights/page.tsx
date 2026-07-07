@@ -72,9 +72,10 @@ export default async function InsightsListPage({
                     ? routes.insights
                     : `${routes.insights}?category=${entry.value}`;
                 return (
-                  <a
+                  <Link
                     key={entry.label}
                     href={href}
+                    scroll={false}
                     aria-current={active ? 'true' : undefined}
                     className={cn(
                       'duration-base focus-visible:outline-accent text-body-sm rounded-full border px-4 py-2 font-mono transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
@@ -84,7 +85,7 @@ export default async function InsightsListPage({
                     )}
                   >
                     {entry.label}
-                  </a>
+                  </Link>
                 );
               })}
             </div>
