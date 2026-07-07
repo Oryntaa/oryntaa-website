@@ -54,15 +54,19 @@
   --text-display-xl: clamp(2.75rem, 1.6rem + 4.6vw, 4.75rem);
   --text-display-xl--line-height: 1.05;
   --text-display-xl--letter-spacing: -0.02em;
+  --text-display-xl--font-weight: 700;
   --text-display-lg: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
   --text-display-lg--line-height: 1.1;
   --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 700;
   --text-display-md: clamp(1.75rem, 1.35rem + 1.6vw, 2.5rem);
   --text-display-md--line-height: 1.15;
   --text-display-md--letter-spacing: -0.02em;
+  --text-display-md--font-weight: 700;
   --text-display-sm: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem);
   --text-display-sm--line-height: 1.25;
   --text-display-sm--letter-spacing: -0.02em;
+  --text-display-sm--font-weight: 600;
   --text-body-lg: 1.125rem;
   --text-body-lg--line-height: 1.65;
   --text-body: 1rem;
@@ -73,8 +77,10 @@
   --text-eyebrow--line-height: 1;
   --text-eyebrow--letter-spacing: 0.08em;
 
-  /* Section rhythm. DESIGN_SYSTEM §5. */
+  /* Section rhythm + container widths. DESIGN_SYSTEM §5. */
   --space-section: clamp(4.5rem, 3rem + 6vw, 8rem);
+  --container-content: 72rem;
+  --container-wide: 80rem;
 
   /* Radius. DESIGN_SYSTEM §3/§5. */
   --radius-sm: 0.375rem;
@@ -99,6 +105,107 @@
     color-mix(in oklab, var(--color-brand-500) 22%, transparent),
     transparent 70%
   );
+}
+
+/* Section vertical rhythm as a utility so <Section> never hand-rolls padding. DESIGN_SYSTEM §5. */
+@utility section-y {
+  padding-block: var(--space-section);
+}
+
+/* Auto-advance progress bar for the homepage services showcase (respects reduced-motion below). */
+@keyframes showcase-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* The navbar slides away while the "what we do" stage is pinned full-screen (ServicesShowcase
+   toggles the attribute); the header's own transition tokens animate the slide. */
+html[data-stage-pinned] .site-header {
+  transform: translateY(-100%);
+}
+
+/* Stack-logo marquee: continuous scroll, pause on hover, fade at the edges (StackStrip). */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee 34s linear infinite;
+}
+
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+/* FAQ accordion open/close, driven by Radix's measured content height (FaqAccordion). */
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+.accordion-content {
+  overflow: hidden;
+}
+.accordion-content[data-state='open'] {
+  animation: accordion-down 240ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+.accordion-content[data-state='closed'] {
+  animation: accordion-up 240ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .accordion-content[data-state='open'],
+  .accordion-content[data-state='closed'] {
+    animation: none;
+  }
+}
+
+/* Duration tokens as utilities — Tailwind v4 has no named-duration namespace. DESIGN_SYSTEM §3. */
+@utility duration-fast {
+  transition-duration: var(--duration-fast);
+}
+@utility duration-base {
+  transition-duration: var(--duration-base);
+}
+@utility duration-slow {
+  transition-duration: var(--duration-slow);
 }
 
 /* Dark-section semantic overrides. DESIGN_SYSTEM §2. */
@@ -126,5 +233,18 @@
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Honor reduced-motion globally (ACCESSIBILITY_GUIDELINES §5): reveals render static,
+     transitions become instant. Phase 13 refines per-surface motion (ANIMATION_ARCHITECTURE §4). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

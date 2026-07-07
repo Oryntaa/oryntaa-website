@@ -75,15 +75,15 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 **Goal:** every future page drops into a finished shell. **Depends on:** 1. **Docs:** NAVIGATION_ARCHITECTURE, COMPONENT_LIBRARY §4, ACCESSIBILITY_GUIDELINES §2–3.
 
 **Step 2.1 — Structural primitives**
-- [ ] `Container`, `Section` (theme prop → data-theme, spacing), `SectionHeader`, `SkipLink`, `VisuallyHidden`.
-- [ ] `config/routes.ts` + `config/navigation.ts` (typed maps, gate-aware filtering helper).
-- [ ] `config/features.ts` with counts stubbed to 0 (real derivation lands Phase 3) — gating logic testable now.
+- [x] `Container`, `Section` (theme prop → data-theme, spacing), `SectionHeader`, `SkipLink`, `VisuallyHidden`.
+- [x] `config/routes.ts` + `config/navigation.ts` (typed maps, gate-aware filtering helper).
+- [x] `config/features.ts` with counts stubbed to 0 (real derivation lands Phase 3) — gating logic testable now.
 
 **Step 2.2 — Navbar & footer**
-- [ ] `Navbar` (server shell + client island): top/scrolled states (`useScrolled`), desktop dropdowns (Radix), active-route logic, CTA button.
-- [ ] `MobileMenu` (Dialog drawer per spec) with focus trap, scroll lock, route-change close.
-- [ ] `Footer` per NAVIGATION_ARCHITECTURE §4 (dark theme — first real dark-section consumer).
-- [ ] Root layout assembly: fonts, skip link, header/main/footer landmarks; `error.tsx` + `not-found.tsx` shells (final copy Phase 11).
+- [x] `Navbar` (server shell + client island): top/scrolled states (`useScrolled`), desktop dropdowns (Radix), active-route logic, CTA button.
+- [x] `MobileMenu` (Dialog drawer per spec) with focus trap, scroll lock, route-change close.
+- [x] `Footer` per NAVIGATION_ARCHITECTURE §4 (dark theme — first real dark-section consumer). _(Social column + brand tagline become content/site.ts in Phase 3.)_
+- [x] Root layout assembly: fonts, skip link, header/main/footer landmarks; `error.tsx` + `not-found.tsx` shells (final copy Phase 11).
 
 **Step 2.3 — First real e2e**
 - [ ] Playwright: nav walk desktop + mobile drawer; axe on the shell; Lighthouse CI job activated on `/`.
@@ -97,20 +97,20 @@ Dependency spine: `0 → 1 → 2 → 3 → 4 → (5…11 in order) → 12 → 13
 **Goal:** the content pipeline exists, validates, and gates. **Depends on:** 2 (for SmartLink integration points). **Docs:** CONTENT_ARCHITECTURE, PAGE_SPECIFICATIONS (as fixture source).
 
 **Step 3.1 — Schemas & loaders**
-- [ ] `lib/content/schemas.ts` (all schemas from CONTENT_ARCHITECTURE §2).
-- [ ] Loaders + `React.cache` wrappers; MDX compile util with the component map registered (map components arrive Phase 4 — register placeholders that throw descriptively).
-- [ ] `lib/content/derived.ts` counts → `config/features.ts` real derivation + env overrides.
+- [x] `lib/content/schemas.ts` (all schemas from CONTENT_ARCHITECTURE §2).
+- [x] Loaders + `React.cache` wrappers; MDX compile util with the component map registered (map components arrive Phase 4 — register placeholders that throw descriptively).
+- [x] `lib/content/derived.ts` counts → `config/features.ts` real derivation + env overrides.
 
 **Step 3.2 — Integrity gate**
-- [ ] `check:content` implementing every §4 rule (unique slugs, ref existence, image existence, featured-count, permission×status, dates, SEO presence); wired into `verify` + CI.
-- [ ] Unit suite: fixture-driven valid/invalid cases per rule.
+- [x] `check:content` implementing every §4 rule (unique slugs, ref existence, image existence, featured-count, permission×status, dates, SEO presence); wired into `verify` + CI.
+- [ ] Unit suite: fixture-driven valid/invalid cases per rule. _(Deferred — tests paused per current direction.)_
 
 **Step 3.3 — Seed content**
-- [ ] `content/site.ts` (real identity data; booking URL optional-pending 👤).
-- [ ] `content/founders.ts` (names/roles real; photos/bios `TODO(content)` placeholders that pass schema).
-- [ ] Six `content/services/*.ts` drafted **in full** from PAGE_SPECIFICATIONS §4 briefs (real copy work — flagged for Gate 3 review).
-- [ ] Project meta for all six projects with correct `status`/`permission` values from the work map (four `pending` until 👤 clearance; case-study MDX stubs).
-- [ ] Legal MDX stubs with `TODO(content): legal review` frontmatter.
+- [x] `content/site.ts` (real identity data; booking URL optional-pending 👤). _(socials real; industries drafted; stack + booking pending 👤.)_
+- [x] `content/founders.ts` (names/roles real; photos/bios `TODO(content)` placeholders that pass schema).
+- [x] Six `content/services/*.ts` drafted **in full** from PAGE_SPECIFICATIONS §4 briefs (real copy work — flagged for Gate 3 review). _(Founder-supplied; problem/approach/FAQ bodies drafted — Gate 6 sign-off.)_
+- [x] Project meta for all six projects with correct `status`/`permission` values from the work map (four `pending` until 👤 clearance; case-study MDX stubs). _(Four seeded draft/pending; Espo + MASI are post-launch grid additions per 7.4.)_
+- [x] Legal MDX stubs with `TODO(content): legal review` frontmatter.
 
 **DoD / ⛳ Gate 3:** `check:content` red/green demonstrably works (PR shows a failing fixture); founders review the six service modules' copy; gates compute correctly (work off, insights off at this point).
 

@@ -27,3 +27,4 @@ pnpm dev                     # http://localhost:3000
 | `verify` | lint + typecheck + test + `check:*` — run before every PR |
 
 See [`docs/DEVELOPMENT_WORKFLOW.md`](./docs/DEVELOPMENT_WORKFLOW.md) for the full workflow, Git conventions, and PR checklist.
+
