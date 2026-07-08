@@ -70,13 +70,15 @@ export const articleFrontmatterSchema = z.object({
 
 `founderSchema`: slug, name, role, intro, focusAreas[], photo, linkedin?, github?. `openingSchema`: title, slug, department, location, type, description, status.
 
+`pageSeoSchema` = `seoSchema.pick({ title, description })` — the title/description floor for routes that have no collection behind them. Every page content module (`services-page`, `about-page`, `leadership-page`, `careers-page`, `contact-page`, `work-page`, `insights-page`) exposes a `seo` block, and `legalFrontmatterSchema` requires one too. Route files spread it (`buildMetadata({ ...workPage.seo, path: routes.work })`) and never inline copy — SEO_ARCHITECTURE §2.
+
 ## 3. Loaders & queries (`lib/content/*`) — the only content boundary
 
 `getServices()`, `getService(slug)`, `getProjects({ type?, publishedOnly: true })`, `getFeaturedProjects()` (exactly 3, ordered by `featured`), `getArticles()`, `getArticle(slug)`, `getRelatedArticles(slug)`, `getFounders()`, `getOpenings()`, `getSite()`. All cached per build (`React.cache`). MDX compiled via `next-mdx-remote/rsc` with the shared component map; reading time computed at load.
 
 ## 4. Build-time integrity checks (fail the build)
 
-Zod parse of every module/frontmatter · unique slugs per collection · referenced slugs exist (relatedServices, project.services, article.author) · every referenced image exists on disk · exactly three `featured` projects when work gate passes · `permission: 'pending'` + `status: 'published'` is a hard error · publish dates not in the future · required SEO fields present.
+Zod parse of every module/frontmatter · unique slugs per collection · referenced slugs exist (relatedServices, project.services, article.author) · every referenced image exists on disk · exactly three `featured` projects when work gate passes · `permission: 'pending'` + `status: 'published'` is a hard error · publish dates not in the future · required SEO fields present · every `seo.description` (plus `site.description`) inside the **140–160 character** band from SEO_ARCHITECTURE §2, so a snippet is never truncated or left short. Article `seo` stays `.partial()`; when a description is authored it is banded, otherwise the route falls back to the excerpt.
 
 ## 5. Publication rules
 

@@ -8,11 +8,12 @@ import { buildMetadata } from '@/lib/seo/metadata';
 
 import { LegalDocument } from '@/components/sections/legal/LegalDocument';
 
-export const metadata: Metadata = buildMetadata({
-  title: 'Privacy Policy',
-  description: 'How Oryntaa handles personal information collected through this website.',
-  path: routes.privacy,
-});
+/** Copy lives in the MDX frontmatter, not here (SEO_ARCHITECTURE §2). */
+export function generateMetadata(): Metadata {
+  const doc = getLegalDoc('privacy');
+  if (doc === undefined) return {};
+  return buildMetadata({ ...doc.frontmatter.seo, path: routes.privacy });
+}
 
 export default function PrivacyPage(): React.JSX.Element {
   const doc = getLegalDoc('privacy');

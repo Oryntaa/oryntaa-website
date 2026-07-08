@@ -18,9 +18,7 @@ import { SiteCta } from '@/components/sections/shared/SiteCta';
 import { workPage } from '@/content/work-page';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Work',
-  description:
-    "Selected products delivered by Oryntaa's founding team — web, mobile, AI, and SaaS.",
+  ...workPage.seo,
   path: routes.work,
 });
 

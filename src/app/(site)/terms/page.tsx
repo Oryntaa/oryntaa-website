@@ -8,11 +8,12 @@ import { buildMetadata } from '@/lib/seo/metadata';
 
 import { LegalDocument } from '@/components/sections/legal/LegalDocument';
 
-export const metadata: Metadata = buildMetadata({
-  title: 'Terms of Service',
-  description: "The terms governing use of Oryntaa's website.",
-  path: routes.terms,
-});
+/** Copy lives in the MDX frontmatter, not here (SEO_ARCHITECTURE §2). */
+export function generateMetadata(): Metadata {
+  const doc = getLegalDoc('terms');
+  if (doc === undefined) return {};
+  return buildMetadata({ ...doc.frontmatter.seo, path: routes.terms });
+}
 
 export default function TermsPage(): React.JSX.Element {
   const doc = getLegalDoc('terms');

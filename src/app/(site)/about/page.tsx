@@ -19,9 +19,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 import { aboutPage } from '@/content/about-page';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'About',
-  description:
-    'Oryntaa is an AI-first software engineering company — founder-led, quality without compromise, built for long-term growth.',
+  ...aboutPage.seo,
   path: routes.about,
 });
 

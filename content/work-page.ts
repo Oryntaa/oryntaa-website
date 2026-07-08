@@ -1,5 +1,10 @@
 // Work grid page copy (PAGE_SPECIFICATIONS §5) — hero + attribution frame verbatim from the spec.
 export const workPage = {
+  seo: {
+    title: 'Work',
+    description:
+      "Selected products delivered by Oryntaa's founding team — web platforms, mobile apps, AI systems, and SaaS, each shipped to real users and live in production.",
+  },
   hero: {
     eyebrow: 'Our work',
     title: 'Products built with purpose.',

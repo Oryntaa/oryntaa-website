@@ -17,9 +17,7 @@ import { ButtonLink } from '@/components/ui/ButtonLink';
 import { careersPage } from '@/content/careers-page';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Careers',
-  description:
-    'Build meaningful technology with a small, senior team. See open roles at Oryntaa, or follow us on LinkedIn for future positions.',
+  ...careersPage.seo,
   path: routes.careers,
 });
 

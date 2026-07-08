@@ -21,9 +21,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 import { contactPage } from '@/content/contact-page';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Contact',
-  description:
-    'Tell us about your product idea, business challenge, or question — we reply within one business day.',
+  ...contactPage.seo,
   path: routes.contact(),
 });
 

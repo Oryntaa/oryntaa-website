@@ -3,6 +3,11 @@ import { routes } from '@/config/routes';
 // Services overview page copy (PAGE_SPECIFICATIONS §3). Hero + engagement models verbatim from the
 // spec; the "how services connect" prose follows the spec's described content.
 export const servicesPage = {
+  seo: {
+    title: 'Services',
+    description:
+      'Custom software development, from strategy to scale — AI, web, mobile, SaaS, UI/UX, and cloud, delivered by a founding team that stays accountable end to end.',
+  },
   hero: {
     eyebrow: 'Our services',
     title: 'Custom software, from strategy to scale.',

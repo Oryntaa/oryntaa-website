@@ -8,11 +8,12 @@ import { buildMetadata } from '@/lib/seo/metadata';
 
 import { LegalDocument } from '@/components/sections/legal/LegalDocument';
 
-export const metadata: Metadata = buildMetadata({
-  title: 'Code of Conduct',
-  description: 'The standards Oryntaa holds itself and its collaborators to.',
-  path: routes.codeOfConduct,
-});
+/** Copy lives in the MDX frontmatter, not here (SEO_ARCHITECTURE §2). */
+export function generateMetadata(): Metadata {
+  const doc = getLegalDoc('code-of-conduct');
+  if (doc === undefined) return {};
+  return buildMetadata({ ...doc.frontmatter.seo, path: routes.codeOfConduct });
+}
 
 export default function CodeOfConductPage(): React.JSX.Element {
   const doc = getLegalDoc('code-of-conduct');
