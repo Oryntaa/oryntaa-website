@@ -15,8 +15,7 @@ import { home } from '@/content/home';
 import { leadershipPage } from '@/content/leadership-page';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Leadership',
-  description: 'The four founders building Oryntaa — equal partners, senior engineers, hands on.',
+  ...leadershipPage.seo,
   path: routes.leadership,
 });
 

@@ -4,6 +4,11 @@ import { routes } from '@/config/routes';
 // how-we-build points follow the spec. Story + vision are founder-written slots, drafted in brand
 // voice for review.
 export const aboutPage = {
+  seo: {
+    title: 'About',
+    description:
+      'Oryntaa is an AI-first software engineering company — founder-led, senior engineers on every engagement, quality without compromise, built for long-term growth.',
+  },
   hero: {
     eyebrow: 'About Oryntaa',
     title: 'Technology with intelligence, purpose, and ambition.',

@@ -8,11 +8,12 @@ import { buildMetadata } from '@/lib/seo/metadata';
 
 import { LegalDocument } from '@/components/sections/legal/LegalDocument';
 
-export const metadata: Metadata = buildMetadata({
-  title: 'Cookie Policy',
-  description: "Oryntaa's cookieless-analytics posture and use of essential cookies.",
-  path: routes.cookies,
-});
+/** Copy lives in the MDX frontmatter, not here (SEO_ARCHITECTURE §2). */
+export function generateMetadata(): Metadata {
+  const doc = getLegalDoc('cookies');
+  if (doc === undefined) return {};
+  return buildMetadata({ ...doc.frontmatter.seo, path: routes.cookies });
+}
 
 export default function CookiesPage(): React.JSX.Element {
   const doc = getLegalDoc('cookies');

@@ -14,6 +14,11 @@ export const seoSchema = z.object({
   noindex: z.boolean().optional(),
 });
 
+/** The title/description floor a route declares from the content layer rather than a component
+ *  (SEO_ARCHITECTURE §2). `check:content` additionally enforces the 140–160 description band. */
+export const pageSeoSchema = seoSchema.pick({ title: true, description: true });
+export type PageSeo = z.infer<typeof pageSeoSchema>;
+
 export const serviceSchema = z.object({
   slug: z.string().regex(/^[a-z0-9-]+$/),
   name: z.string(),
@@ -99,6 +104,7 @@ export const openingSchema = z.object({
 export const legalFrontmatterSchema = z.object({
   title: z.string(),
   updatedAt: z.coerce.date(),
+  seo: pageSeoSchema,
 });
 
 export const siteSchema = z.object({

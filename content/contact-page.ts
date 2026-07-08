@@ -1,6 +1,11 @@
 // Contact page copy (PAGE_SPECIFICATIONS §10). Hero, promise line, success + error states verbatim
 // from the spec; FAQ answers drafted around the spec's six topics.
 export const contactPage = {
+  seo: {
+    title: 'Contact',
+    description:
+      'Tell us about your product idea, business challenge, or question — we reply within one business day. Fixed-scope delivery, a dedicated team, or an AI sprint.',
+  },
   hero: {
     eyebrow: 'Contact',
     title: "Let's talk about what's next.",

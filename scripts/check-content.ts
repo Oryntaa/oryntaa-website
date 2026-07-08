@@ -1,29 +1,39 @@
 // check:content — build-time content integrity gate (CONTENT_ARCHITECTURE §4). Runs the real Zod
 // schemas over every content module + MDX frontmatter and enforces the cross-collection rules:
 // unique slugs, referenced slugs/images exist, exactly-3 featured when the work gate passes,
-// permission×status, no future publish dates, required SEO fields. Fails the build (and `verify`).
+// permission×status, no future publish dates, required SEO fields, and the 140–160 character
+// description band from SEO_ARCHITECTURE §2. Fails the build (and `verify`).
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import matter from 'gray-matter';
 import type { ZodError, ZodType } from 'zod';
 
+import { aboutPage } from '../content/about-page';
 import { openings } from '../content/careers/openings';
+import { careersPage } from '../content/careers-page';
+import { contactPage } from '../content/contact-page';
 import { founders } from '../content/founders';
+import { insightsPage } from '../content/insights-page';
+import { leadershipPage } from '../content/leadership-page';
 import { projects } from '../content/projects';
 import { services } from '../content/services';
+import { servicesPage } from '../content/services-page';
 import { site } from '../content/site';
+import { workPage } from '../content/work-page';
 import { WORK_GATE_THRESHOLD } from '../src/config/constants';
 import {
   articleFrontmatterSchema,
   founderSchema,
   legalFrontmatterSchema,
   openingSchema,
+  pageSeoSchema,
   projectMetaSchema,
   serviceSchema,
   siteSchema,
   type ArticleFrontmatter,
   type Founder,
+  type PageSeo,
   type ProjectMeta,
   type Service,
 } from '../src/lib/content/schemas';
@@ -81,14 +91,51 @@ function assertImageExists(path: string, owner: string): void {
   }
 }
 
+/** SEO_ARCHITECTURE §2: descriptions fill the SERP snippet without being truncated. Below the
+ *  band leaves room unused; above it, Google cuts the tail off. */
+const DESCRIPTION_MIN = 140;
+const DESCRIPTION_MAX = 160;
+
+function assertDescription(description: string, owner: string): void {
+  const length = description.trim().length;
+  if (length === 0) {
+    fail('seo', `${owner}: seo.description is empty`);
+    return;
+  }
+  if (length < DESCRIPTION_MIN || length > DESCRIPTION_MAX) {
+    fail(
+      'seo',
+      `${owner}: seo.description is ${String(length)} chars — SEO_ARCHITECTURE §2 requires ${String(DESCRIPTION_MIN)}–${String(DESCRIPTION_MAX)}`,
+    );
+  }
+}
+
 function assertSeo(seo: { title: string; description: string }, owner: string): void {
   if (seo.title.trim() === '') fail('seo', `${owner}: seo.title is empty`);
-  if (seo.description.trim() === '') fail('seo', `${owner}: seo.description is empty`);
+  assertDescription(seo.description, owner);
 }
 
 // --- Parse every collection against its schema ---
 const siteResult = siteSchema.safeParse(site);
 if (!siteResult.success) fail('schema', `site: ${formatIssues(siteResult.error)}`);
+// site.description is the homepage's meta description (root layout), so it sits in the same band.
+else assertDescription(siteResult.data.description, 'site');
+
+// Page-level copy lives in content modules, never in a component (SEO_ARCHITECTURE §2).
+const pageSeoModules: { owner: string; seo: PageSeo }[] = [
+  { owner: 'services-page', seo: servicesPage.seo },
+  { owner: 'about-page', seo: aboutPage.seo },
+  { owner: 'leadership-page', seo: leadershipPage.seo },
+  { owner: 'careers-page', seo: careersPage.seo },
+  { owner: 'contact-page', seo: contactPage.seo },
+  { owner: 'work-page', seo: workPage.seo },
+  { owner: 'insights-page', seo: insightsPage.seo },
+];
+for (const page of pageSeoModules) {
+  const result = pageSeoSchema.safeParse(page.seo);
+  if (!result.success) fail('schema', `${page.owner}: ${formatIssues(result.error)}`);
+  else assertSeo(result.data, page.owner);
+}
 
 const parsedServices = parseEach<Service>(serviceSchema, services, 'services');
 const parsedProjects = parseEach<ProjectMeta>(projectMetaSchema, projects, 'projects');
@@ -105,6 +152,7 @@ for (const entry of articleEntries) {
 for (const entry of readMdxFrontmatter('legal')) {
   const result = legalFrontmatterSchema.safeParse(entry.data);
   if (!result.success) fail('schema', `legal/${entry.slug}.mdx: ${formatIssues(result.error)}`);
+  else assertSeo(result.data.seo, `legal "${entry.slug}"`);
 }
 
 // --- Unique slugs per collection ---
@@ -167,6 +215,11 @@ for (const article of parsedArticles) {
   }
   if (article.publishedAt.getTime() > Date.now()) {
     fail('date', `article "${article.slug}": publishedAt is in the future`);
+  }
+  // `seo` is partial for articles (CONTENT_ARCHITECTURE §2); when a description is authored it
+  // still has to sit in the band. Absent, the route falls back to the excerpt.
+  if (article.seo.description !== undefined) {
+    assertDescription(article.seo.description, `article "${article.slug}"`);
   }
   if (article.cover !== undefined)
     assertImageExists(article.cover, `article "${article.slug}" cover`);

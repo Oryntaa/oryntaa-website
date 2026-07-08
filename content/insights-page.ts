@@ -1,5 +1,10 @@
 // Insights list page copy (PAGE_SPECIFICATIONS §9). Hero verbatim from the spec.
 export const insightsPage = {
+  seo: {
+    title: 'Insights',
+    description:
+      "Ideas, perspectives, and what we're learning — on AI, engineering, product, and design, written by the Oryntaa founders who actually do the work.",
+  },
   hero: {
     eyebrow: 'Insights',
     title: "Ideas, perspectives, and what we're learning.",

@@ -21,9 +21,7 @@ import { Heading } from '@/components/ui/Heading';
 import { insightsPage } from '@/content/insights-page';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Insights',
-  description:
-    "Ideas, perspectives, and what we're learning — on AI, engineering, product, and how Oryntaa builds.",
+  ...insightsPage.seo,
   path: routes.insights,
 });
 

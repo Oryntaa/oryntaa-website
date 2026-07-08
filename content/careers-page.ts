@@ -1,6 +1,11 @@
 // Careers page copy (PAGE_SPECIFICATIONS §8). Hero + empty-state verbatim from the spec; why-list
 // titles from the spec, bodies drafted in brand voice.
 export const careersPage = {
+  seo: {
+    title: 'Careers',
+    description:
+      'Build meaningful technology with a small, senior team growing the way we build — for the long term. See open roles, or follow us on LinkedIn for future ones.',
+  },
   hero: {
     eyebrow: 'Careers',
     title: 'Build meaningful technology with us.',

@@ -22,9 +22,7 @@ import { home } from '@/content/home';
 import { servicesPage } from '@/content/services-page';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Services',
-  description:
-    'Custom software development, from strategy to scale — AI, web, mobile, SaaS/MVP, UI/UX, and cloud, delivered by a founding team that stays accountable end to end.',
+  ...servicesPage.seo,
   path: routes.services,
 });
 
