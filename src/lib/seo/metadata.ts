@@ -9,7 +9,8 @@ const HOME_TITLE = 'Oryntaa — AI-First Software Engineering & Digital Products
 /** Preview/dev deployments must never be indexed (SEO_ARCHITECTURE §2/§3). */
 const IS_PRODUCTION = process.env.VERCEL_ENV === 'production';
 
-export type OgType = 'default' | 'service' | 'work' | 'article' | 'page';
+/** Mirrors the /api/og allowlist (API_DOCUMENTATION §2) — the route 400s on anything else. */
+export type OgType = 'page' | 'service' | 'project' | 'article';
 
 interface BuildMetadataOptions {
   /** Page title without the site suffix. Omit for the homepage (uses the full brand title). */
@@ -18,6 +19,8 @@ interface BuildMetadataOptions {
   /** Absolute path, params stripped (canonical). e.g. '/services', '/work/trackrec'. */
   path: string;
   ogType?: OgType;
+  /** Overrides the card's eyebrow; defaults to the label the route derives from `ogType`. */
+  ogEyebrow?: string;
   /** Article routes only: promotes og:type to 'article' with publish time + author bylines. */
   article?: { publishedTime: string; authors: string[] };
 }
@@ -29,14 +32,25 @@ export function buildMetadata({
   description,
   path,
   ogType = 'page',
+  ogEyebrow,
   article,
 }: BuildMetadataOptions): Metadata {
   const canonical = new URL(path, SITE_URL).toString();
   const fullTitle = title === undefined ? HOME_TITLE : `${title} — ${SITE_NAME}`;
   const ogTitle = title ?? SITE_NAME;
-  const ogImage = `/api/og?title=${encodeURIComponent(ogTitle)}&type=${ogType}`;
+  // Percent-encoded (not URLSearchParams, which emits `+` for spaces) so every scraper agrees.
+  const ogParams = [`title=${encodeURIComponent(ogTitle)}`, `type=${ogType}`];
+  if (ogEyebrow !== undefined) ogParams.push(`eyebrow=${encodeURIComponent(ogEyebrow)}`);
+  const ogImage = `/api/og?${ogParams.join('&')}`;
   const images = [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }];
-  const baseOg = { title: fullTitle, description, url: canonical, siteName: SITE_NAME, images };
+  const baseOg = {
+    title: fullTitle,
+    description,
+    url: canonical,
+    siteName: SITE_NAME,
+    images,
+    locale: 'en_US',
+  };
 
   return {
     metadataBase: new URL(SITE_URL),

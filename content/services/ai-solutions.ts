@@ -85,7 +85,7 @@ export const aiSolutions = {
   seo: {
     title: 'AI Solutions & Automation | Oryntaa',
     description:
-      'Production-grade AI — assistants, retrieval, and automation with evaluation, guardrails, and cost control built in from the first commit.',
+      'Production-grade AI — assistants, retrieval, and automation with evaluation, guardrails, and cost control built in from the first commit by senior engineers.',
   },
   order: 1,
 };

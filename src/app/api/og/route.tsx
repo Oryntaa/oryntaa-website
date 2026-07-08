@@ -2,21 +2,71 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
-/** Allowlisted OG types → their eyebrow label (API_ARCHITECTURE §6: params are constrained). */
-const TYPE_LABEL: Record<string, string> = {
-  default: 'AI-First Software Engineering',
-  service: 'Services',
-  work: 'Selected Work',
-  article: 'Insights',
-  page: 'Oryntaa',
-};
+const WIDTH = 1200;
+const HEIGHT = 630;
+const TITLE_MAX = 90;
+const EYEBROW_MAX = 48;
 
-/** GET /api/og?title=…&type=… — branded social card (SEO_ARCHITECTURE §2, API_DOCUMENTATION §2). */
-export function GET(request: Request): ImageResponse {
+/** Allowlisted card types → their default eyebrow (API_DOCUMENTATION §2). */
+const TYPE_LABEL = {
+  page: 'Oryntaa',
+  service: 'Services',
+  project: 'Selected Work',
+  article: 'Insights',
+} as const;
+
+const OG_TYPES = ['page', 'service', 'project', 'article'] as const;
+type OgCardType = (typeof OG_TYPES)[number];
+
+const ALLOWED_PARAMS = new Set(['title', 'type', 'eyebrow']);
+
+const SPACE = 0x20;
+const DEL = 0x7f;
+
+function isOgCardType(value: string): value is OgCardType {
+  return (OG_TYPES as readonly string[]).includes(value);
+}
+
+/** Collapse control chars + runs of whitespace, then cap (API_DOCUMENTATION §2). These params land
+ *  in an image rather than in HTML, but a stray control char breaks satori's text shaper. */
+function sanitize(value: string, max: number): string {
+  let cleaned = '';
+  for (const char of value) {
+    const code = char.codePointAt(0) ?? SPACE;
+    cleaned += code < SPACE || code === DEL ? ' ' : char;
+  }
+  return cleaned.replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+/** Bundled Latin subsets, instanced to a single weight (API_DOCUMENTATION §2). Resolved once per
+ *  edge isolate: the module-scope promise is shared across every request the isolate serves. */
+const fontsPromise = Promise.all([
+  fetch(new URL('./fonts/Sora-Bold-latin.ttf', import.meta.url)).then((res) => res.arrayBuffer()),
+  fetch(new URL('./fonts/JetBrainsMono-Regular-latin.ttf', import.meta.url)).then((res) =>
+    res.arrayBuffer(),
+  ),
+]);
+
+/** GET /api/og?title=…&type=…&eyebrow=… — branded social card (SEO_ARCHITECTURE §2).
+ *  Colors are literal because satori resolves no CSS custom properties; they mirror the
+ *  DESIGN_SYSTEM canvas/brand tokens. */
+export async function GET(request: Request): Promise<Response> {
   const { searchParams, origin } = new URL(request.url);
-  const title = (searchParams.get('title') ?? 'Oryntaa').slice(0, 100);
-  const rawType = searchParams.get('type') ?? 'default';
-  const label = TYPE_LABEL[rawType] ?? TYPE_LABEL.default;
+
+  for (const key of searchParams.keys()) {
+    if (!ALLOWED_PARAMS.has(key)) {
+      return new Response(`Unknown parameter: ${key}`, { status: 400 });
+    }
+  }
+
+  const rawType = searchParams.get('type') ?? 'page';
+  if (!isOgCardType(rawType)) {
+    return new Response(`Unknown type: ${rawType}`, { status: 400 });
+  }
+
+  const title = sanitize(searchParams.get('title') ?? '', TITLE_MAX);
+  const eyebrow = sanitize(searchParams.get('eyebrow') ?? TYPE_LABEL[rawType], EYEBROW_MAX);
+  const [sora, mono] = await fontsPromise;
 
   return new ImageResponse(
     <div
@@ -45,6 +95,7 @@ export function GET(request: Request): ImageResponse {
         <div
           style={{
             display: 'flex',
+            fontFamily: 'JetBrains Mono',
             fontSize: 24,
             letterSpacing: 4,
             textTransform: 'uppercase',
@@ -52,11 +103,12 @@ export function GET(request: Request): ImageResponse {
             marginBottom: 24,
           }}
         >
-          {label}
+          {eyebrow}
         </div>
         <div
           style={{
             display: 'flex',
+            fontFamily: 'Sora',
             fontSize: 68,
             fontWeight: 700,
             lineHeight: 1.1,
@@ -64,10 +116,17 @@ export function GET(request: Request): ImageResponse {
             maxWidth: 960,
           }}
         >
-          {title}
+          {title === '' ? 'Oryntaa' : title}
         </div>
       </div>
     </div>,
-    { width: 1200, height: 630 },
+    {
+      width: WIDTH,
+      height: HEIGHT,
+      fonts: [
+        { name: 'Sora', data: sora, weight: 700, style: 'normal' },
+        { name: 'JetBrains Mono', data: mono, weight: 400, style: 'normal' },
+      ],
+    },
   );
 }

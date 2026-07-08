@@ -83,7 +83,7 @@ export const saasMvp = {
   seo: {
     title: 'SaaS & MVP Development | Oryntaa',
     description:
-      'From scoping to a focused, billed, multi-tenant MVP in weeks — built on foundations you can grow on, not throw away.',
+      'From scoping to a focused, billed, multi-tenant MVP in weeks — built on foundations you can grow on, not throw away once the first real users arrive.',
   },
   order: 4,
 };

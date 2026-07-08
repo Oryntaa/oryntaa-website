@@ -81,7 +81,7 @@ export const uiuxDesign = {
   seo: {
     title: 'UI/UX Design | Oryntaa',
     description:
-      'Product design and design systems from people who also write the code — shaped around real tasks and drawn for every state.',
+      'Product design and design systems from people who also write the code — shaped around how users actually work, drawn for every state, not just the happy path.',
   },
   order: 5,
 };

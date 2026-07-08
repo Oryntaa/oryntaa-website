@@ -23,6 +23,6 @@ export const fairsettle = {
   seo: {
     title: 'FairSettle | Oryntaa',
     description:
-      'A neutral, structured alternative to the family-court route for separating parents — guided questions, neutral outcomes, court-ready packs.',
+      'A neutral, structured alternative to the family-court route for separating parents — guided questions, neutral outcomes, and court-ready case packs.',
   },
 };
