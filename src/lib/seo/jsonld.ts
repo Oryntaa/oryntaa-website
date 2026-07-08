@@ -99,8 +99,9 @@ export function articleJsonLd(input: {
   };
 }
 
-/** FAQPage node (SEO_ARCHITECTURE §5) — service + contact FAQs. */
-export function faqJsonLd(items: { q: string; a: string }[]): Record<string, unknown> {
+/** FAQPage node (SEO_ARCHITECTURE §5) — service + contact FAQs. Readonly-tolerant so `as const`
+ *  content modules (contact-page) can feed it directly. */
+export function faqJsonLd(items: readonly { q: string; a: string }[]): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { routes } from '@/config/routes';
 
 import { getSite } from '@/lib/content/site';
+import { faqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 
 import { BookingEmbed } from '@/features/contact/components/BookingEmbed';
@@ -14,6 +15,7 @@ import { SectionHeader } from '@/components/layout/SectionHeader';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger } from '@/components/motion/Stagger';
 import { FaqAccordion } from '@/components/sections/shared/FaqAccordion';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 
 import { contactPage } from '@/content/contact-page';
@@ -58,6 +60,8 @@ export default async function ContactPage({
 
   return (
     <>
+      {/* FAQPage node — the contact FAQ is eligible for rich results (SEO_ARCHITECTURE §5). */}
+      <JsonLd data={[faqJsonLd(contactPage.faq.items)]} />
       <PageHero
         eyebrow={contactPage.hero.eyebrow}
         title={contactPage.hero.title}
