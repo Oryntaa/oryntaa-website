@@ -83,7 +83,7 @@ export const cloudDevops = {
   seo: {
     title: 'Cloud & DevOps | Oryntaa',
     description:
-      'Architecture, CI/CD, and observability that keep production fast, safe, and affordable — shipping routine, outages rare.',
+      'Architecture, CI/CD, and observability that keep your product fast, safe, and affordable in production — so shipping stays routine and outages stay rare.',
   },
   order: 6,
 };

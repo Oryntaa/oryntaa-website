@@ -7,7 +7,7 @@ export const site = {
   name: 'Oryntaa',
   slogan: 'Building Digital Futures',
   description:
-    'An AI-first software engineering company building intelligent digital products for organizations worldwide.',
+    'An AI-first software engineering company building intelligent digital products — assistants, web and mobile platforms, and MVPs — for organizations worldwide.',
   email: 'hello@oryntaa.com',
   socials: {
     linkedin: 'https://www.linkedin.com/company/oryntaa',

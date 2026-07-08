@@ -84,7 +84,7 @@ export const webDevelopment = {
   seo: {
     title: 'Web Development | Oryntaa',
     description:
-      'Web apps, marketplaces, and platforms on Next.js and TypeScript — engineered for real performance and search, not brochure templates.',
+      'Web apps, marketplaces, and platforms on Next.js and TypeScript — engineered for the two things that decide their fate in production: real speed and search.',
   },
   order: 2,
 };

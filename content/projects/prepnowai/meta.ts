@@ -23,6 +23,6 @@ export const prepnowai = {
   seo: {
     title: 'PrepNowAI | Oryntaa',
     description:
-      'A live AI interviewer for medical, dental, nursing, PA, and allied-health admissions — adaptive follow-ups, rubric scoring, and billing.',
+      'A live AI interviewer for medical, dental, nursing, PA, and allied-health admissions — adaptive follow-ups, rubric scoring, transcript playback, and billing.',
   },
 };

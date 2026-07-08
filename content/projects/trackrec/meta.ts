@@ -23,6 +23,6 @@ export const trackrec = {
   seo: {
     title: 'TrackRec | Oryntaa',
     description:
-      'Turns sales metrics into verified, recruiter-ready career profiles — vouched by the managers and clients who saw the work.',
+      'Turns sales metrics into verified, recruiter-ready career profiles — deal sizes, quota attainment, and ICP history, vouched by the managers who saw the work.',
   },
 };

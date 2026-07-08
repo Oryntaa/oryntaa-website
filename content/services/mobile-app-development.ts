@@ -82,7 +82,7 @@ export const mobileAppDevelopment = {
   seo: {
     title: 'Mobile App Development | Oryntaa',
     description:
-      'Genuine iOS and Android apps from one React Native codebase — offline-ready, synced, and delivered to both stores.',
+      'Genuine iOS and Android apps from a single React Native codebase — offline-ready, synced, and delivered to both stores by the engineers who designed them.',
   },
   order: 3,
 };

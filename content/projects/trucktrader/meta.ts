@@ -23,6 +23,6 @@ export const trucktrader = {
   seo: {
     title: 'TruckTrader | Oryntaa',
     description:
-      'A live marketplace for trucks, machinery, agri, and parts — faceted search across 17 categories, dealer feeds, and lease financing.',
+      'A live marketplace for trucks, machinery, agri, and parts — faceted search across 17 categories, dealer inventory feeds, and per-listing lease financing.',
   },
 };
