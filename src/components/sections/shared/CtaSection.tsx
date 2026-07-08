@@ -7,7 +7,9 @@ interface CtaSectionProps {
   title: string;
   description: string;
   primary: { label: string; href: string };
-  secondary: { label: string; href: string };
+  /** Omitted when the target it links to is gated off — a CTA must never point at nothing.
+   *  Explicitly `| undefined` because `exactOptionalPropertyTypes` is on (CODING_STANDARDS §2). */
+  secondary?: { label: string; href: string } | undefined;
 }
 
 /**
@@ -36,9 +38,11 @@ export function CtaSection({
               <ButtonLink href={primary.href} size="lg">
                 {primary.label}
               </ButtonLink>
-              <ButtonLink href={secondary.href} variant="secondary" size="lg">
-                {secondary.label}
-              </ButtonLink>
+              {secondary === undefined ? null : (
+                <ButtonLink href={secondary.href} variant="secondary" size="lg">
+                  {secondary.label}
+                </ButtonLink>
+              )}
             </div>
           </div>
         </Reveal>

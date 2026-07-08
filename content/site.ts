@@ -1,7 +1,11 @@
 /**
  * Site identity (CONTENT_ARCHITECTURE §1). Plain data — validated by getSite() against siteSchema.
- * TODO(content): bookingUrl (👤, later) and the stack-logo row (drop SVGs in public/images/stack/,
- * then wire them here). Industries are drafted from our project sectors — flag for review.
+ * TODO(content): the stack-logo row (drop SVGs in public/images/stack/, then wire them here).
+ * Industries are drafted from our project sectors — flag for review.
+ *
+ * Booking is deliberately NOT configured here: the `booking` gate and BookingEmbed both read
+ * NEXT_PUBLIC_BOOKING_URL (SYSTEM_ARCHITECTURE §7), so `siteSchema.bookingUrl` is vestigial —
+ * setting it would change nothing.
  */
 export const site = {
   name: 'Oryntaa',

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
+import { features } from '@/config/features';
 import { routes } from '@/config/routes';
 
 import { getProjects } from '@/lib/content/projects';
@@ -102,9 +103,11 @@ export default async function ServiceDetailPage({
                 <ButtonLink href={routes.contact({ intent: 'project' })} size="lg">
                   Start a Project
                 </ButtonLink>
-                <ButtonLink href={routes.book} variant="secondary" size="lg">
-                  Book a Call
-                </ButtonLink>
+                {features.booking.enabled ? (
+                  <ButtonLink href={routes.book} variant="secondary" size="lg">
+                    Book a Call
+                  </ButtonLink>
+                ) : null}
               </div>
             </Reveal>
           </div>

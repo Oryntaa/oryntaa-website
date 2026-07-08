@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils/cn';
 import { Container } from '@/components/layout/Container';
 import { Reveal } from '@/components/motion/Reveal';
 import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Heading } from '@/components/ui/Heading';
 
 export interface ShowcaseService {
   slug: string;
@@ -82,12 +83,14 @@ function ServiceContent({ service }: { service: ShowcaseService }): React.JSX.El
       exit="exit"
       className="flex max-w-xl flex-col gap-6"
     >
-      <motion.h3
+      {/* h2, not h3: the active service name is this section's heading, and the page must never
+          jump h1 → h3 (SEO_ARCHITECTURE §4). Motion needs the raw tag, so no <Heading> here. */}
+      <motion.h2
         variants={itemVariants}
         className="font-display text-display-md md:text-display-lg text-ink"
       >
         {service.name}
-      </motion.h3>
+      </motion.h2>
 
       <motion.p variants={itemVariants} className="text-body-lg text-ink-muted">
         {service.oneLiner}
@@ -128,7 +131,11 @@ function StaticPanel({ service }: { service: ShowcaseService }): React.JSX.Eleme
       />
       <StageWash />
       <div className="relative flex max-w-xl flex-col gap-5">
-        <h3 className="font-display text-display-md text-ink">{service.name}</h3>
+        {/* The active service name is this section's heading — h2, so the page never jumps
+            h1 → h3 (SEO_ARCHITECTURE §4). The eyebrow above it is a label, not a heading. */}
+        <Heading level={2} size="display-md">
+          {service.name}
+        </Heading>
         <p className="text-body-lg text-ink-muted">{service.oneLiner}</p>
         <ul className="grid gap-x-8 gap-y-3 sm:grid-cols-2">
           {service.capabilities.map((capability) => (

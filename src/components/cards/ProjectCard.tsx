@@ -6,6 +6,8 @@ import { routes } from '@/config/routes';
 
 import { PROJECT_TYPE_LABEL } from '@/lib/content/labels';
 
+import { Heading } from '@/components/ui/Heading';
+
 export interface ProjectCardItem {
   slug: string;
   name: string;
@@ -17,11 +19,14 @@ export interface ProjectCardItem {
 
 interface ProjectCardProps {
   project: ProjectCardItem;
+  /** `2` when the grid sits directly under the page h1 (/work); `3` under a section h2
+   *  (service detail's related work). Heading order never skips — SEO_ARCHITECTURE §4. */
+  headingLevel?: 2 | 3;
 }
 
 /** Work grid card (PAGE_SPECIFICATIONS §5) — cover, type badge, industry, name, one-liner. The whole
  *  card links to the case study. */
-export function ProjectCard({ project }: ProjectCardProps): React.JSX.Element {
+export function ProjectCard({ project, headingLevel = 3 }: ProjectCardProps): React.JSX.Element {
   return (
     <Link
       href={routes.project(project.slug)}
@@ -44,7 +49,9 @@ export function ProjectCard({ project }: ProjectCardProps): React.JSX.Element {
           </span>
           <span>{project.industry}</span>
         </div>
-        <h3 className="font-display text-display-sm text-ink">{project.name}</h3>
+        <Heading level={headingLevel} size="display-sm">
+          {project.name}
+        </Heading>
         <p className="text-body text-ink-muted flex-1">{project.oneLiner}</p>
         <span className="text-body-sm text-accent-text inline-flex items-center gap-1 font-medium">
           View case study

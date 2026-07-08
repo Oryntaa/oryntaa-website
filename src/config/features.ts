@@ -1,7 +1,7 @@
 import { INSIGHTS_GATE_THRESHOLD, WORK_GATE_THRESHOLD } from '@/config/constants';
 
 import { derived } from '@/lib/content/derived';
-import { getSite } from '@/lib/content/site';
+import { clientEnv } from '@/lib/env';
 
 /**
  * Feature flags (SYSTEM_ARCHITECTURE §7). Two sources merged: content-derived counts and env
@@ -29,7 +29,13 @@ export const features = {
       isForcedOn(process.env.NEXT_PUBLIC_FLAG_INSIGHTS),
   },
   booking: {
-    enabled: Boolean(getSite().bookingUrl),
+    /**
+     * Read the exact value BookingEmbed reads (ENVIRONMENT_VARIABLES §2), so the "Book a Call"
+     * CTAs and the `#book` section they scroll to can never disagree. Sourcing this from
+     * `site.bookingUrl` — which no content module ever set — pinned the flag to `false` while the
+     * embed followed the env var, and every CTA linked to an anchor that did not render.
+     */
+    enabled: clientEnv.NEXT_PUBLIC_BOOKING_URL !== undefined,
   },
   newsletter: {
     // Reserved.
