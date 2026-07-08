@@ -43,7 +43,7 @@ export default function LeadershipPage(): React.JSX.Element {
         <Container>
           <Stagger className="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {founders.map((founder) => (
-              <FounderCard key={founder.slug} founder={founder} showIntro />
+              <FounderCard key={founder.slug} founder={founder} showIntro headingLevel={2} />
             ))}
           </Stagger>
         </Container>
