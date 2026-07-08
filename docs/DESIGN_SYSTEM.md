@@ -108,7 +108,9 @@ Prose (articles/case studies): max-width 68ch, body-lg, headings per scale, styl
 
 ## 7. Iconography & illustration
 
-Lucide at 1.5px stroke, 20/24px, `--color-ink` (or accent when meaningful). Section-identity icons are **3D stills from the object family**, not line icons. The Orbit mark: clear space = mark height ×0.5; never recolored outside brand-600/ink/white; favicon + OG derive from `/public/brand`.
+Lucide at 1.5px stroke, 20/24px, `--color-ink` (or accent when meaningful). Section-identity icons are **3D stills from the object family**, not line icons.
+
+The Orbit mark is the letter **O** of the wordmark — a dimensional O ringed by an orbit, carrying its own orange gradient (not a flat token colour). It is never recoloured or flattened; clear space = mark height ×0.5. The horizontal lockup is `mark + "ryntaa"`, which reads **Oryntaa** only because the mark *is* the O — so the mark is never substituted, cropped, or replaced with a flat shape. Two tones ship: `oryntaa-logo.png` (ink wordmark, light backgrounds) and `oryntaa-logo-light.png` (`--color-canvas` wordmark, dark backgrounds). Favicon, `icon.png`, `apple-icon.png`, the manifest, and the OG card all derive from `/public/brand`; consumers must declare the asset's true aspect ratio (`1390×390` lockup, `512×512` mark) or `object-fit: fill` will distort it.
 
 ## 8. Responsive rules
 

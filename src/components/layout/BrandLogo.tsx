@@ -36,11 +36,14 @@ export function BrandLogo({
         className,
       )}
     >
+      {/* 139:39 is the asset's exact 1390×390 ratio, reduced. It has to match: `w-auto` makes the
+          browser derive the box from these attributes, and `object-fit: fill` then squashes the
+          image. The old 176×56 declared 3.14:1 for a 3.44:1 file — a ~9% horizontal compression. */}
       <Image
         src={LOCKUP[tone]}
         alt=""
-        width={176}
-        height={56}
+        width={139}
+        height={39}
         priority={priority}
         className="h-10 w-auto lg:h-11"
       />
