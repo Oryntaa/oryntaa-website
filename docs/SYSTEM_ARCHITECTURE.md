@@ -77,12 +77,14 @@ Typed, config-driven, two sources merged in `config/features.ts`:
 export const features = {
   work:      { enabled: derived.publishedProjects >= 3 || envFlag('NEXT_PUBLIC_FLAG_WORK') },
   insights:  { enabled: derived.publishedArticles  >= 3 || envFlag('NEXT_PUBLIC_FLAG_INSIGHTS') },
-  booking:   { enabled: Boolean(site.bookingUrl) },
+  booking:   { enabled: clientEnv.NEXT_PUBLIC_BOOKING_URL !== undefined },
   newsletter:{ enabled: false }, // reserved
 } as const;
 ```
 
 Flags are evaluated at build time (static site — a flag flip is a deploy). Nav, homepage sections, sitemap, and internal links all read the same flags module; nothing checks content counts independently.
+
+The booking flag reads the same variable `BookingEmbed` itself reads (ENVIRONMENT_VARIABLES §2), never a content field: sourcing it from `site.bookingUrl` — which no content module set — pinned the flag to `false` while the embed followed the env var, so every "Book a Call" button linked to a `#book` anchor that never rendered. **Any CTA pointing at a gated target lives behind that gate**: `HeroSection`, `CtaSection`/`SiteCta`, and the service-detail hero all omit the secondary button when `features.booking.enabled` is false. `siteSchema.bookingUrl` is now vestigial and unread.
 
 ## 8. Error handling model
 

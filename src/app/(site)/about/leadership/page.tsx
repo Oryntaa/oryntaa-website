@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { features } from '@/config/features';
 import { routes } from '@/config/routes';
 
 import { getFounders } from '@/lib/content/founders';
@@ -52,7 +53,7 @@ export default function LeadershipPage(): React.JSX.Element {
         title={cta.title}
         description={cta.description}
         primary={home.cta.primary}
-        secondary={home.cta.secondary}
+        secondary={features.booking.enabled ? home.cta.secondary : undefined}
       />
     </>
   );

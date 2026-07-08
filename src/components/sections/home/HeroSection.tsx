@@ -1,5 +1,7 @@
 import { ArrowUpRight, Star } from 'lucide-react';
 
+import { features } from '@/config/features';
+
 import { Container } from '@/components/layout/Container';
 import { AmbientDrift } from '@/components/motion/AmbientDrift';
 import { Reveal } from '@/components/motion/Reveal';
@@ -57,9 +59,11 @@ export function HeroSection(): React.JSX.Element {
                 {hero.primary.label}
                 <ArrowUpRight size={18} aria-hidden />
               </ButtonLink>
-              <ButtonLink href={hero.secondary.href} variant="ink" size="lg">
-                {hero.secondary.label}
-              </ButtonLink>
+              {features.booking.enabled ? (
+                <ButtonLink href={hero.secondary.href} variant="ink" size="lg">
+                  {hero.secondary.label}
+                </ButtonLink>
+              ) : null}
             </div>
           </Reveal>
 
