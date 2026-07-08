@@ -18,7 +18,10 @@ const TYPE_LABEL = {
 const OG_TYPES = ['page', 'service', 'project', 'article'] as const;
 type OgCardType = (typeof OG_TYPES)[number];
 
-const ALLOWED_PARAMS = new Set(['title', 'type', 'eyebrow']);
+/** `v` is inert — it exists only so a card redesign can change the URL. The response is served
+ *  `immutable, max-age=31536000` and scrapers key their cache on the URL, so without a bustable
+ *  param an art change would never reach an already-scraped link (API_DOCUMENTATION §2). */
+const ALLOWED_PARAMS = new Set(['title', 'type', 'eyebrow', 'v']);
 
 const SPACE = 0x20;
 const DEL = 0x7f;
@@ -87,7 +90,7 @@ export async function GET(request: Request): Promise<Response> {
       <img
         src={`${origin}/brand/oryntaa-logo-light.png`}
         height={72}
-        width={242}
+        width={257}
         alt=""
         style={{ objectFit: 'contain' }}
       />

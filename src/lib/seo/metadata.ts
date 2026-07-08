@@ -9,6 +9,11 @@ const HOME_TITLE = 'Oryntaa — AI-First Software Engineering & Digital Products
 /** Preview/dev deployments must never be indexed (SEO_ARCHITECTURE §2/§3). */
 const IS_PRODUCTION = process.env.VERCEL_ENV === 'production';
 
+/** Bump whenever the /api/og card art changes. The image is cached `immutable` for a year and every
+ *  scraper keys on the URL, so without this an art change never reaches an already-shared link.
+ *  v2 = the corrected Oryntaa lockup (the previous mark did not read as an "O"). */
+const OG_VERSION = '2';
+
 /** Mirrors the /api/og allowlist (API_DOCUMENTATION §2) — the route 400s on anything else. */
 export type OgType = 'page' | 'service' | 'project' | 'article';
 
@@ -41,6 +46,7 @@ export function buildMetadata({
   // Percent-encoded (not URLSearchParams, which emits `+` for spaces) so every scraper agrees.
   const ogParams = [`title=${encodeURIComponent(ogTitle)}`, `type=${ogType}`];
   if (ogEyebrow !== undefined) ogParams.push(`eyebrow=${encodeURIComponent(ogEyebrow)}`);
+  ogParams.push(`v=${OG_VERSION}`);
   const ogImage = `/api/og?${ogParams.join('&')}`;
   const images = [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }];
   const baseOg = {
