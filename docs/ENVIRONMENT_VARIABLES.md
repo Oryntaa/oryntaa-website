@@ -15,14 +15,22 @@ const server = z.object({
   LEAD_IP_SALT: z.string().min(16),
 });
 const client = z.object({
-  NEXT_PUBLIC_SITE_URL: z.string().url(),
+  NEXT_PUBLIC_SITE_URL: z.url().default(DEV_SITE_URL),      // guarded below
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1),
   NEXT_PUBLIC_BOOKING_URL: z.string().url().optional(),
   NEXT_PUBLIC_SHOW_DRAFTS: z.enum(['0','1']).default('0'),
   NEXT_PUBLIC_FLAG_WORK: z.enum(['0','1']).optional(),      // gate override only
   NEXT_PUBLIC_FLAG_INSIGHTS: z.enum(['0','1']).optional(),
 });
+
+// A Production build that never received the variable would inherit the localhost fallback and
+// poison every canonical, og:image, and sitemap URL. Fail the build instead.
+if (process.env.VERCEL_ENV === 'production' && clientEnv.NEXT_PUBLIC_SITE_URL === DEV_SITE_URL) {
+  throw new Error('NEXT_PUBLIC_SITE_URL is unset on a Production deployment. …');
+}
 ```
+
+`NEXT_PUBLIC_SITE_URL` keeps a `http://localhost:3000` default so dev, CI, and Vercel Preview boot without configuration; the guard makes it effectively **required on Production only**. `VERCEL_ENV` is server-only, so the check runs during `next build` and never in the browser. Because `NEXT_PUBLIC_*` values are inlined at build time, changing this variable requires a **redeploy with the build cache off** — restarting the deployment does nothing.
 
 `import 'server-only'` guards the server object; importing it from a client component fails the build.
 
