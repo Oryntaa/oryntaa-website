@@ -26,7 +26,8 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = buildMetadata({
   description: getSite().description,
   path: '/',
-  ogType: 'default',
+  ogType: 'page',
+  ogEyebrow: 'AI-First Software Engineering',
 });
 
 /** Mobile browser-chrome tint — matches the canvas the nav sits on (DESIGN_SYSTEM §2). */

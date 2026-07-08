@@ -28,9 +28,9 @@ Concrete inventory of every dynamic entry point at v1.
 
 **Output:** `LeadResult` (API_ARCHITECTURE §4). **Side effects on success:** row in `leads`; notification email to `site.leadsInbox` via Resend (react-email template: all fields + Supabase row link + reply-to set to the visitor); `lead.created` log line; failure of email alone → `lead.email_failed` alert log, visitor still sees success.
 
-## 2. Route Handler: `GET /api/og/[...params]`
+## 2. Route Handler: `GET /api/og`
 
-**Runtime:** Edge · **Purpose:** brand-consistent Open Graph images. **Params (validated allowlist):** `type` ∈ `page · service · project · article` + `title` (≤90 chars, sanitized) + optional `eyebrow`. Renders `ImageResponse` 1200×630: canvas bg, Horizon gradient footer band, mono eyebrow, Sora title, Orbit mark. **Caching:** `public, immutable, max-age=31536000` (content-addressed by params). Unknown params → 400. Fonts loaded once from bundled subsets.
+**Runtime:** Edge · **Purpose:** brand-consistent Open Graph images. **Params (validated allowlist, passed as a query string):** `type` ∈ `page · service · project · article` (default `page`) + `title` (≤90 chars, sanitized) + optional `eyebrow` (≤48 chars; defaults to the label derived from `type`). Renders `ImageResponse` 1200×630: canvas bg, Horizon radial wash anchored bottom-left, mono eyebrow, Sora title, light logo lockup. **Caching:** `public, immutable, no-transform, max-age=31536000` — emitted by `ImageResponse` itself on production builds (content-addressed by params; the dev server sends `no-store` instead). An unrecognized `type`, or any query key outside the allowlist, → 400. Fonts are bundled Latin subsets (`api/og/fonts/*.ttf`, OFL, variable sources instanced to a single weight) resolved once per edge isolate through a module-scope promise — satori cannot read `next/font`'s woff2 output, so the faces are vendored rather than shared with the app.
 
 ## 3. Generated files (build-time conventions)
 

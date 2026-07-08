@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     title: project.name,
     description: project.seo.description,
     path: routes.project(slug),
-    ogType: 'work',
+    ogType: 'project',
   });
 }
 

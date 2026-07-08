@@ -36,7 +36,8 @@ oryntaa-website/
 │   │   │   ├── insights/{page.tsx, [slug]/page.tsx}
 │   │   │   ├── contact/page.tsx
 │   │   │   └── (legal)/{privacy,terms,cookies,code-of-conduct}/page.tsx
-│   │   ├── api/og/[...params]/route.tsx  # edge OG images
+│   │   ├── api/og/route.tsx             # edge OG images (query params, API_DOCUMENTATION §2)
+│   │   ├── api/og/fonts/                # vendored OFL Latin subsets satori renders with
 │   │   ├── sitemap.ts · robots.ts · manifest.ts
 │   │   ├── error.tsx · not-found.tsx · layout.tsx (root: fonts, analytics, metadata base)
 │   ├── components/
