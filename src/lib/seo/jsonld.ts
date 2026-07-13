@@ -9,10 +9,14 @@ function absolute(path: string): string {
 
 export interface OrganizationInput {
   name: string;
+  slogan: string;
   description: string;
   email: string;
   socials: string[];
   founders: { name: string }[];
+  /** The disciplines the org practises — the service names. Anchors the entity as a software
+   *  company, which helps Google stop reading the coined brand name as a misspelling. */
+  knowsAbout: string[];
 }
 
 /** Organization node (SEO_ARCHITECTURE §5) — one per site, in the root layout. */
@@ -22,11 +26,13 @@ export function organizationJsonLd(input: OrganizationInput): Record<string, unk
     '@type': 'Organization',
     '@id': ORG_ID,
     name: input.name,
+    slogan: input.slogan,
     url: SITE_URL,
     description: input.description,
     email: input.email,
     logo: absolute('/brand/oryntaa-mark.png'),
     sameAs: input.socials,
+    knowsAbout: input.knowsAbout,
     founder: input.founders.map((founder) => ({ '@type': 'Person', name: founder.name })),
   };
 }

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono, Sora } from 'next/font/google';
 
 import { getFounders } from '@/lib/content/founders';
+import { getServices } from '@/lib/content/services';
 import { getSite } from '@/lib/content/site';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
@@ -46,10 +47,12 @@ export default function RootLayout({
   );
   const organization = organizationJsonLd({
     name: site.name,
+    slogan: site.slogan,
     description: site.description,
     email: site.email,
     socials,
     founders: getFounders().map((founder) => ({ name: founder.name })),
+    knowsAbout: getServices().map((service) => service.name),
   });
 
   return (

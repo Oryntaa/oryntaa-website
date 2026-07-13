@@ -20,7 +20,7 @@ Exactly one `h1` per page (the Heading component makes levels explicit); heading
 
 | Type | Where | Key fields |
 |---|---|---|
-| Organization (+ logo, founders as Person[], sameAs socials) | root layout | one per site |
+| Organization (+ logo, slogan, knowsAbout=service names, founders as Person[], sameAs socials) | root layout | one per site — slogan + knowsAbout anchor the coined brand name as a real software-company entity so search engines stop autocorrecting it |
 | WebSite | root layout | name, url |
 | Service | each service page | name, provider→Organization, description |
 | BreadcrumbList | all detail pages | from the Breadcrumbs component's data |
